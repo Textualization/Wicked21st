@@ -6,125 +6,6 @@
 import random
 import copy
 
-import numpy as np
-
-def to_json(v):
-    if v is Int:
-        return v
-    if v is string:
-        return v
-    if v is list:
-        return [ to_json(_) for _ in v ]
-    if v is dict:
-        return { k: to_json(vv) for k, vv in v.items() }
-    return v.to_json()
-        
-class GameInit:
-    def __init__(self, graph_init: GraphState):
-        self.graph = graph_init
-
-    def to_json(self):
-        return { 'graph' : self.graph.to_json() }
-
-class GameDef:
-    def __init__(self, game_init: GameInit,
-                 num_players: Int,
-                 classes_def: Classes,
-                 graph_def: Graph,
-                 board_def: Board,
-                 techtree_def: TechTree):
-        self.game_init = game_init
-        self.num_players = num_players
-        self.classes = classes_def
-        self.graph = graph_def
-        self.board = board_def
-        self.tree = techtree_def
-        
-    def to_json(self):
-        return { 'num_players' : self.num_players,
-                 'game_init' : self.game_init.to_json(),
-                 'classes' : self.classes_def.to_json(),
-                 'graph' : self.graph.to_json(),
-                 'tree' : self.tree.to_json(),
-                 'board': self.board.to_json() }
-
-class ValidKeysDict(dict):
-    def __init__(self, keys):
-        super.__init__(self)
-        self.valid_keys = set(keys)
-    def __getitem__(self, key):
-        assert key in self.valid_keys
-        return super.__getitem__(key)
-    def __setitem__(self, key, value):
-        assert key in self.valid_keys
-        return super.__setitem__(key, value)
-    def update(self, *args, **kwargs):
-        for k, v in dict(*args, **kwargs).items():
-            self[k] = v
-    def get(self, key, value=None):
-        assert key in self.valid_keys
-        return super.get(key, value)
-
-    def to_json(self):
-        return to_json(self)
-
-class GraphState(ValidKeysDict):
-    def __init__(self, graph):
-        super.__init__(self, graph.nodes())
-        self.graph = graph
-
-    def in_crisis(self, category=None):
-        result = set()
-        for k, v in self.items():
-            if v:
-                if categoy is None or k in self.graph.class_for_node[self.graph.name_to_id[k]] == self.graph.category_for_name[category]:
-                    result.add(k)
-        return k
-
-class BoardState(ValidKeysDict):
-    def __init__(self, board):
-        super.__init__(self, board.locations)
-
-class TechTreeState(ValidKeysDict):
-    def __init__(self, tree):
-        super.__init__(self, tree.technologies)
-
-class PolicyState(ValidKeysDict):
-    def __init__(self, policies):
-        super.__init__(self, policies.names)
-
-class GameState:
-    def __init__(self,
-                 turn: Int,
-                 phase: Int,
-                 player: Int,
-                 game_def: GameDef,
-                 players_state: list,
-                 graph_state: GraphState,
-                 board_state: BoardState,
-                 techtree_state: TechtreeState,
-                 policy_state: PolicyState,
-                 drawpiles_state: DrawPiles):
-        self.turn = turn
-        self.phase = phase
-        self.player = player
-        self.game = game_def
-        self.players = players_state
-        self.graph = graph_state
-        self.board = board_state
-        self.techtree = techtree_state
-        self.policy = policy_state
-        self.drawpiles = drawpiles_state
-
-    def to_json(self):
-        return { 'game': self.game.to_json(),
-                 'players' : to_json(self.players),
-                 'board' : self.board.to_json(),
-                 'graph' : self.graph.to_json(),
-                 'tech' : self.techtree.to_json(),
-                 'policy' : self.policy.to_json(),
-                 'piles' : self.drawpiles.to_json() }
-
 class Game:
 
     PHASES = [ 'ENGAGE', 'ACTIVATE', 'REFLECT', 'END' ]
@@ -150,7 +31,8 @@ class Game:
 
     def start(self, rand):
         drawpiles = DrawPiles(rand)
-        player_state = [ PlayState(p, { '!': 0, '$': 0 }, list(), p.pick(Player.INIT_LOC, self.game_def.board.locations, rand)) for p in self.players ]
+        player_state = [ PlayState(p, { '!': 0, '$': 0 }, list(),
+                                   p.pick(Player.INIT_LOC, self.game_def.board.locations, rand)) for p in self.players ]
         graph_state = copy.deepcopy(self.game_def.game_init.graph)
         board_state = BoardState(self.game_def.board)
         for p in player_state:
@@ -191,7 +73,8 @@ class Game:
     def step(self, rand):
         if self.state.phase == 0: # engage
             # moving
-            new_loc = self.game_def.players[self.state.player].pick(Player.NEW_LOC, self.game_def.board.locations, rand, self.state.players[self.state.player],
+            new_loc = self.game_def.players[self.state.player].pick(Player.NEW_LOC,
+                                                                    self.game_def.board.locations, rand, self.state.players[self.state.player],
                                                                     self.state)
             self.state.players[self.state.player].location = new_loc
             log.append( { 'phase' : Game.PHASES[self.state.phase],
@@ -239,7 +122,32 @@ class Game:
                           'memo' : 'second',
                           'state' : self.state.to_json() } )
             # crisis rising
-            
+            self.state.players[self.state.player].crisis_chips += 1
+            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                          'step' : Game.STEPS_PER_PHASE[self.state.phase][4],
+                          'state' : self.state.to_json() } )
+        elif self.state.phase == 1: # activate
+            # projects
+            ## decide whether to start a new project?
+            ## play cards for any of its projects?
+            ## if rolls fail, they go to the 'failed rolls in turn' for the emphasizing section
+            ## if rolls fail 2d, crisis chips are added
+            pass
+            # policies
+            pass
+        elif self.state.phase == 2: # reflect
+            #EMPATHIZING
+            pass
+            #COMMERCE
+            pass
+            #STRATEGIZING
+            pass
+            #REFACTORING
+            pass
+            #STREAMLINING
+            pass
+        else: # the end
+            pass
             
             
 
