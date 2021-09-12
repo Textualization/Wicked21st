@@ -43,6 +43,36 @@ class BoardState(ValidKeysDict):
     def __init__(self, board):
         super.__init__(self, board.locations)
 
+# keys: object 'state' : 
+class ProjectState(ValidKeysDict):
+
+    AVAILABLE = 'available'
+    IN_PROGRESS = 'in progress'
+    FINISHED = 'finished'
+    
+    def __init__(self, projects):
+        super.__init__(self, projects.names)
+        self.projects = projects
+
+    def status(self, project_name):
+        if project_name not in self:
+            return ProjectState.AVAILABLE
+        return self[project_name]['status']
+
+    def player_starts(self, project_name, player: int, turn: int):
+        self[project_name] = {
+            'name':    project_name,
+            'project': self.projects[project_name],
+            'status':  ProjectState.IN_PROGRESS,
+            'player':  player,
+            'turn':    turn
+            }
+    def abandoned(self, project_name):
+        del self[project_name]
+
+    def finished(self, project_name):
+        self[project_name]['status'] = ProjectState.FINISHED
+
 class TechTreeState(ValidKeysDict):
     def __init__(self, tree):
         super.__init__(self, tree.technologies)
@@ -70,8 +100,9 @@ class GameState:
         self.players = players_state
         self.graph = graph_state
         self.board = board_state
-        self.techtree = techtree_state
-        self.policy = policy_state
+        self.projects = project_state
+        self.technologies = techtree_state
+        self.policies = policy_state
         self.drawpiles = drawpiles_state
 
     def to_json(self):

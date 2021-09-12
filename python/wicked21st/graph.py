@@ -13,8 +13,19 @@ import xml.etree.ElementTree as ET
 
 
 class Graph:
+
+  INDUSTRIAL       = ( 'INDUSTRIAL',       '#6bb3b3' )
+  ECONOMIC         = ( 'ECONOMIC',         '#33bbff' )
+  SOCIAL           = ( 'SOCIAL',           '#e67c73' )
+  CLASS            = ( 'CLASS',            '#e69545' )
+  ENVIRONMENTAL    = ( 'ENVIRONMENTAL',    '#a7cc5c' )
+  LIVING_STANDARDS = ( 'LIVING STANDARDS', '#987db3' )
+
+  CATEGORIES = [ INDUSTRIAL, ECONOMIC, SOCIAL, CLASS, ENVIRONMENTAL, LIVING_STANDARDS ]
+    
+  
   # nodes: dict( id -> name ), class_for_node: dict( id -> clazz ), outlinks: dict( id -> set(id) )
-  def __init__(self, nodes, clazzes, outlinks, categories):
+  def __init__(self, nodes, class_for_node, outlinks, categories):
     self.node_names = nodes
     self.name_to_id = { n: i for i, n in nodes.items() }
     self.node_classes = dict() # class to set of ids
@@ -152,12 +163,6 @@ def load_graph(graph_file):
         #print(link.tag, link.attrib)
         links[name].add(link.attrib['DESTINATION'])
         
-    return Graph({ _id : node.attrib['TEXT'] for _id, node in nodes.items()}, class_for_node, links, {
-        # not exact
-        '#6bb3b3': 'INDUSTRIAL',
-        '#33bbff': 'ECONOMIC',
-        '#a7cc5c' : 'ENVIRONMENT',
-        '#987db3' : 'LABOUR',
-        '#e67c73' : 'SOCIAL'
-        '#e69545' : 'CLASS' })
+    return Graph({ _id : node.attrib['TEXT'] for _id, node in nodes.items()}, class_for_node, links,
+                 { p[1] : p[0] for p in Graph.CATEGORIES })
 

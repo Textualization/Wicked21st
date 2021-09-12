@@ -38,6 +38,9 @@ class PlayerState:
         self.cards = cards
         self.location = location
         self.crisis_chips = crisis_chips
+        self.projects = list()
+        self.policies = list()
+        self.technologies = list()
 
     def to_json(self):
         return { 'player' : self.player.to_json(),

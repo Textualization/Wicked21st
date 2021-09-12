@@ -15,12 +15,19 @@ class BaseClass:
         self.suit_a = suit_a
         self.suit_b = suit_b
         self.resource = resource
+        self.project_slots = 1
+        self.policy_slots = 1
+        self.research_slots = 1
 
     def to_json(self):
         return { 'name' : self.name,
                  'suit_a' : self.suit_a,
                  'suit_b' : self.suit_b,
-                 'resource' : self.resource }
+                 'resource' : self.resource,
+                 'project_slots' : self.project_slots.
+                 'policy_slots' : self.policy_slots,
+                 'research_slots' : self.research_slots,
+                }
 
 # missing: special abilities
 

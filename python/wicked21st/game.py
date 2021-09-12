@@ -15,19 +15,20 @@ class Game:
                                      'DRAWING CARDS',
                                      'CRISIS RISING' ],
                         'ACTIVATE' : [ 'ATTEMPTING PROJECTS',
-                                       'PASSING POWER' ],
-                        'REFLECT' : [ 'VISIONING',
-                                      'EMPATHIZING',
+                                       'PASSING POLICY',
+                                       'DOING RESEARCH'
+                                      ],
+                        'REFLECT' : [ 'EMPATHIZING',
                                       'STRATEGIZING' ],
-                        'END': [ 'CRISIS ROLLING',
-                                 'FINALIZING',
-                                 'SCENARIO CONCLUDING' ]
+                        'END': [ 'CRISIS ROLLING' ]
                        }
     
     def __init__(self, game_def: GameDef, players: list):
         self.game_def = game_def
         self.players = players
         self.log = list()
+        self.phase_start_state = None
+        self.activate_phase_checks = None
 
     def start(self, rand):
         drawpiles = DrawPiles(rand)
@@ -72,10 +73,13 @@ class Game:
 
     def step(self, rand):
         if self.state.phase == 0: # engage
+            if self.state.player == 0:
+                self.phase_start_state = copy.deepcopy(self.state)
+
             # moving
             new_loc = self.game_def.players[self.state.player].pick(Player.NEW_LOC,
                                                                     self.game_def.board.locations, rand, self.state.players[self.state.player],
-                                                                    self.state)
+                                                                    self.phase_start_state)
             self.state.players[self.state.player].location = new_loc
             log.append( { 'phase' : Game.PHASES[self.state.phase],
                           'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
@@ -105,7 +109,7 @@ class Game:
             accessible_piles = list(accessible_piles)
             
             drawn = self.game_def.players[self.state.player].pick(PILE_DRAW, accessible_piles, rand, self.state.players[self.state.player],
-                                                          self.state)
+                                                          self.phase_start_state)
             self.state.players[self.state.player].cards.append(drawn)
             log.append( { 'phase' : Game.PHASES[self.state.phase],
                           'step' : Game.STEPS_PER_PHASE[self.state.phase][3],
@@ -114,7 +118,7 @@ class Game:
                           'state' : self.state.to_json() } )
             accessible_piles = list(set(accessible_piles) - set([drawn]))
             drawn = self.game_def.players[self.state.player].pick(PILE_DRAW, accessible_piles, rand, self.state.players[self.state.player],
-                                                          self.state)
+                                                          self.phase_start_state)
             self.state.players[self.state.player].cards.append(drawn)
             log.append( { 'phase' : Game.PHASES[self.state.phase],
                           'step' : Game.STEPS_PER_PHASE[self.state.phase][3],
@@ -127,7 +131,12 @@ class Game:
                           'step' : Game.STEPS_PER_PHASE[self.state.phase][4],
                           'state' : self.state.to_json() } )
         elif self.state.phase == 1: # activate
+            if self.state.player == 0:
+                self.phase_start_state = copy.deepcopy(self.state)
+                self.activate_phase_checks = list()
+            
             # projects
+            
             ## decide whether to start a new project?
             ## play cards for any of its projects?
             ## if rolls fail, they go to the 'failed rolls in turn' for the emphasizing section
@@ -138,14 +147,7 @@ class Game:
         elif self.state.phase == 2: # reflect
             #EMPATHIZING
             pass
-            #COMMERCE
-            pass
             #STRATEGIZING
-            pass
-            #REFACTORING
-            pass
-            #STREAMLINING
-            pass
         else: # the end
             pass
             
