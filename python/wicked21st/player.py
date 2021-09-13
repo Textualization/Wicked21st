@@ -20,10 +20,22 @@ class Player:
     START_PROJECT_PROTECT_YN   = 8
     START_PROJECT_PROTECT_NODE = 9
     PLAY_CARD = 10
+    START_POLICY_YN = 11
+    START_POLICY_FIX_CAT      = 12
+    START_POLICY_FIX_NODE     = 13
+    START_POLICY_TRIGGER_NODE = 14
+    START_POLICY_IMPROV_A_YN  = 15
+    START_POLICY_IMPROV_B_YN  = 16
+    START_POLICY_PROTECT_NODE = 17
+    START_POLICY_IMPROV_C_YN  = 18
+    START_POLICY_IMPROV_D_YN  = 19
+    
 
-    decision_names = [ 'Initial Location',
-                       'New Location',
-                       'Pile Draw' ]
+    decision_names = [ 'Initial location',
+                       'New location',
+                       'Pile draw',
+                       'Start a new project?',
+                      ]
     
     def __init__(self, name: string, ordering: Int, pclass: BaseClass):
         self.name = name

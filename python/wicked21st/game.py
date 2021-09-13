@@ -12,6 +12,7 @@ from .drawpiles import DrawPiles
 from .definitions import GameDef
 from .state import ProjectState
 from .projects import Projects
+from .policy import Policies
 
 class Game:
 
@@ -342,7 +343,104 @@ class Game:
                     else:
                         idx += 1
             # policies
-            pass
+            
+            ## decide whether to start a new policy?
+            if self.state.players[self.state.player].available_policy_slots():
+                start = self.game_def.players[self.state.player].pick(
+                    Player.START_POLICY_YN,
+                    [ True, False ],
+                    rand, self.state.players[self.state.player], self.phase_start_state)
+                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                              'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                              'target' : start,
+                              'memo' : 'start policy?',
+                              'state' : self.state.to_json() } )
+                if start:
+                    fix_cat = self.game_def.players[self.state.player].pick(
+                        Player.START_POLICY_FIX_CAT,
+                        list(map(lambda x:x[0], Graph.CATEGORIES)),
+                        rand, self.state.players[self.state.player], self.phase_start_state)
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                  'target' : fix_cat,
+                                  'memo' : 'start policy: fix category',
+                                  'state' : self.state.to_json() } )
+                    fix_cat_id = self.state.game_def.graph.category_for_name[fix_cat]
+                    fix_node =  self.game_def.players[self.state.player].pick(
+                        Player.START_POLICY_FIX_NODE,
+                        list(map(lambda x:self.state.game_def.graph.node_names[x], self.state.game_def.graph.node_classes[fix_cat_id])),
+                        rand, self.state.players[self.state.player], self.phase_start_state)
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                  'target' : fix_node,
+                                  'memo' : 'start policy: fix node',
+                                  'state' : self.state.to_json() } )
+                    fix_node_id = self.state.game_def.graph.name_to_id[fix_node]
+                    # trigger cat
+                    for f, t in Policies.BASE_TABLE:
+                        if f[1] == fix_cat_id:
+                            trigger_cat, trigger_cat_id = t
+                            break
+                    trigger_node =  self.game_def.players[self.state.player].pick(
+                        Player.START_POLICY_TRIGGER_NODE,
+                        list(map(lambda x:self.state.game_def.graph.node_names[x], self.state.game_def.graph.node_classes[trigger_cat_id])),
+                        rand, self.state.players[self.state.player], self.phase_start_state)
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                  'target' : trigger_node,
+                                  'memo' : 'start policy: trigger node',
+                                  'state' : self.state.to_json() } )
+                    trigger_node_id = self.state.game_def.graph.name_to_id[trigger_node]
+
+                    want_improv_a = self.game_def.players[self.state.player].pick(
+                        Player.START_POLICY_IMPROV_A_YN,
+                        [ True, False ],
+                        rand, self.state.players[self.state.player], self.phase_start_state)
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                  'target' : want_improv_a,
+                                  'memo' : 'start policy: want improv-a',
+                                  'state' : self.state.to_json() } )
+                    if not want_improv_a:
+                        policy = self.state.policies.find_policy(Policy.BASE, set([fix_node_id]), set([trigger_node_id]))
+                    else:
+                        want_improv_b = self.game_def.players[self.state.player].pick(
+                            Player.START_POLICY_IMPROV_B_YN,
+                            [ True, False ],
+                            rand, self.state.players[self.state.player], self.phase_start_state)
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                      'target' : want_improv_b,
+                                      'memo' : 'start policy: want improv-b',
+                                  'state' : self.state.to_json() } )
+                        if not want_improv_b:
+                            policy = self.state.policies.find_policy(Policy.A, set([fix_node_id]))
+                        else:
+                            protected_node =  self.game_def.players[self.state.player].pick(
+                                Player.START_POLICY_PROTECT_NODE,
+                                list(map(lambda x:self.state.game_def.graph.node_names[x], self.state.game_def.graph.node_classes[fix_cat_id])),
+                                rand, self.state.players[self.state.player], self.phase_start_state)
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                          'target' : protect_node,
+                                          'memo' : 'start policy: protect node in same category',
+                                          'state' : self.state.to_json() } )
+                            protect_node_id = self.state.game_def.graph.name_to_id[protect_node]
+                            
+                            want_improv_c = self.game_def.players[self.state.player].pick(
+                                Player.START_POLICY_IMPROV_C_YN,
+                                [ True, False ],
+                                rand, self.state.players[self.state.player], self.phase_start_state)
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                          'target' : want_improv_c,
+                                          'memo' : 'start policy: want improv-c',
+                                  'state' : self.state.to_json() } )
+                            if not want_improv_c:
+                                pass
+                                #policy = self.state.policies.find_policy(Policy.A, set([fix_node_id]))
+            
+
             # research
             pass
         elif self.state.phase == 2: # reflect

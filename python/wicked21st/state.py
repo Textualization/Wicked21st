@@ -106,8 +106,61 @@ class TechTreeState(ValidKeysDict):
         super.__init__(self, tree.technologies)
 
 class PolicyState(ValidKeysDict):
+
+    AVAILABLE   = 'available'
+    IN_PROGRESS = 'in progress'
+    FINISHED    = 'finished'
+    
     def __init__(self, policies):
         super.__init__(self, policies.names)
+        self.policies = policies
+
+    def status(self, policy_name):
+        if policy_name not in self:
+            return PolicyState.AVAILABLE
+        return self[policy_name]['status']
+
+    def player_starts(self, policy, player: int, turn: int):
+        self[policy_name] = {
+            'name':    policy.name,
+            'policy':  policy,
+            'status':  PolicyState.IN_PROGRESS,
+            'player':  player,
+            'turn':    turn,
+            'missing': policy.cost
+            }
+    def abandon(self, policy_name):
+        del self[policy_name]
+
+    def finish(self, policy_name):
+        self[policy_name]['missing'] = []
+        self[policy_name]['status'] = PolicyState.FINISHED
+
+    def policies_for_status(self, status: str):
+        result = ()
+        if status == PolicyState.AVAILABLE:
+            for policy in self.policies.policies:
+                if policy.name not in self:
+                    result.append(policy)
+        else:
+            for obj in self.items():
+                if obj['status'] == status:
+                    result.append(obj['policy'])
+
+    def find_policy(self, type_, fix: set, trigger: set=None, protect: set=None):
+        for policy in self.policies.policies:
+            if policy.type_ == type_ and fix == policy.fixes:
+                if trigger is None:
+                    if policy.triggers:
+                        continue
+                elif trigger == policy.triggers:
+                    if protect is None:
+                        return policy
+                    if protect == policy.protects:
+                        return policy
+                # else, continue
+        raise Exception("Not found: find_policy({}, {}, {}, {})".format(type_, fix, trigger, protect))
+
 
 class GameState:
     def __init__(self,
