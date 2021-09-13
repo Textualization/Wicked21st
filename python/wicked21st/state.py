@@ -65,12 +65,14 @@ class ProjectState(ValidKeysDict):
             'project': project,
             'status':  ProjectState.IN_PROGRESS,
             'player':  player,
-            'turn':    turn
+            'turn':    turn,
+            'missing': project.cost
             }
     def abandon(self, project_name):
         del self[project_name]
 
     def finish(self, project_name):
+        self[project_name]['missing'] = []
         self[project_name]['status'] = ProjectState.FINISHED
 
     def projects_for_status(self, status: str):
@@ -83,6 +85,21 @@ class ProjectState(ValidKeysDict):
             for obj in self.items():
                 if obj['status'] == status:
                     result.append(obj['project'])
+
+    def find_project(self, type_, fix, trigger=None, protect=None):
+        for project in self.projects.projects:
+            if project.type_ == type_ and fix in project.fixes:
+                if trigger is None:
+                    if not project.triggers:
+                        return project
+                    # else, continue
+                elif trigger in project.triggers:
+                    if protect is None:
+                        return project
+                    if protect in project.protects:
+                        return project
+                # else, continue
+        raise Exception("Not found: find_project({}, {}, {}, {})".format(type_, fix, trigger, protect))
 
 class TechTreeState(ValidKeysDict):
     def __init__(self, tree):
@@ -99,6 +116,7 @@ class GameState:
                  player: Int,
                  game_def: GameDef,
                  players_state: list,
+                 crisis_chips: int,
                  graph_state: GraphState,
                  board_state: BoardState,
                  techtree_state: TechtreeState,
@@ -109,6 +127,7 @@ class GameState:
         self.player = player
         self.game = game_def
         self.players = players_state
+        self.crisis_chips = crisis_chips
         self.graph = graph_state
         self.board = board_state
         self.projects = project_state
@@ -119,6 +138,7 @@ class GameState:
     def to_json(self):
         return { 'game': self.game.to_json(),
                  'players' : to_json(self.players),
+                 'crisis_chips' : crisis_chips,
                  'board' : self.board.to_json(),
                  'graph' : self.graph.to_json(),
                  'tech' : self.techtree.to_json(),

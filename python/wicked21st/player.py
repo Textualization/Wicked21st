@@ -9,11 +9,17 @@ import random
 class Player:
 
     # decisions
-    INIT_LOC         = 0
-    NEW_LOC          = 1
-    PILE_DRAW        = 2
-    START_PROJECT    = 3
-    PROJECT_TO_START = 4
+    INIT_LOC  = 0
+    NEW_LOC   = 1
+    PILE_DRAW = 2
+    START_PROJECT_YN           = 3
+    START_PROJECT_FIX_CAT      = 4
+    START_PROJECT_FIX_NODE     = 5
+    START_PROJECT_TRIGGER_NODE = 6
+    START_PROJECT_IMPROV_A_YN  = 7
+    START_PROJECT_PROTECT_YN   = 8
+    START_PROJECT_PROTECT_NODE = 9
+    PLAY_CARD = 10
 
     decision_names = [ 'Initial Location',
                        'New Location',
@@ -29,17 +35,17 @@ class Player:
                  'ordering' : self.ordering,
                  'player_class' : self.player_class.to_json() }
 
-    def pick(self, decision: int, decisions: list, rand: random.Random, state: PlayerState=None, game: GameState=None):
+    def pick(self, decision: int, decisions: list,
+             rand: random.Random, state: PlayerState=None, game: GameState=None, context: dict=None):
         """Choose a decision among many"""
         return rand.choice(decisions)
 
 class PlayerState:
-    def __init__(self, player: Player, resources: dict, cards: list, location: string, crisis_chips: int):
+    def __init__(self, player: Player, resources: dict, cards: list, location: string):
         self.player    = player
         self.resources = resources
         self.cards     = cards
         self.location  = location
-        self.crisis_chips = crisis_chips
         self.projects  = list()
         self.policies  = list()
         self.technologies = list()
@@ -61,6 +67,5 @@ class PlayerState:
                  'projects'     : self.projects,
                  'policies'     : self.policies,
                  'technologies' : self.technologies,
-                 'crisis_chips' : self.crisis_chips
                 }
     

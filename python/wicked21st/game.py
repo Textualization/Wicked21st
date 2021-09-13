@@ -6,9 +6,12 @@
 import random
 import copy
 
+from .graph import Graph
+from .player import Player
 from .drawpiles import DrawPiles
 from .definitions import GameDef
 from .state import ProjectState
+from .projects import Projects
 
 class Game:
 
@@ -33,6 +36,18 @@ class Game:
         self.log = list()
         self.phase_start_state = None
         self.phase_actions = None
+
+    def roll_dice(self, rand, num, step):
+        result = 0
+        for _ in range(num):
+            result += rand.randint(1,6)
+        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                      'step' : Game.STEPS_PER_PHASE[self.state.phase][step],
+                      'target' : result,
+                      'memo' : 'dice roll {}D6'.format(num),
+                      'state' : self.state.to_json() } )
+        return result
+        
 
     def start(self, rand):
         drawpiles = DrawPiles(rand)
@@ -81,9 +96,10 @@ class Game:
                 self.phase_start_state = copy.deepcopy(self.state)
 
             # moving
-            new_loc = self.game_def.players[self.state.player].pick(Player.NEW_LOC,
-                                                                    self.game_def.board.locations, rand, self.state.players[self.state.player],
-                                                                    self.phase_start_state)
+            new_loc = self.game_def.players[self.state.player].pick(
+                Player.NEW_LOC,
+                self.game_def.board.locations,
+                rand, self.state.players[self.state.player], self.phase_start_state)
             self.state.players[self.state.player].location = new_loc
             log.append( { 'phase' : Game.PHASES[self.state.phase],
                           'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
@@ -112,8 +128,10 @@ class Game:
             accessible_piles.add(self.game_def.board.suits[new_loc])
             accessible_piles = list(accessible_piles)
             
-            drawn = self.game_def.players[self.state.player].pick(Player.PILE_DRAW, accessible_piles, rand, self.state.players[self.state.player],
-                                                          self.phase_start_state)
+            drawn = self.game_def.players[self.state.player].pick(
+                Player.PILE_DRAW,
+                accessible_piles,
+                rand, self.state.players[self.state.player], self.phase_start_state)
             self.state.players[self.state.player].cards.append(drawn)
             log.append( { 'phase' : Game.PHASES[self.state.phase],
                           'step' : Game.STEPS_PER_PHASE[self.state.phase][3],
@@ -121,8 +139,10 @@ class Game:
                           'memo' : 'first',
                           'state' : self.state.to_json() } )
             accessible_piles = list(set(accessible_piles) - set([drawn]))
-            drawn = self.game_def.players[self.state.player].pick(Player.PILE_DRAW, accessible_piles, rand, self.state.players[self.state.player],
-                                                          self.phase_start_state)
+            drawn = self.game_def.players[self.state.player].pick(
+                Player.PILE_DRAW,
+                accessible_piles,
+                rand, self.state.players[self.state.player], self.phase_start_state)
             self.state.players[self.state.player].cards.append(drawn)
             log.append( { 'phase' : Game.PHASES[self.state.phase],
                           'step' : Game.STEPS_PER_PHASE[self.state.phase][3],
@@ -130,7 +150,7 @@ class Game:
                           'memo' : 'second',
                           'state' : self.state.to_json() } )
             # crisis rising
-            self.state.players[self.state.player].crisis_chips += 1
+            self.state.crisis_chips += 1
             log.append( { 'phase' : Game.PHASES[self.state.phase],
                           'step' : Game.STEPS_PER_PHASE[self.state.phase][4],
                           'state' : self.state.to_json() } )
@@ -143,19 +163,87 @@ class Game:
 
             ## decide whether to start a new project?
             if self.state.players[self.state.player].available_project_slots():
-                start = self.game_def.players[self.state.player].pick(Player.START_PROJECT, [ True, False ], rand,
-                                                                      self.state.players[self.state.player],
-                                                                      self.phase_start_state)
+                start = self.game_def.players[self.state.player].pick(
+                    Player.START_PROJECT_YN,
+                    [ True, False ],
+                    rand, self.state.players[self.state.player], self.phase_start_state)
                 log.append( { 'phase' : Game.PHASES[self.state.phase],
                               'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
                               'target' : start,
                               'memo' : 'start project?',
                               'state' : self.state.to_json() } )
                 if start:
-                    available_projects = self.state.projects.projects_for_status(ProjectState.AVAILABLE)
-                    project = self.game_def.players[self.state.player].pick(Player.PROJECT_TO_START, available_projects, rand,
-                                                                            self.state.players[self.state.player],
-                                                                            self.phase_start_state)
+                    fix_cat = self.game_def.players[self.state.player].pick(
+                        Player.START_PROJECT_FIX_CAT,
+                        list(map(lambda x:x[0], Graph.CATEGORIES)),
+                        rand, self.state.players[self.state.player], self.phase_start_state)
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                  'target' : fix_cat,
+                                  'memo' : 'start project: fix category',
+                                  'state' : self.state.to_json() } )
+                    fix_cat_id = self.state.game_def.graph.category_for_name[fix_cat]
+                    fix_node =  self.game_def.players[self.state.player].pick(
+                        Player.START_PROJECT_FIX_NODE,
+                        list(map(lambda x:self.state.game_def.graph.node_names[x], self.state.game_def.graph.node_classes[fix_cat_id])),
+                        rand, self.state.players[self.state.player], self.phase_start_state)
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                  'target' : fix_node,
+                                  'memo' : 'start project: fix node',
+                                  'state' : self.state.to_json() } )
+                    fix_node_id = self.state.game_def.graph.name_to_id[fix_node]
+
+                    # trigger cat
+                    for f, t, _, _ in Projects.BASE_TABLE:
+                        if f[1] == fix_cat_id:
+                            trigger_cat, trigger_cat_id = t
+                            break
+                    trigger_node =  self.game_def.players[self.state.player].pick(
+                        Player.START_PROJECT_TRIGGER_NODE,
+                        list(map(lambda x:self.state.game_def.graph.node_names[x], self.state.game_def.graph.node_classes[trigger_cat_id])),
+                        rand, self.state.players[self.state.player], self.phase_start_state)
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                  'target' : trigger_node,
+                                  'memo' : 'start project: trigger node',
+                                  'state' : self.state.to_json() } )
+                    trigger_node_id = self.state.game_def.graph.name_to_id[trigger_node]
+                    want_improv_a = self.game_def.players[self.state.player].pick(
+                        Player.START_PROJECT_IMPROV_A_YN,
+                        [ True, False ],
+                        rand, self.state.players[self.state.player], self.phase_start_state)
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                  'target' : want_improv_a,
+                                  'memo' : 'start project: want improv-a',
+                                  'state' : self.state.to_json() } )
+                    if not want_improv_a:
+                        project = self.state.projects.find_project(Project.BASE, fix_node_id, trigger_node_id)
+                    else:
+                        want_protect = self.game_def.players[self.state.player].pick(
+                            Player.START_PROJECT_PROTECT_YN,
+                            [ True, False ],
+                            rand, self.state.players[self.state.player], self.phase_start_state)
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                      'target' : want_protect,
+                                      'memo' : 'start project: want protect',
+                                      'state' : self.state.to_json() } )
+                        if not want_protect:
+                            project = self.state.projects.find_project(Project.A, fix_node_id)
+                        else:
+                            protected_node =  self.game_def.players[self.state.player].pick(
+                                Player.START_PROJECT_PROTECT_NODE,
+                                list(map(lambda x:self.state.game_def.graph.node_names[x], self.state.game_def.graph.node_classes[fix_cat_id])),
+                                rand, self.state.players[self.state.player], self.phase_start_state)
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                          'target' : protect_node,
+                                          'memo' : 'start project: protect node',
+                                          'state' : self.state.to_json() } )
+                            protect_node_id = self.state.game_def.graph.name_to_id[protect_node]
+                            project = self.state.projects.find_project(Project.A, fix_node_id, trigger_node_id, protect_node_id)
                     log.append( { 'phase' : Game.PHASES[self.state.phase],
                                   'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
                                   'target' : project.name,
@@ -164,16 +252,95 @@ class Game:
                     self.state.projects.player_starts(project, self.state.player, self.state.turn)
                     self.state.players[self.state.player].projects.append(project.name)
                     self.state.phase_actions( ( self.state.player, 'START_PROJECT', project ) )
+                    started_project = project
             
             ## play cards for any projects
             in_progress = self.state.phase_start_state.projects.projects_for_status(ProjectState.IN_PROGRESS)
-            for card in self.state.players[self.state.player].cards:
-                
+            if start:
+                in_progress.append(started_project)
+
+            card_choices = list()
+            for idx, card in enumerate(self.state.players[self.state.player].cards):
+                projects_for_card = list()
+                for project in in_progress:
+                    missing = set(self.state.projects[project.name]['missing'])
+                    if card[1] == 14:
+                        for s in missing:
+                            projects_for_card.append( (project, s) )
+                    elif card[0] in missing:
+                        projects_for_card.append( (project, card[0]) )
+                for project, suit in projects_for_card
+                    card_choices.append( ( card, suit, idx, project.name ) )
                     
-            
-            ## if rolls fail, they go to the 'failed rolls in turn' for the emphasizing section
-            ## if rolls fail 2d, crisis chips are added
-            pass
+            while True:
+                if not card_choices:
+                    break
+                
+                if None not in card_choices:
+                    card_choices.append( None )
+
+                play_card = self.game_def.players[self.state.player].pick(
+                    Player.PLAY_CARD,
+                    card_choices,
+                    rand, self.state.players[self.state.player], self.phase_start_state)
+                if play_card is None:
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                  'target' : False,
+                                  'memo' : 'play card',
+                                  'state' : self.state.to_json() } )
+                    break
+                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                              'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                              'target' : play_card,
+                              'memo' : 'play card',
+                              'state' : self.state.to_json() } )
+
+                succeeded = False
+                if play_card[0][1] == 14: # joker
+                    succeeded = True
+                else:
+                    value = min(10, play_card[0][1])
+                    if self.state.players[self.state.player].resources['$'] > 0:
+                        moneys = min(11 - value, self.state.players[self.state.player].resources['$'])
+                    consultant = self.game_def.players[self.state.player].pick(
+                        Player.CONSULTANT,
+                        list(range(moneys + 1)),
+                        rand, self.state.players[self.state.player], self.phase_start_state)
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                  'target' : consultant,
+                                  'memo' : 'consultant fees',
+                                  'state' : self.state.to_json() } )
+                    self.state.players[self.state.player].resources['$'] -= consultant
+                    value += consultant
+                    roll = self.roll_dice(rand, 2, 0)
+                    if roll <= value:
+                        succeed = True
+                    if roll == 12:
+                        self.state.crisis_chips += 1
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                      'target' : self.state.crisis_chips,
+                                      'memo' : 'crisis chip',
+                                      'state' : self.state.to_json() } )
+
+                if succeeded:
+                    self.state.phase_actions( ( self.state.player, 'SUCCESS_SKILL', self.states.projects[play_card[3]], play_card[0] ) )
+                else:
+                    self.state.phase_actions( ( self.state.player, 'FAILED_SKILL', self.states.projects[play_card[3]], play_card[0]) )
+                    
+                # closing the project is left to the empathy phase
+                self.state.drawpiles.return_card(play_card[0], play_card[1])
+                del self.state.players[self.state.player].cards[play_card[2]]
+                idx = 0
+                while idx < len(card_choices):
+                    if card_choices[idx] is None:
+                        idx += 1
+                    elif card_choices[idx][2] == play_card[2]:
+                        del card_choices[idx]
+                    else:
+                        idx += 1
             # policies
             pass
             # research
@@ -207,6 +374,7 @@ class Game:
         self.crisis.remove(to_solve)
         self.good.add(to_solve)
     return super().step()
+
 
 GAMES['BaseGame'] = BaseGame()
 
