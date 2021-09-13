@@ -130,7 +130,7 @@ class Graph:
   def to_json(self):
       return { self.node_names[n]: [ self.node_names[nn] for nn in self.outlinks[n] ] for n in self.node_names }
 
-def load_graph(graph_file):
+def load_graph(graph_file, verbose=False):
     root = ET.parse(graph_file).getroot()
 
     nodes = dict() # name to node dict
@@ -148,11 +148,12 @@ def load_graph(graph_file):
       class_for_node[child.attrib['ID']] = child.attrib['BACKGROUND_COLOR']
       node_classes[clazz].add(child)
 
-    print("Found {} classes\n".format(len(node_classes)))
-    for color, clazz in node_classes.items():
-      print(color)
-      for node in clazz:
-        print("",node.attrib['TEXT']) 
+    if verbose:
+      print("Found {} classes\n".format(len(node_classes)))
+      for color, clazz in node_classes.items():
+        print(color)
+        for node in clazz:
+          print("",node.attrib['TEXT']) 
 
     links = dict() # node id to set of node id
     for name, node in nodes.items():

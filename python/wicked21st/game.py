@@ -6,6 +6,10 @@
 import random
 import copy
 
+from .drawpiles import DrawPiles
+from .definitions import GameDef
+from .state import ProjectState
+
 class Game:
 
     PHASES = [ 'ENGAGE', 'ACTIVATE', 'REFLECT', 'END' ]
@@ -28,7 +32,7 @@ class Game:
         self.players = players
         self.log = list()
         self.phase_start_state = None
-        self.activate_phase_checks = None
+        self.phase_actions = None
 
     def start(self, rand):
         drawpiles = DrawPiles(rand)
@@ -108,7 +112,7 @@ class Game:
             accessible_piles.add(self.game_def.board.suits[new_loc])
             accessible_piles = list(accessible_piles)
             
-            drawn = self.game_def.players[self.state.player].pick(PILE_DRAW, accessible_piles, rand, self.state.players[self.state.player],
+            drawn = self.game_def.players[self.state.player].pick(Player.PILE_DRAW, accessible_piles, rand, self.state.players[self.state.player],
                                                           self.phase_start_state)
             self.state.players[self.state.player].cards.append(drawn)
             log.append( { 'phase' : Game.PHASES[self.state.phase],
@@ -117,7 +121,7 @@ class Game:
                           'memo' : 'first',
                           'state' : self.state.to_json() } )
             accessible_piles = list(set(accessible_piles) - set([drawn]))
-            drawn = self.game_def.players[self.state.player].pick(PILE_DRAW, accessible_piles, rand, self.state.players[self.state.player],
+            drawn = self.game_def.players[self.state.player].pick(Player.PILE_DRAW, accessible_piles, rand, self.state.players[self.state.player],
                                                           self.phase_start_state)
             self.state.players[self.state.player].cards.append(drawn)
             log.append( { 'phase' : Game.PHASES[self.state.phase],
@@ -133,16 +137,46 @@ class Game:
         elif self.state.phase == 1: # activate
             if self.state.player == 0:
                 self.phase_start_state = copy.deepcopy(self.state)
-                self.activate_phase_checks = list()
+                self.phase_actions = list()
             
             # projects
-            
+
             ## decide whether to start a new project?
-            ## play cards for any of its projects?
+            if self.state.players[self.state.player].available_project_slots():
+                start = self.game_def.players[self.state.player].pick(Player.START_PROJECT, [ True, False ], rand,
+                                                                      self.state.players[self.state.player],
+                                                                      self.phase_start_state)
+                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                              'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                              'target' : start,
+                              'memo' : 'start project?',
+                              'state' : self.state.to_json() } )
+                if start:
+                    available_projects = self.state.projects.projects_for_status(ProjectState.AVAILABLE)
+                    project = self.game_def.players[self.state.player].pick(Player.PROJECT_TO_START, available_projects, rand,
+                                                                            self.state.players[self.state.player],
+                                                                            self.phase_start_state)
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                  'target' : project.name,
+                                  'memo' : 'start project',
+                                  'state' : self.state.to_json() } )
+                    self.state.projects.player_starts(project, self.state.player, self.state.turn)
+                    self.state.players[self.state.player].projects.append(project.name)
+                    self.state.phase_actions( ( self.state.player, 'START_PROJECT', project ) )
+            
+            ## play cards for any projects
+            in_progress = self.state.phase_start_state.projects.projects_for_status(ProjectState.IN_PROGRESS)
+            for card in self.state.players[self.state.player].cards:
+                
+                    
+            
             ## if rolls fail, they go to the 'failed rolls in turn' for the emphasizing section
             ## if rolls fail 2d, crisis chips are added
             pass
             # policies
+            pass
+            # research
             pass
         elif self.state.phase == 2: # reflect
             #EMPATHIZING

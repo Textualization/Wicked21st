@@ -46,9 +46,9 @@ class BoardState(ValidKeysDict):
 # keys: object 'state' : 
 class ProjectState(ValidKeysDict):
 
-    AVAILABLE = 'available'
+    AVAILABLE   = 'available'
     IN_PROGRESS = 'in progress'
-    FINISHED = 'finished'
+    FINISHED    = 'finished'
     
     def __init__(self, projects):
         super.__init__(self, projects.names)
@@ -59,19 +59,30 @@ class ProjectState(ValidKeysDict):
             return ProjectState.AVAILABLE
         return self[project_name]['status']
 
-    def player_starts(self, project_name, player: int, turn: int):
+    def player_starts(self, project, player: int, turn: int):
         self[project_name] = {
-            'name':    project_name,
-            'project': self.projects[project_name],
+            'name':    project.name,
+            'project': project,
             'status':  ProjectState.IN_PROGRESS,
             'player':  player,
             'turn':    turn
             }
-    def abandoned(self, project_name):
+    def abandon(self, project_name):
         del self[project_name]
 
-    def finished(self, project_name):
+    def finish(self, project_name):
         self[project_name]['status'] = ProjectState.FINISHED
+
+    def projects_for_status(self, status: str):
+        result = ()
+        if status == ProjectState.AVAILABLE:
+            for project in self.projects.projects:
+                if project.name not in self:
+                    result.append(project)
+        else:
+            for obj in self.items():
+                if obj['status'] == status:
+                    result.append(obj['project'])
 
 class TechTreeState(ValidKeysDict):
     def __init__(self, tree):
