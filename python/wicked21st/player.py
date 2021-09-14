@@ -18,7 +18,7 @@ class Player:
     START_PROJECT_TYPE         = 6
     START_PROJECT_TRIGGER_NODE = 7
     START_PROJECT_PROTECT_NODE = 8
-    PLAY_CARD = 9
+    PLAY_CARD       = 9
     START_POLICY_YN = 10
     START_POLICY_FIX_CAT      = 11
     START_POLICY_FIX_NODE     = 12
@@ -26,7 +26,11 @@ class Player:
     START_POLICY_TRIGGER_NODE = 14
     START_POLICY_PROTECT_NODE = 15
     POLICY_TO_EMPOWER = 16
-    POWER_AMOUNT = 17
+    POWER_AMOUNT      = 17
+    START_RESEARCH_YN   = 18
+    START_RESEARCH_TECH = 19
+    CARD_FOR_RESEARCH   = 20
+    FUND_RESEARCH       = 21
     
 
     decision_names = [ 'Initial location',
@@ -58,7 +62,7 @@ class PlayerState:
         self.location  = location
         self.projects  = list()
         self.policies  = list()
-        self.technologies = list()
+        self.tech = list()
 
     def available_project_slots(self):
         return self.player.player_class.project_slots - len(self.projects)
@@ -67,7 +71,7 @@ class PlayerState:
         return self.player.player_class.policy_slots - len(self.policies)
 
     def available_research_slots(self):
-        return self.player.player_class.research_slots - len(self.technologies)
+        return self.player.player_class.research_slots - len(self.tech)
 
     def to_json(self):
         return { 'player'       : self.player.to_json(),
@@ -76,6 +80,6 @@ class PlayerState:
                  'location'     : self.location,
                  'projects'     : self.projects,
                  'policies'     : self.policies,
-                 'technologies' : self.technologies,
+                 'technologies' : self.tech,
                 }
     

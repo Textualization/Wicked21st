@@ -286,13 +286,13 @@ class Game:
                     log.append( { 'phase' : Game.PHASES[self.state.phase],
                                   'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
                                   'target' : False,
-                                  'memo' : 'play card',
+                                  'memo' : 'skill for project',
                                   'state' : self.state.to_json() } )
                     break
                 log.append( { 'phase' : Game.PHASES[self.state.phase],
                               'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
                               'target' : play_card,
-                              'memo' : 'play card',
+                              'memo' : 'skill for project',
                               'state' : self.state.to_json() } )
 
                 succeeded = False
@@ -533,10 +533,121 @@ class Game:
                 # policy effects, etc are left for the end
 
             # research
-            pass
+            start = False
+            if self.state.players[self.state.player].available_research_slots():
+                start = self.game_def.players[self.state.player].pick(
+                    Player.START_RESEARCH_YN,
+                    [ True, False ],
+                    rand, self.state.players[self.state.player], self.phase_start_state)
+                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                              'step' : Game.STEPS_PER_PHASE[self.state.phase][2],
+                              'target' : start,
+                              'memo' : 'start researching?',
+                              'state' : self.state.to_json() } )
+                if start:
+                    boundary = self.state.tech.boundary()
+                    chosen_tech = self.game_def.players[self.state.player].pick(
+                        Player.START_RESEARCH_TECH,
+                        list(map(lambda x:x.name, boundary)),
+                        rand, self.state.players[self.state.player], self.phase_start_state)
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][2],
+                                  'target' : chosen_tech,
+                                  'memo' : 'start researching',
+                                  'state' : self.state.to_json() } )
+                    tech = self.state.tech[chosen_tech]
+                    self.state.tech.player_starts(tech, self.state.player, self.state.turn)
+                    self.state.players[self.state.player].tech.append(tech.name)
+                    self.state.phase_actions( ( self.state.player, 'START_RESEARCH', tech ) )
+                    started_tech = tech
+
+            researching = self.state.tech.techs_for_status(TechTreeState.IN_PROGRESS)
+            if start:
+                researching.append(started_tech)
+
+            ## cards for research
+            cards_for_tech = list()
+            for idx, card in enumerate(self.state.players[self.state.player].cards):
+                for tech in researching:
+                    if card[0] == tech.suit:
+                        cards_for_tech.append( (tech.name, card, idx) )
+                        
+            while True
+                if None not in cards_for_tech:
+                    cards_for_tech.append( None )
+                
+                if len(cards_for_tech) <= 1:
+                    break
+                
+                chosen_card_for_tech = self.game_def.players[self.state.player].pick(
+                    Player.CARD_FOR_RESEARCH,
+                    cards_for_tech,
+                    rand, self.state.players[self.state.player], self.phase_start_state)
+                if chosen_card_for_tech is None:
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][2],
+                                  'target' : False,
+                                  'memo' : 'skill for research',
+                                  'state' : self.state.to_json() } )
+                    break
+                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                              'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                              'target' : chosen_card_for_tech,
+                              'memo' : 'skill for research',
+                              'state' : self.state.to_json() } )
+                self.state.phase_actions( ( self.state.player, 'SKILL_RESEARCH', chosen_card_for_tech[1], self.state.tech[chosen_card_for_tech[0]] ) )
+                self.state.drawpiles.return_card(chosen_card_for_tech[1])
+                del self.state.players[self.state.player].cards[chosen_card_for_tech[2]]
+                
+                idx = 0
+                while idx < len(cards_for_tech):
+                    if cards_for_tech[idx] is None:
+                        idx += 1
+                    elif cards_for_tech[idx][2] == chosen_card_for_tech[2]:
+                        del cards_for_tech[idx]
+                    else:
+                        idx += 1
+                
+            ## funds for research
+            to_fund = researching
+
+            while True:
+                if self.state.players[self.state.player].resources['$'] == 0:
+                    break
+                if None not in to_fund:
+                    to_fund.append( None )
+
+                if len(to_fund) <= 1:
+                    break
+
+                chosen_to_fund = self.game_def.players[self.state.player].pick(
+                    Player.FUND_RESEARCH,
+                    list(map(lambda x:x.name, to_fund)),
+                    rand, self.state.players[self.state.player], self.phase_start_state)
+                if chosen_to_found is None:
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][2],
+                                  'target' : False,
+                                  'memo' : 'funds for research',
+                                  'state' : self.state.to_json() } )
+                    break
+                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                              'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                              'target' : chosen_to_fund,
+                              'memo' : 'funds for research',
+                              'state' : self.state.to_json() } )
+                self.state.phase_actions( ( self.state.player, 'FUND_RESEARCH', self.state.tech[chosen_to_fund] ) )
+                self.state.players[self.state.player].resources['$'] -= 1
+                
+                for idx, tech in enumerate(to_fund):
+                    if tech is not None and tech.name == chosen_to_fund:
+                        break
+                del to_fund[idx]
+
         elif self.state.phase == 2: # reflect
             #EMPATHIZING
-            pass
+            
+
             #STRATEGIZING
         else: # the end
             pass

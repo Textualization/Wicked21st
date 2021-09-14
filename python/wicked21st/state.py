@@ -110,36 +110,36 @@ class TechTreeState(ValidKeysDict):
     def __init__(self, tree):
         super.__init__(self, tree.names)
         self.tree = tree
-
+        for tech in tree.technologies:
+            self[tech.name] = {
+                'name':    tech.name,
+                'tech':    tech,
+                'status':  TechTreeState.AVAILABLE,
+            }
+            
     def status(self, tech_name):
-        if tech_name not in self:
-            return TechTree.AVAILABLE
         return self[tech_name]['status']
 
     def player_starts(self, tech, player: int, turn: int):
-        self[policy_name] = {
+        self[tech.name] = {
             'name':    tech.name,
             'tech':    tech,
-            'status':  PolicyState.IN_PROGRESS,
+            'status':  TechTreeState.IN_PROGRESS,
             'player':  player,
             'turn':    turn,
             'suit':    tech.suit,
             'missing_turns': tech.turns,
             }
+        
     def finish(self, tech_name):
         self[tech_name]['missing_turns'] = 0
-        self[tech_name]['status'] = TechTree.RESEARCHED
+        self[tech_name]['status'] = TechTreeState.RESEARCHED
 
     def techs_for_status(self, status: str):
         result = ()
-        if status == TechTree.AVAILABLE:
-            for tech in self.tree.technologies:
-                if tech.name not in self:
-                    result.append(tech)
-        else:
-            for obj in self.items():
-                if obj['status'] == status:
-                    result.append(obj['tech'])
+        for obj in self.items():
+            if obj['status'] == status:
+                result.append(obj['tech'])
 
     def find_tech(self, type_, suit: str, node: str=None):
         for tech in self.tree.technologies:
@@ -155,7 +155,16 @@ class TechTreeState(ValidKeysDict):
             # else, continue
         raise Exception("Not found: find_policy({}, {}, {}, {})".format(type_, fix, trigger, protect))
 
-        
+    def research_boundary(self):
+        result = list()
+        researched = set(map(lambda t:t.name, self.techs_for_status(TechTreeState.RESEARCHED)))
+        for tech in self.techs_for_status(TechTreeState.AVAILABLE):
+            if tech.parents is None:
+                result.append(tech)
+            else:
+                if tech.parents.intersection(researched) == tech.parents:
+                    result.append(tech)
+        return result
 
 class PolicyState(ValidKeysDict):
 
