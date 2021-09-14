@@ -27,9 +27,9 @@ class Game:
                                        'PASSING POLICY',
                                        'DOING RESEARCH'
                                       ],
-                        'REFLECT' : [ 'EMPATHIZING',
-                                      'STRATEGIZING' ],
-                        'END': [ 'CRISIS ROLLING' ]
+                        'REFLECT' : [ 'EMPATHIZING' ],
+                        'END': [ 'UPDATING',
+                                 'CRISIS ROLLING' ]
                        }
     
     def __init__(self, game_def: GameDef, players: list):
@@ -272,11 +272,11 @@ class Game:
                     card_choices.append( ( card, suit, idx, project.name ) )
                     
             while True:
-                if not card_choices:
-                    break
-                
                 if None not in card_choices:
                     card_choices.append( None )
+                if len(card_choices) <= 1:
+                    break
+                
 
                 play_card = self.game_def.players[self.state.player].pick(
                     Player.PLAY_CARD,
@@ -646,7 +646,37 @@ class Game:
 
         elif self.state.phase == 2: # reflect
             #EMPATHIZING
-            
+            succeeded = [ (p[2], p[3]) for p in self.state.phase_actions if p[0] == self.state.player and p[1] == 'SUCCESS_SKILL' ]
+            failed = [ (p[0], p[2], p[3]) for p in self.state.phase_actions if p[0] != self.state.player and p[1] == 'FAILED_SKILL' ]
+            empath_pairs = ()
+            for sproject, scard in succeeded:
+                for player, fproject, fcard in failed:
+                    if scard[0] == fcard[0]: # potential empath
+                        empath_pairs = ( sproject.name, fproject.name, player, self.game_def.players[player].name, scard, fcard )
+            while True:
+                if None not in empath_pairs:
+                    empath_pairs.append( None )
+                if len(empath_pairs) <= 1:
+                    break
+                empathize = self.game_def.players[self.state.player].pick(
+                    Player.EMPATHIZE,
+                    empath_pairs,
+                    rand, self.state.players[self.state.player], self.phase_start_state)
+                if empath_pairs is None:
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                  'target' : False,
+                                  'memo' : 'skill for project',
+                                  'state' : self.state.to_json() } )
+                    break
+                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                              'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                              'target' : play_card,
+                              'memo' : 'skill for project',
+                              'state' : self.state.to_json() } )
+                
+                
+                
 
             #STRATEGIZING
         else: # the end

@@ -31,6 +31,7 @@ class Player:
     START_RESEARCH_TECH = 19
     CARD_FOR_RESEARCH   = 20
     FUND_RESEARCH       = 21
+    EMPATHIZE = 22
     
 
     decision_names = [ 'Initial location',
