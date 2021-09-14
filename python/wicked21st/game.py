@@ -10,9 +10,10 @@ from .graph import Graph
 from .player import Player
 from .drawpiles import DrawPiles
 from .definitions import GameDef
-from .state import ProjectState
-from .projects import Projects
-from .policy import Policies
+from .state import ProjectState, PolicyState, TechTreeState
+from .projects import Projects, Project
+from .policy import Policies, Policy
+from .techtree import Tech, TechTree
 
 class Game:
 
@@ -299,19 +300,41 @@ class Game:
                     succeeded = True
                 else:
                     value = min(10, play_card[0][1])
-                    if self.state.players[self.state.player].resources['$'] > 0:
+                    base_tech = self.state.tech.find_tech(Tech.BASE, play_card[0][0])
+                    expanded_tech = self.state.tech.find_tech(Tech.A, play_card[0][0])
+                    
+                    if self.state.tech.status(base_tech.name) == TechTreeState.RESEARCHED:
+                        value += 1
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                      'target' : 1,
+                                      'memo' : 'using tech "{}"'.format(base_tech.name),
+                                      'state' : self.state.to_json() } )
+                    if self.state.tech.status(expanded_tech.name) == TechTreeState.RESEARCHED:
+                        base = value
+                        value = min(11, value + 2)
+                        if base > value:
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                          'target' : (value - base),
+                                          'memo' : 'using tech "{}"'.format(expanded_tech.name),
+                                          'state' : self.state.to_json() } )
+                        
+                    if value < 11 and self.state.players[self.state.player].resources['$'] > 0:
                         moneys = min(11 - value, self.state.players[self.state.player].resources['$'])
-                    consultant = self.game_def.players[self.state.player].pick(
-                        Player.CONSULTANT,
-                        list(range(moneys + 1)),
-                        rand, self.state.players[self.state.player], self.phase_start_state)
-                    log.append( { 'phase' : Game.PHASES[self.state.phase],
-                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
-                                  'target' : consultant,
-                                  'memo' : 'consultant fees',
-                                  'state' : self.state.to_json() } )
-                    self.state.players[self.state.player].resources['$'] -= consultant
-                    value += consultant
+                        
+                        consultant = self.game_def.players[self.state.player].pick(
+                            Player.CONSULTANT,
+                            list(range(moneys + 1)),
+                            rand, self.state.players[self.state.player], self.phase_start_state)
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                      'target' : consultant,
+                                      'memo' : 'consultant fees',
+                                      'state' : self.state.to_json() } )
+                        self.state.players[self.state.player].resources['$'] -= consultant
+                        value += consultant
+                        
                     roll = self.roll_dice(rand, 2, 0)
                     if roll <= value:
                         succeed = True
@@ -479,25 +502,34 @@ class Game:
                                   'memo' : 'empower a policy',
                                   'state' : self.state.to_json() } )
                     break
-                if chosen_policy == started_policy.name:
-                    powers = min(self.state.players[self.state.player].resources['!'], self.state.policies[chosen_policy]['missing_power'])
-                else:
-                    powers = min(self.state.players[self.state.player].resources['!'], self.phase_start_state.policies[chosen_policy]['missing_power'])
-                powers = list(range(1, powers + 1))
-                chosen_power = self.game_def.players[self.state.player].pick(
-                    Player.POWER_AMOUNT,
-                    powers,
-                    rand, self.state.players[self.state.player], self.phase_start_state)
+                chosen_power = None
                 
-                self.state.players[self.state.player].resources['!'] -= chosen_power
-                self.state.policies[chosen_policy]['missing_power'] -=  chosen_power
-                del policy_choices[policy_choices.index(chosen_policy)]
-                self.state.phase_actions( ( self.state.player, 'EMPOWER_POLICY', self.state.policies[chosen_policy]['policy'], chosen_power ) )
+                if chosen_policy == started_policy.name:
+                    powers = min(self.state.players[self.state.player].resources['!'],
+                                 self.state.policies[chosen_policy]['missing_power'])
+                else:
+                    if self.state.phase_start_state.policies.status(chosen_policy) == PolicyState.PASSED:
+                        chosen_power = 1
+                    else:
+                        powers = min(self.state.players[self.state.player].resources['!'],
+                                     self.phase_start_state.policies[chosen_policy]['missing_power'])
+                if chosen_power is None:
+                    powers = list(range(1, powers + 1))
+                    chosen_power = self.game_def.players[self.state.player].pick(
+                        Player.POWER_AMOUNT,
+                        powers,
+                        rand, self.state.players[self.state.player], self.phase_start_state)
+                    
                 log.append( { 'phase' : Game.PHASES[self.state.phase],
                               'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
                               'target' : chosen_power,
                               'memo' : 'empower policy "{}"'.format(chosen_policy),
                               'state' : self.state.to_json() } )
+                
+                self.state.players[self.state.player].resources['!'] -= chosen_power
+                self.state.policies[chosen_policy]['missing_power'] -=  chosen_power
+                del policy_choices[policy_choices.index(chosen_policy)]
+                self.state.phase_actions( ( self.state.player, 'EMPOWER_POLICY', self.state.policies[chosen_policy]['policy'], chosen_power ) )
                 # policy effects, etc are left for the end
 
             # research

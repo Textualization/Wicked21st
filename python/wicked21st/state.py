@@ -102,8 +102,60 @@ class ProjectState(ValidKeysDict):
         raise Exception("Not found: find_project({}, {}, {}, {})".format(type_, fix, trigger, protect))
 
 class TechTreeState(ValidKeysDict):
+    
+    AVAILABLE   = 'available'
+    IN_PROGRESS = 'in progress'
+    RESEARCHED  = 'researched'
+    
     def __init__(self, tree):
-        super.__init__(self, tree.technologies)
+        super.__init__(self, tree.names)
+        self.tree = tree
+
+    def status(self, tech_name):
+        if tech_name not in self:
+            return TechTree.AVAILABLE
+        return self[tech_name]['status']
+
+    def player_starts(self, tech, player: int, turn: int):
+        self[policy_name] = {
+            'name':    tech.name,
+            'tech':    tech,
+            'status':  PolicyState.IN_PROGRESS,
+            'player':  player,
+            'turn':    turn,
+            'suit':    tech.suit,
+            'missing_turns': tech.turns,
+            }
+    def finish(self, tech_name):
+        self[tech_name]['missing_turns'] = 0
+        self[tech_name]['status'] = TechTree.RESEARCHED
+
+    def techs_for_status(self, status: str):
+        result = ()
+        if status == TechTree.AVAILABLE:
+            for tech in self.tree.technologies:
+                if tech.name not in self:
+                    result.append(tech)
+        else:
+            for obj in self.items():
+                if obj['status'] == status:
+                    result.append(obj['tech'])
+
+    def find_tech(self, type_, suit: str, node: str=None):
+        for tech in self.tree.technologies:
+            if tech.type_ == type_ and tech.suit == suit:
+                if node is None:
+                    if tech.node is None:
+                        return tech
+                # else, continue
+                elif tech.node is not None:
+                    if node == tech.node:
+                        return tech
+                # else, continue
+            # else, continue
+        raise Exception("Not found: find_policy({}, {}, {}, {})".format(type_, fix, trigger, protect))
+
+        
 
 class PolicyState(ValidKeysDict):
 
@@ -186,7 +238,7 @@ class GameState:
         self.graph = graph_state
         self.board = board_state
         self.projects = project_state
-        self.technologies = techtree_state
+        self.tech = techtree_state
         self.policies = policy_state
         self.drawpiles = drawpiles_state
 

@@ -23,6 +23,7 @@ class Graph:
 
   CATEGORIES = [ INDUSTRIAL, ECONOMIC, SOCIAL, CLASS, ENVIRONMENTAL, LIVING_STANDARDS ]
     
+  GRAPH_PRINT_SIZE = "10,10"
   
   # nodes: dict( id -> name ), class_for_node: dict( id -> clazz ), outlinks: dict( id -> set(id) )
   def __init__(self, nodes, class_for_node, outlinks, categories):
@@ -117,7 +118,7 @@ class Graph:
     return self
 
   def show(self):
-    digraph = graphviz.Digraph(graph_attr={"size": GRAPH_PRINT_SIZE, "landscape":"portrait"})
+    digraph = graphviz.Digraph(graph_attr={"size": Graph.GRAPH_PRINT_SIZE, "landscape":"portrait"})
 
     for _id, name in self.node_names.items():
       digraph.node(name, shape="box", fillcolor=self.class_for_node[_id], style='filled')
