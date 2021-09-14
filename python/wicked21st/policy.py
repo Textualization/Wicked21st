@@ -11,9 +11,8 @@ class Policy:
     A = 1
     B = 2
     C = 3
-    D = 4
 
-    TYPES = [ 'Base', 'Remove-Tradeoff', 'Protect-Extra', 'Fix-Extra', 'Protect-Any' ]
+    TYPES = [ 'Base', 'Remove-Tradeoff', 'Protect-Extra', 'Protect-Any' ]
 
     # cost is 'quorum': int, 'turns': int
     # added value on top of quorum and turns is the number of turns to wait after it passes
@@ -81,26 +80,15 @@ class Policies:
                                          cost, improvA)
                         self.policies.append(improvB)
 
-                        # improv-C fix another in same cat
-                        for other2 in graph.node_classes[c1[1]]:
-                            if other2 != n1:
-                                other2n = graph.node_names[other]
+                        # improv-C, protect any other
+                        for other2, other2n in graph.node_names.items():
+                            if other2 != other:
                                 cost = ( 6, 6 )
-                                improvC = Policy("Improv-C fix '{}'+'{}' protect '{}' ({}) ".format(nn1, other2n, othern, c1[0]), Policy.C,
-                                                 set([n1, other2]), set(), set([other]),
+                                improvC = Policy("Improv-C fix '{}' protect '{}'"+
+                                                 " ({}) protect '{}'".format(nn1, othern, othern, c1[0], other2n), Policy.C,
+                                                 set([n1]), set(), set([other, other2]),
                                                  cost, improvB)
                                 self.policies.append(improvC)
-
-                                # improv-D, protect any other
-                                for other3 in graph.node_classes[c1[1]]:
-                                    if other3 != other:
-                                        other3n = graph.node_names[other3]
-                                        cost = ( 8, 8 )
-                                        improvD = Policy("Improv-D fix '{}'+'{}' protect '{}'"+
-                                                         " ({}) protect '{}'".format(nn1, other2n, othern, c1[0], other3n), Policy.D,
-                                                         set([n1, other2]), set(), set([other, other3]),
-                                                         cost, improvC)
-                                        self.policies.append(improvD)
         
         self.policy_for_name = { policy.name: policy for policy in self.policies }
         self.names = list(self.policy_for_name.keys())

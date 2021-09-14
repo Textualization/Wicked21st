@@ -109,7 +109,8 @@ class PolicyState(ValidKeysDict):
 
     AVAILABLE   = 'available'
     IN_PROGRESS = 'in progress'
-    FINISHED    = 'finished'
+    PASSED      = 'passed'
+    EXPIRED     = 'expired'
     
     def __init__(self, policies):
         super.__init__(self, policies.names)
@@ -120,14 +121,15 @@ class PolicyState(ValidKeysDict):
             return PolicyState.AVAILABLE
         return self[policy_name]['status']
 
-    def player_starts(self, policy, player: int, turn: int):
+    def player_starts(self, policy, player: int, turn: int, quorum: int):
         self[policy_name] = {
             'name':    policy.name,
             'policy':  policy,
             'status':  PolicyState.IN_PROGRESS,
             'player':  player,
             'turn':    turn,
-            'missing': policy.cost
+            'missing_power': policy.cost[0] + quorum,
+            'missing_turns': policy.cost[1]
             }
     def abandon(self, policy_name):
         del self[policy_name]
@@ -187,6 +189,9 @@ class GameState:
         self.technologies = techtree_state
         self.policies = policy_state
         self.drawpiles = drawpiles_state
+
+    def quorum(self):
+        return len(self.players_state) // 2 + 1
 
     def to_json(self):
         return { 'game': self.game.to_json(),
