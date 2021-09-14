@@ -227,9 +227,10 @@ class PolicyState(ValidKeysDict):
 
 class GameState:
     def __init__(self,
-                 turn: Int,
-                 phase: Int,
-                 player: Int,
+                 turn: int,
+                 phase: int,
+                 player: int,
+                 leader: int
                  game_def: GameDef,
                  players_state: list,
                  crisis_chips: int,
@@ -241,6 +242,7 @@ class GameState:
         self.turn = turn
         self.phase = phase
         self.player = player
+        self.leader = leader
         self.game = game_def
         self.players = players_state
         self.crisis_chips = crisis_chips
@@ -257,6 +259,10 @@ class GameState:
     def to_json(self):
         return { 'game': self.game.to_json(),
                  'players' : to_json(self.players),
+                 'player' : self.player,
+                 'turn' : self.turn,
+                 'phase' : self.phase,
+                 'leader': self.leader,
                  'crisis_chips' : crisis_chips,
                  'board' : self.board.to_json(),
                  'graph' : self.graph.to_json(),

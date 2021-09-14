@@ -55,6 +55,9 @@ class Player:
         """Choose a decision among many"""
         return rand.choice(decisions)
 
+    def roll(self, rand, num):
+        return rand.randint(1, num)
+
 class PlayerState:
     def __init__(self, player: Player, resources: dict, cards: list, location: string):
         self.player    = player

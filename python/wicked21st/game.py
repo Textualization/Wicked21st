@@ -28,7 +28,7 @@ class Game:
                                        'DOING RESEARCH'
                                       ],
                         'REFLECT' : [ 'EMPATHIZING' ],
-                        'END': [ 'UPDATING',
+                        'END': [ 'FINALIZING',
                                  'CRISIS ROLLING' ]
                        }
     
@@ -39,10 +39,10 @@ class Game:
         self.phase_start_state = None
         self.phase_actions = None
 
-    def roll_dice(self, rand, num, step):
+    def roll_dice(self, player, rand, num, step):
         result = 0
         for _ in range(num):
-            result += rand.randint(1,6)
+            result += self.game_def.players[player].roll(rand, 6)
         log.append( { 'phase' : Game.PHASES[self.state.phase],
                       'step' : Game.STEPS_PER_PHASE[self.state.phase][step],
                       'target' : result,
@@ -78,6 +78,7 @@ class Game:
                 if self.state.phase == len(Game.PHASES)
                     self.state.phase = 0
                     self.turn += 1
+                    self.leader = (self.leader + 1) % self.game_def.num_players
         return self.finished
 
     def cascade(self, node):
@@ -646,13 +647,15 @@ class Game:
 
         elif self.state.phase == 2: # reflect
             #EMPATHIZING
-            succeeded = [ (p[2], p[3]) for p in self.state.phase_actions if p[0] == self.state.player and p[1] == 'SUCCESS_SKILL' ]
-            failed = [ (p[0], p[2], p[3]) for p in self.state.phase_actions if p[0] != self.state.player and p[1] == 'FAILED_SKILL' ]
+            succeeded = [ (p[2], p[3], idx) for idx, p in enumerate(self.state.phase_actions)
+                          if p[0] == self.state.player and p[1] == 'SUCCESS_SKILL' ]
+            failed = [ (p[0], p[2], p[3], idx) for idx, p in enumerate(self.state.phase_actions)
+                       if p[0] != self.state.player and p[1] == 'FAILED_SKILL' ]
             empath_pairs = ()
-            for sproject, scard in succeeded:
-                for player, fproject, fcard in failed:
+            for sproject, scard, sidx in succeeded:
+                for player, fproject, fcard, fidx in failed:
                     if scard[0] == fcard[0]: # potential empath
-                        empath_pairs = ( sproject.name, fproject.name, player, self.game_def.players[player].name, scard, fcard )
+                        empath_pairs = ( sproject.name, fproject.name, player, self.game_def.players[player].name, scard, fcard, sidx, fidx )
             while True:
                 if None not in empath_pairs:
                     empath_pairs.append( None )
@@ -662,28 +665,61 @@ class Game:
                     Player.EMPATHIZE,
                     empath_pairs,
                     rand, self.state.players[self.state.player], self.phase_start_state)
-                if empath_pairs is None:
+                if empathize is None:
                     log.append( { 'phase' : Game.PHASES[self.state.phase],
                                   'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
                                   'target' : False,
-                                  'memo' : 'skill for project',
+                                  'memo' : 'empathize',
                                   'state' : self.state.to_json() } )
                     break
                 log.append( { 'phase' : Game.PHASES[self.state.phase],
                               'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
-                              'target' : play_card,
-                              'memo' : 'skill for project',
+                              'target' : empathize,
+                              'memo' : 'empathize',
                               'state' : self.state.to_json() } )
+                self.state.phase_actions[emphatize[-2]][1] = 'FAILED_SKILL_EMPATH'
+                self.state.phase_actions[emphatize[-1]][1] = 'SUCCESS_SKILL_EMPATH'
                 
-                
-                
+                idx = 0
+                while idx < len(empath_pairs):
+                    if empath_pairs[idx] is None:
+                        idx += 1
+                    elif empath_pairs[idx][-1] == emphatize[-1] or empath_pairs[idx][-2] == emphatize[-2]:
+                        del empath_pairs[idx]
+                    else:
+                        idx += 1
 
-            #STRATEGIZING
         else: # the end
-            pass
-            
-            
+            if self.player != self.leader:
+                pass
+            else:
+                # FINALIZING
 
+                ## see if any of the techs was researched and apply its actions
+
+                ## see if any of the projects had no action and should be discarded
+
+                ## see if any of the projects was finished and apply its actions
+
+                ## see if any of the policies had no action and should be discarded
+
+                ## see if any of the policies was passed and apply its actions
+
+                # CRISIS ROLLING
+
+                ## add crisis chip for each category fully in crisis
+
+                ## roll a category, if the category is fully in crisis, add a crisis chip and roll again
+
+                ## roll a node in category, if in crisis and all its descendants are in crisis, add a crisis chip and roll again
+
+                ## with a node in hand, roll crisis chips until either the roll is successful or all the crisis chips are exhausted
+
+                ## if the node was in crisis, activate all the nodes reachable from it and further cascade as needed
+
+                ## if the node was protected, remove the protection
+
+                ## if there are more crisis chips, continue by selecting a new category
         
     if random.random() < creation_prob:
       # we got ourselves a crisis!
