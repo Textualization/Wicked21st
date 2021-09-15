@@ -27,7 +27,7 @@ class Tech:
                    'type' : Tech.TYPES[self.type_],
                    'suit' : self.suit }
         if self.node is not None:
-            result['node'] = node
+            result['node'] = self.node
         if self.parents is not None:
             result['parents'] = list(self.parents)
         return result

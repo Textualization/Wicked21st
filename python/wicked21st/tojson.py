@@ -4,13 +4,12 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 
 def to_json(v):
-    if v is Int:
+    t = type(v)
+    if t is int or t is bool or t is str:
         return v
-    if v is string:
-        return v
-    if v is list:
+    if t is list or t is set:
         return [ to_json(_) for _ in v ]
-    if v is dict:
+    if t is dict:
         return { k: to_json(vv) for k, vv in v.items() }
     return v.to_json()
         

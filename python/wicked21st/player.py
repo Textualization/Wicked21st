@@ -5,6 +5,7 @@
 
 import random
 
+from .classes import BaseClass
 
 class Player:
 
@@ -40,7 +41,7 @@ class Player:
                        'Start a new project?',
                       ]
     
-    def __init__(self, name: string, ordering: Int, pclass: BaseClass):
+    def __init__(self, name: str, ordering: int, pclass: BaseClass):
         self.name = name
         self.ordering = ordering
         self.player_class = pclass
@@ -51,7 +52,9 @@ class Player:
                  'player_class' : self.player_class.to_json() }
 
     def pick(self, decision: int, decisions: list,
-             rand: random.Random, state: PlayerState=None, game: GameState=None, context: dict=None):
+             # state: PlayerState
+             # game: GameState
+             rand: random.Random, state: object=None, game: object=None, context: dict=None):
         """Choose a decision among many"""
         return rand.choice(decisions)
 
@@ -59,7 +62,7 @@ class Player:
         return rand.randint(1, num)
 
 class PlayerState:
-    def __init__(self, player: Player, resources: dict, cards: list, location: string):
+    def __init__(self, player: Player, resources: dict, cards: list, location: str):
         self.player    = player
         self.resources = resources
         self.cards     = cards

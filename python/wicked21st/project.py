@@ -30,7 +30,7 @@ class Project:
                    'protects': list(self.protects),
                    'cost':     self.cost
                   }
-        if parent is not None:
+        if self.parent is not None:
             result['parent'] = self.parent.name
    
 class Projects:

@@ -6,25 +6,28 @@
 import random
 import copy
 
+from .tojson import to_json
+
+
 class ValidKeysDict(dict):
     def __init__(self, keys):
-        super.__init__(self)
+        super().__init__()
         self.valid_keys = set(keys)
     def __getitem__(self, key):
         assert key in self.valid_keys
-        return super.__getitem__(key)
+        return super().__getitem__(key)
     def __setitem__(self, key, value):
         assert key in self.valid_keys
-        return super.__setitem__(key, value)
+        return super().__setitem__(key, value)
     def update(self, *args, **kwargs):
         for k, v in dict(*args, **kwargs).items():
             self[k] = v
     def get(self, key, value=None):
         assert key in self.valid_keys
-        return super.get(key, value)
+        return super().get(key, value)
 
     def to_json(self):
-        return to_json(self)
+        return { k: to_json(v) for k,v in self.items() }
 
 class GraphState(ValidKeysDict):
 
@@ -33,7 +36,7 @@ class GraphState(ValidKeysDict):
     PROTECTED = 2
     
     def __init__(self, graph):
-        super.__init__(self, graph.nodes())
+        super().__init__(graph.nodes())
         self.graph = graph
         for n in graph.nodes():
             id_ = graph.name_to_id[n]
@@ -45,15 +48,15 @@ class GraphState(ValidKeysDict):
                        }
 
     def in_crisis(self, node_name):
-        self[node_name]['status'] = GRaphState.IN_CRISIS
+        self[node_name]['status'] = GraphState.IN_CRISIS
 
     def are_in_crisis(self, category=None):
         result = set()
         for k, v in self.items():
             if v['status']:
-                if categoy is None or v['category'] == self.graph.category_for_name[category]:
+                if category is None or v['category'] == self.graph.category_for_name[category]:
                     result.add(k)
-        return k
+        return result
 
     def is_staturated(self, node_name):
         if self[node_name]['status'] != GraphState.IN_CRISIS:
@@ -71,7 +74,8 @@ class GraphState(ValidKeysDict):
 
 class BoardState(ValidKeysDict):
     def __init__(self, board):
-        super.__init__(self, board.locations)
+        super().__init__(board.locations)
+        
 
 # keys: object 'state' : 
 class ProjectState(ValidKeysDict):
@@ -81,7 +85,7 @@ class ProjectState(ValidKeysDict):
     FINISHED    = 'finished'
     
     def __init__(self, projects):
-        super.__init__(self, projects.names)
+        super().__init__(projects.names)
         self.projects = projects
 
     def status(self, project_name):
@@ -90,7 +94,7 @@ class ProjectState(ValidKeysDict):
         return self[project_name]['status']
 
     def player_starts(self, project, player: int, turn: int):
-        self[project_name] = {
+        self[project.name] = {
             'name':    project.name,
             'project': project,
             'status':  ProjectState.IN_PROGRESS,
@@ -106,7 +110,7 @@ class ProjectState(ValidKeysDict):
         self[project_name]['status'] = ProjectState.FINISHED
 
     def projects_for_status(self, status: str):
-        result = ()
+        result = list()
         if status == ProjectState.AVAILABLE:
             for project in self.projects.projects:
                 if project.name not in self:
@@ -115,6 +119,7 @@ class ProjectState(ValidKeysDict):
             for obj in self.items():
                 if obj['status'] == status:
                     result.append(obj['project'])
+        return result
 
     def find_project(self, type_, fix, trigger=None, protect=None):
         for project in self.projects.projects:
@@ -138,7 +143,7 @@ class TechTreeState(ValidKeysDict):
     RESEARCHED  = 'researched'
     
     def __init__(self, tree):
-        super.__init__(self, tree.names)
+        super().__init__(tree.names)
         self.tree = tree
         for tech in tree.technologies:
             self[tech.name] = {
@@ -166,10 +171,11 @@ class TechTreeState(ValidKeysDict):
         self[tech_name]['status'] = TechTreeState.RESEARCHED
 
     def techs_for_status(self, status: str):
-        result = ()
-        for obj in self.items():
+        result = list()
+        for obj in self.values():
             if obj['status'] == status:
                 result.append(obj['tech'])
+        return result
 
     def find_tech(self, type_, suit: str, node: str=None):
         for tech in self.tree.technologies:
@@ -204,7 +210,7 @@ class PolicyState(ValidKeysDict):
     EXPIRED     = 'expired'
     
     def __init__(self, policies):
-        super.__init__(self, policies.names)
+        super().__init__(policies.names)
         self.policies = policies
 
     def status(self, policy_name):
@@ -234,7 +240,7 @@ class PolicyState(ValidKeysDict):
         self[policy_name]['status'] = PolicyState.PASSED
 
     def policies_for_status(self, status: str):
-        result = ()
+        result = list()
         if status == PolicyState.AVAILABLE:
             for policy in self.policies.policies:
                 if policy.name not in self:
@@ -243,6 +249,7 @@ class PolicyState(ValidKeysDict):
             for obj in self.items():
                 if obj['status'] == status:
                     result.append(obj['policy'])
+        return result
 
     def find_policy(self, type_, fix: set, trigger: set=None, protect: set=None):
         for policy in self.policies.policies:
@@ -257,51 +264,4 @@ class PolicyState(ValidKeysDict):
                         return policy
                 # else, continue
         raise Exception("Not found: find_policy({}, {}, {}, {})".format(type_, fix, trigger, protect))
-
-
-class GameState:
-    def __init__(self,
-                 turn: int,
-                 phase: int,
-                 player: int,
-                 leader: int,
-                 game_def: GameDef,
-                 players_state: list,
-                 crisis_chips: int,
-                 graph_state: GraphState,
-                 board_state: BoardState,
-                 techtree_state: TechtreeState,
-                 policy_state: PolicyState,
-                 drawpiles_state: DrawPiles):
-        self.turn = turn
-        self.phase = phase
-        self.player = player
-        self.leader = leader
-        self.game = game_def
-        self.players = players_state
-        self.crisis_chips = crisis_chips
-        self.graph = graph_state
-        self.board = board_state
-        self.projects = project_state
-        self.tech = techtree_state
-        self.policies = policy_state
-        self.drawpiles = drawpiles_state
-
-    def quorum(self):
-        return len(self.players_state) // 2 + 1
-
-    def to_json(self):
-        return { 'game': self.game.to_json(),
-                 'players' : to_json(self.players),
-                 'player' : self.player,
-                 'turn' : self.turn,
-                 'phase' : self.phase,
-                 'leader': self.leader,
-                 'crisis_chips' : crisis_chips,
-                 'board' : self.board.to_json(),
-                 'graph' : self.graph.to_json(),
-                 'tech' : self.techtree.to_json(),
-                 'projects' : self.projects.to_json(),
-                 'policy' : self.policy.to_json(),
-                 'piles' : self.drawpiles.to_json() }
 

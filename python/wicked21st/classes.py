@@ -33,40 +33,40 @@ class BaseClass:
 
 class EngineerClass(BaseClass):
     def __init__(self):
-        super.__init__('Engineer', 'S', 'C', '!')
+        super().__init__('Engineer', 'S', 'C', '!')
 class InvestorClass(BaseClass):
     def __init__(self):
-        super.__init__('Investor', 'S', 'C', '$')
+        super().__init__('Investor', 'S', 'C', '$')
 class UnionRepClass(BaseClass):
     def __init__(self):
-        super.__init__('Union Rep', 'S', 'H', '!')
+        super().__init__('Union Rep', 'S', 'H', '!')
 class SocialWorkerClass(BaseClass):
     def __init__(self):
-        super.__init__('Social Worker', 'S', 'H', '$')
+        super().__init__('Social Worker', 'S', 'H', '$')
 class ArtistClass(BaseClass):
     def __init__(self):
-        super.__init__('Artist', 'S', 'D', '!')
+        super().__init__('Artist', 'S', 'D', '!')
 class ServiceWorkerClass(BaseClass):
     def __init__(self):
-        super.__init__('Service Worker', 'S', 'D', '$')
+        super().__init__('Service Worker', 'S', 'D', '$')
 class ResearcherClass(BaseClass):
     def __init__(self):
-        super.__init__('Researcher', 'C', 'H', '!')
+        super().__init__('Researcher', 'C', 'H', '!')
 class ScientistClass(BaseClass):
     def __init__(self):
-        super.__init__('Scientist', 'C', 'H', '$')
+        super().__init__('Scientist', 'C', 'H', '$')
 class JournalistClass(BaseClass):
     def __init__(self):
-        super.__init__('Journalist', 'C', 'D', '$')
+        super().__init__('Journalist', 'C', 'D', '$')
 class CouncilorClass(BaseClass):
     def __init__(self):
-        super.__init__('Councilor', 'C', 'D', '!')
+        super().__init__('Councilor', 'C', 'D', '!')
 class ActivistClass(BaseClass):
     def __init__(self):
-        super.__init__('Activist', 'H', 'D', '!')
+        super().__init__('Activist', 'H', 'D', '!')
 class LocalOrganizerClass(BaseClass):
     def __init__(self):
-        super.__init__('Local Organizer', 'H', 'D', '$')
+        super().__init__('Local Organizer', 'H', 'D', '$')
 
 class Classes:
     def __init__(self):

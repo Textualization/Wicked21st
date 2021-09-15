@@ -14,10 +14,10 @@ class DrawPiles:
 
         #suit_cards = ['a'] + list(range(2,11)) + ['j','q','k']
         suit_cards = list(range(1,14))
-        for suit in SUITS:
+        for suit in DrawPiles.SUITS:
             pile = suit_cards + suit_cards + [14,] # joker
             rand.shuffle(pile)
-            self.draw_pile[suit] = pile
+            self.draw_piles[suit] = pile
 
     def draw(self, suit, rand):
         pile =  self.draw_piles[suit]
@@ -39,5 +39,5 @@ class DrawPiles:
             self.return_piles[card[0]].append(card[1])
 
     def to_json(self):
-        return { 'draw' : { s: self.draw_piles[s] for s in SUITS },
-                 'return' : { s: self.return_piles[s] for s in SUITS } }
+        return { 'draw' : { s: self.draw_piles[s] for s in DrawPiles.SUITS },
+                 'return' : { s: self.return_piles[s] for s in DrawPiles.SUITS } }
