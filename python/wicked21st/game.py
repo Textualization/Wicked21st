@@ -39,7 +39,7 @@ class Game:
         self.phase_start_state = None
         self.phase_actions = None
 
-    def roll_dice(self, player, memo, rand, num, step):
+    def roll_dice(self, num, player, memo, rand, step):
         result = 0
         for idx in range(num):
             result += self.game_def.players[player].roll("{}, {} of {}".format(memo, idx+1, num), rand, 6)
@@ -340,7 +340,7 @@ class Game:
                         self.state.players[self.state.player].resources['$'] -= consultant
                         value += consultant
                         
-                    roll = self.roll_dice(rand, 'skill check', 2, 0)
+                    roll = self.roll_dice(2, self.state.player, 'skill check', rand, 0)
                     if roll <= value:
                         succeed = True
                     if roll == 12:
@@ -1017,37 +1017,114 @@ class Game:
                 # CRISIS ROLLING
 
                 ## add crisis chip for each category fully in crisis
+                for catn, catid in Graph.CATEGORIES:
+                    if len(self.state.graph.in_crisis(cat)) == len(self.game_def.graph.node_classes[catid]):
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                      'target' : cat,
+                                      'memo' : 'crisis chip full category',
+                                      'state' : self.state.to_json() } )
 
-                ## roll a category, if the category is fully in crisis, add a crisis chip and roll again
+                while self.state.crisis_chips and len(self.state.graph.in_crisis()) < len(self.game_def.graph):
+                    ## roll a category, if the category is fully in crisis, add a crisis chip and roll again
+                    catnum = self.roll_dice(1, self.state.player, 'crisis cat', rand, 1)
+                    cat, catid = Graph.CATEGORIES[catnum]
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                  'target' : cat,
+                                  'memo' : 'crisis category',
+                                  'state' : self.state.to_json() } )
 
-                ## roll a node in category, if in crisis and all its descendants are in crisis, add a crisis chip and roll again
+                    if len(self.state.graph.in_crisis(cat)) == len(self.game_def.graph.node_classes[catid]):
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                      'target' : cat,
+                                      'memo' : 'crisis chip full category',
+                                      'state' : self.state.to_json() } )
+                        continue
 
-                ## with a node in hand, roll crisis chips until either the roll is successful or all the crisis chips are exhausted
+                    ## roll a node in category, if in crisis and all its descendants are in crisis, add a crisis chip and roll again
+                    nodes = self.game_def.graph.node_classes[catid]
+                    dice = 1
+                    if len(nodes) > 6:
+                        dice += 1
+                    nodenum = self.roll_dice(dice, self.state.player, 'node in ' + cat, rand, 1) % len(nodes)
+                    node = nodes[nodenum]
+                    noden = self.game_def.graph.node_names[node]
+                    if self.state.graph.is_saturated(noden):
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                      'target' : noden,
+                                      'memo' : 'crisis chip saturated node',
+                                      'state' : self.state.to_json() } )
+                        continue
+                    
+                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                  'target' : noden,
+                                  'memo' : 'crisis node',
+                                  'state' : self.state.to_json() } )
+                        
+                    ## with a node in hand, roll crisis chips until either the roll is successful or all the crisis chips are exhausted
+                    crisis_averted = True
+                    while self.state.crisis_chips:
+                        crisis_roll = self.roll_dice(2, self.state.player, 'crisis roll for ' + noden, rand, 1)
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                      'target' : crisis_roll,
+                                      'memo' : 'crisis roll for node "{}"'.format(noden),
+                                      'state' : self.state.to_json() } )
+                        self.state.crisis_chips -= 1
+                        if crisis_roll > 6:
+                            crisis_averted = False
+                            break
 
-                ## if the node was in crisis, activate all the nodes reachable from it and further cascade as needed
+                    if crisis_averted:
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                      'target' : noden,
+                                      'memo' : 'crisis averted!',
+                                      'state' : self.state.to_json() } )
+                    else:
+                        ## if node was stable, set in crisis
+                        if self.graph[noden]['status'] == GraphState.STABLE:
+                            self.graph[noden]['status'] = GraphState.IN_CRISIS
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                          'target' : noden,
+                                          'memo' : 'in crisis',
+                                          'state' : self.state.to_json() } )
+                    
+                        ## if the node was protected, remove the protection
+                        elif self.graph[noden]['status'] == GraphState.PROTECTED:
+                            self.graph[triggern]['status'] = GraphState.STABLE
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                          'target' : noden,
+                                          'memo' : 'loses protection',
+                                          'state' : self.state.to_json() } )
+                        ## if the node was in crisis, activate all the nodes reachable from it and further cascade as needed
+                        else: 
+                            cascaded = self.cascade(node)
+                            for node2 in cascaded:
+                                node2n = self.game_def.graph.node_names[node2]
+                                if self.graph[node2n]['status'] == GraphState.STABLE:
+                                    self.graph[node2n]['status'] = GraphState.IN_CRISIS
+                                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                                  'target' : node2n,
+                                                  'memo' : 'in crisis (cascaded from: {})'.format(noden),
+                                                  'state' : self.state.to_json() } )
+                                elif self.graph[node2n]['status'] == GraphState.PROTECTED:
+                                    self.graph[node2n]['status'] = GraphState.STABLE
+                                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
+                                                  'target' : node2n,
+                                                  'memo' : 'loses protection (project: {})'.format(project.name),
+                                                  'state' : self.state.to_json() } )
+                        
 
-                ## if the node was protected, remove the protection
-
-                ## if there are more crisis chips, continue by selecting a new category
-        
-    if random.random() < creation_prob:
-      # we got ourselves a crisis!
-      done = False
-      while not done:
-        in_crisis = random.choice(list(self.graph.node_names.keys())) # any problem, in crisis or otherwise
-        if in_crisis in self.crisis: # been there, done that
-          done = len(self.cascade(in_crisis)) > 0
-        else:
-          self.good.remove(in_crisis)
-          self.crisis.add(in_crisis)
-          done = True
-    if random.random() < resolution_prob:
-      # don't just stand there, fix something!
-      # here reinforcement learning would be handy    
-      if len(self.crisis) > 0:
-        to_solve = random.choice(list(self.crisis))
-        self.crisis.remove(to_solve)
-        self.good.add(to_solve)
+                    ## if there are more crisis chips, continue by selecting a new category
     return super().step()
 
 

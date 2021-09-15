@@ -52,6 +52,20 @@ class GraphState(ValidKeysDict):
                     result.add(k)
         return k
 
+    def is_staturated(self, node_name):
+        if self[node_name]['status'] != GraphState.IN_CRISIS:
+            return False
+
+        node = self[node_name]['id']
+        for outlink in self.graph.outlinks[node]
+            outlinkn = self.game_def.graph.node_names[outlink]
+            if not self.is_saturated(outlinkn):
+                return False
+            
+        return True
+        
+    
+
 class BoardState(ValidKeysDict):
     def __init__(self, board):
         super.__init__(self, board.locations)
