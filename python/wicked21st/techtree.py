@@ -66,7 +66,7 @@ class TechTree:
             for n in graph.node_classes[cat[1]]:
                 nn = graph.node_names[n]
 
-                protected = Tech('Protect "{}"'.format(nn), Tech.B, suit_c, parents=set([expanded.name, base.name]))
+                protected = Tech('Protect "{}"'.format(nn), Tech.B, suit_c, n, parents=set([expanded.name, base.name]))
                 self.technologies.append(protected)
 
         self.tech_for_name = { tech.name: tech for tech in self.technologies }

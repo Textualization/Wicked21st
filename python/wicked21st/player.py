@@ -55,7 +55,7 @@ class Player:
         """Choose a decision among many"""
         return rand.choice(decisions)
 
-    def roll(self, rand, num):
+    def roll(self, nemo, rand, num):
         return rand.randint(1, num)
 
 class PlayerState:

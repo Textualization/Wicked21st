@@ -10,7 +10,7 @@ from .graph import Graph
 from .player import Player
 from .drawpiles import DrawPiles
 from .definitions import GameDef
-from .state import ProjectState, PolicyState, TechTreeState
+from .state import GraphState, ProjectState, PolicyState, TechTreeState
 from .projects import Projects, Project
 from .policy import Policies, Policy
 from .techtree import Tech, TechTree
@@ -39,10 +39,10 @@ class Game:
         self.phase_start_state = None
         self.phase_actions = None
 
-    def roll_dice(self, player, rand, num, step):
+    def roll_dice(self, player, memo, rand, num, step):
         result = 0
-        for _ in range(num):
-            result += self.game_def.players[player].roll(rand, 6)
+        for idx in range(num):
+            result += self.game_def.players[player].roll("{}, {} of {}".format(memo, idx+1, num), rand, 6)
         log.append( { 'phase' : Game.PHASES[self.state.phase],
                       'step' : Game.STEPS_PER_PHASE[self.state.phase][step],
                       'target' : result,
@@ -336,7 +336,7 @@ class Game:
                         self.state.players[self.state.player].resources['$'] -= consultant
                         value += consultant
                         
-                    roll = self.roll_dice(rand, 2, 0)
+                    roll = self.roll_dice(rand, 'skill check', 2, 0)
                     if roll <= value:
                         succeed = True
                     if roll == 12:
@@ -696,6 +696,81 @@ class Game:
                 # FINALIZING
 
                 ## see if any of the techs was researched and apply its actions
+                for tech in self.state.tech.techs_for_stats(TechTreeState.IN_PROGRESS):
+                    # got skill and funds this turn?
+                    skills = 0
+                    funds = 0
+                    for act in self.state.phase_actions:
+                        if act[1] == 'SKILL_RESEARCH' and act[2] == tech:
+                            skills += 1
+                        elif act[1] == 'FUND_RESEARCH' and act[2] == tech:
+                            funds += 1
+                    if skills == 0 and funds == 0:
+                        continue
+                    if skills >= 1 and funds >= 1:
+                        if skills >= 0:
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                          'target' : tech.name,
+                                          'memo' : 'overskilled',
+                                          'state' : self.state.to_json() } )
+                        if funds >= 0:
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                          'target' : tech.name,
+                                          'memo' : 'overfunded',
+                                          'state' : self.state.to_json() } )
+                        self.state.tech[tech.name]['missing_turns'] -= 1
+                        
+                        if self.state.tech[tech.name]['missing_turns'] > 0:
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                          'target' : tech.name,
+                                          'memo' : 'research cycle, {} remain'.format(self.state.tech[tech.name]['missing_turns']),
+                                          'state' : self.state.to_json() } )
+                        else:
+                            # finished!
+                            self.state.tech.finish(tech.name)
+                            tech_player = self.state.tech[tech.name]['player']
+                            del self.state.players[tech_player].tech[self.state.players[tech_player].tech.index[tech]]
+                            
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                          'target' : tech.name,
+                                          'memo' : 'researched',
+                                          'state' : self.state.to_json() } )
+
+                            if tech.type_ == Tech.B:
+                                # auto-protect, apply protection
+                                node = self.game_def.graph.node_names[tech.node]
+                                self.state.graph[node]['auto-protected'] = True
+                                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                              'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                              'target' : node,
+                                              'memo' : 'auto-protected',
+                                              'state' : self.state.to_json() } )
+                                
+                                if self.state.graph[node]['status'] == GraphState.STABLE:
+                                    self.state.graph[node]['status'] = GraphState.PROTECTED
+                                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                                  'target' : node,
+                                                  'memo' : 'protected',
+                                                  'state' : self.state.to_json() } )
+                    else:
+                        if skills == 0:
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                          'target' : tech.name,
+                                          'memo' : 'funded but not skilled, ignoring',
+                                          'state' : self.state.to_json() } )
+                        elif funds == 0:
+                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                          'target' : tech.name,
+                                          'memo' : 'skilled but not funded, ignoring',
+                                          'state' : self.state.to_json() } )
+                            
 
                 ## see if any of the projects had no action and should be discarded
 

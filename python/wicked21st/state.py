@@ -27,15 +27,28 @@ class ValidKeysDict(dict):
         return to_json(self)
 
 class GraphState(ValidKeysDict):
+
+    STABLE = 0
+    IN_CRISIS = 1
+    PROTECTED = 2
+    
     def __init__(self, graph):
         super.__init__(self, graph.nodes())
         self.graph = graph
+        for n in graph.nodes():
+            id_ = graph.name_to_id[n]
+            self[n] = { 'node': n,
+                        'id': id_,
+                        'status': GraphState.STABLE,
+                        'category': graph.class_for_node[id_],
+                        'auto-protected': False
+                       }
 
     def in_crisis(self, category=None):
         result = set()
         for k, v in self.items():
-            if v:
-                if categoy is None or k in self.graph.class_for_node[self.graph.name_to_id[k]] == self.graph.category_for_name[category]:
+            if v['status']:
+                if categoy is None or v['category'] == self.graph.category_for_name[category]:
                     result.add(k)
         return k
 
