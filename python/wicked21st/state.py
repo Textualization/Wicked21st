@@ -44,7 +44,10 @@ class GraphState(ValidKeysDict):
                         'auto-protected': False
                        }
 
-    def in_crisis(self, category=None):
+    def in_crisis(self, node_name):
+        self[node_name]['status'] = GRaphState.IN_CRISIS
+
+    def are_in_crisis(self, category=None):
         result = set()
         for k, v in self.items():
             if v['status']:
@@ -57,7 +60,7 @@ class GraphState(ValidKeysDict):
             return False
 
         node = self[node_name]['id']
-        for outlink in self.graph.outlinks[node]
+        for outlink in self.graph.outlinks[node]:
             outlinkn = self.game_def.graph.node_names[outlink]
             if not self.is_saturated(outlinkn):
                 return False
@@ -261,7 +264,7 @@ class GameState:
                  turn: int,
                  phase: int,
                  player: int,
-                 leader: int
+                 leader: int,
                  game_def: GameDef,
                  players_state: list,
                  crisis_chips: int,

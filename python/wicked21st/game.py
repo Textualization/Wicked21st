@@ -52,6 +52,7 @@ class Game:
         
 
     def start(self, rand):
+        self.finished = False
         drawpiles = DrawPiles(rand)
         player_state = [ PlayState(p, { '!': 0, '$': 0 }, list(),
                                    p.pick(Player.INIT_LOC, self.game_def.board.locations, rand)) for p in self.players ]
@@ -59,16 +60,16 @@ class Game:
         board_state = BoardState(self.game_def.board)
         for p in player_state:
             board_state[p.location] = board_state.get(p.location, set()) + set([ p.ordering ])
-            self.state = GameState(0, 0, 0,
+            self.state = GameState(0, 0, 0, 0,
                                    self.game_def,
-                                   player_state, graph_state, board_state,
+                                   player_state, 0, graph_state, board_state,
                                    TechTreeState(self.game_def.techtree),
                                    PolicyState(self.game_def.policy),
                                    drawpiles)
 
     def advance(self):
         "Returns True is the game has ended"
-        if len(self.state.graph.in_crisis()) == len(self.game_def.graph):
+        if len(self.state.graph.are_in_crisis()) == len(self.game_def.graph):
             self.finished = True
         else:
             self.state.player += 1
@@ -122,7 +123,7 @@ class Game:
                           'target' : drawn,
                           'state' : self.state.to_json() } )
             # drawing money
-            drawn = 5 - len(self.state.graph.in_crisis('ECONOMIC')) + 2 *  (
+            drawn = 5 - len(self.state.graph.are_in_crisis('ECONOMIC')) + 2 *  (
                 (1 if self.game_def.board.resources[new_loc] == '$' else 0) + \
                 (1 if self.game_def.players[self.state.player].player_class.resource == '$'))
             self.state.players[self.state.player].resources['$'] += drawn
@@ -1018,14 +1019,14 @@ class Game:
 
                 ## add crisis chip for each category fully in crisis
                 for catn, catid in Graph.CATEGORIES:
-                    if len(self.state.graph.in_crisis(cat)) == len(self.game_def.graph.node_classes[catid]):
+                    if len(self.state.graph.are_in_crisis(cat)) == len(self.game_def.graph.node_classes[catid]):
                         log.append( { 'phase' : Game.PHASES[self.state.phase],
                                       'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
                                       'target' : cat,
                                       'memo' : 'crisis chip full category',
                                       'state' : self.state.to_json() } )
 
-                while self.state.crisis_chips and len(self.state.graph.in_crisis()) < len(self.game_def.graph):
+                while self.state.crisis_chips and len(self.state.graph.are_in_crisis()) < len(self.game_def.graph):
                     ## roll a category, if the category is fully in crisis, add a crisis chip and roll again
                     catnum = self.roll_dice(1, self.state.player, 'crisis cat', rand, 1)
                     cat, catid = Graph.CATEGORIES[catnum]
@@ -1035,7 +1036,7 @@ class Game:
                                   'memo' : 'crisis category',
                                   'state' : self.state.to_json() } )
 
-                    if len(self.state.graph.in_crisis(cat)) == len(self.game_def.graph.node_classes[catid]):
+                    if len(self.state.graph.are_in_crisis(cat)) == len(self.game_def.graph.node_classes[catid]):
                         log.append( { 'phase' : Game.PHASES[self.state.phase],
                                       'step' : Game.STEPS_PER_PHASE[self.state.phase][1],
                                       'target' : cat,

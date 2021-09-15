@@ -8,6 +8,15 @@ import copy
 
 import numpy as np
 
+from wicked21st.graph import load_graph
+from wicked21st.board import Board
+from wicked21st.classes import Classes
+from wicked21st.project import Projects
+from wicked21st.policy import Policies
+from wicked21st.techtree import TechTree
+from wicked21st.definitions import GameInit, GameDef
+from wicked21st.player import Player
+
 SEED = 42
 NUM_PLAYERS = 4
 
@@ -16,18 +25,20 @@ rand = random.Random(SEED)
 # definitions
 graph_def = load_graph("map20210812.mm")
 board_def = Board()
-tree_def = TechTree()
 classes_def = Classes()
+proj_def = Projects(graph_def)
+pol_def = Policies(graph_def)
+tree_def = TechTree(graph_def)
 
 initial_graph = GraphState(graph_def)
-initial_graph['Social Inequity'] = 1
-initial_graph['Affordable Housing'] = 1
-initial_graph['Community Networks Breakdown'] = 1
-initial_graph['Systemic Corruption'] = 1
-initial_graph['Monopoly'] = 1
-initial_graph['Unsustainable Harvesting'] = 1
-initial_graph['Polluting Industry'] = 1
-initial_graph['Fossil Fuel Dependency'] = 1
+initial_graph.in_crisis('Social Inequity')
+initial_graph.in_crisis('Affordable Housing')
+initial_graph.in_crisis('Community Networks Breakdown')
+initial_graph.in_crisis('Systemic Corruption')
+initial_graph.in_crisis('Monopoly')
+initial_graph.in_crisis('Unsustainable Harvesting')
+initial_graph.in_crisis('Polluting Industry')
+initial_graph.in_crisis('Fossil Fuel Dependency')
 
 game_init = GameInit(initial_graph)
 
@@ -37,3 +48,11 @@ game_def = GameDef(game_init, NUM_PLAYERS, graph_def, board_def, tree_def)
 
 players = [ Player("Player{}".format(p+1), p, classes_def.pick(rand)) for p in range(NUM_PLAYERS) ]
 
+game = Game(game_def, players)
+game.start(rand)
+
+while not game.finished and game.turn < 12:
+    log0 = len(game.log)
+    game.step(rand)
+    for e in game.log[log0:]:
+        print("{}\t{}\t{}\t\t{}".format(e['phase'], e['step'], e['target'], e.get('memo', "-")))

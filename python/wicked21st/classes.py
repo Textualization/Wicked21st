@@ -24,7 +24,7 @@ class BaseClass:
                  'suit_a' : self.suit_a,
                  'suit_b' : self.suit_b,
                  'resource' : self.resource,
-                 'project_slots' : self.project_slots.
+                 'project_slots' : self.project_slots,
                  'policy_slots' : self.policy_slots,
                  'research_slots' : self.research_slots,
                 }

@@ -8,6 +8,8 @@ import copy
 
 import numpy as np
 
+from .state import GraphState
+
 class GameInit:
     def __init__(self, graph_init: GraphState):
         self.graph = graph_init
