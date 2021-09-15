@@ -280,6 +280,7 @@ class GameState:
                  'board' : self.board.to_json(),
                  'graph' : self.graph.to_json(),
                  'tech' : self.techtree.to_json(),
+                 'projects' : self.projects.to_json(),
                  'policy' : self.policy.to_json(),
                  'piles' : self.drawpiles.to_json() }
 

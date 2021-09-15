@@ -83,15 +83,19 @@ class Game:
 
     def cascade(self, node):
         "A node in crisis has been selected, deal with it. Returns the activated nodes."
-        # follow a link
-        outlinks = list(self.graph.outlinks[node])
-        random.shuffle(outlinks)
+        result = list()
+        outlinks = list(self.game_def.graph.outlinks[node])
         for outlink in outlinks:
-            if outlink in self.good:
-                self.good.remove(outlink)
-                self.crisis.add(outlink)
-                return [ outlink ]
-        return []
+            outlinkn = self.game_def.graph.node_names[outlink]
+            if self.state.graph[outlinkn]['status'] != GraphState.IN_CRISIS:
+                result.append(outlink)
+        if result:
+            return result
+        # recurse
+        for outlink in outlinks:
+            result = result + self.cascade(outlink)
+            
+        return result
 
     def step(self, rand):
         if self.state.phase == 0: # engage
@@ -696,7 +700,7 @@ class Game:
                 # FINALIZING
 
                 ## see if any of the techs was researched and apply its actions
-                for tech in self.state.tech.techs_for_stats(TechTreeState.IN_PROGRESS):
+                for tech in self.state.tech.techs_for_status(TechTreeState.IN_PROGRESS):
                     # got skill and funds this turn?
                     skills = 0
                     funds = 0
@@ -773,8 +777,120 @@ class Game:
                             
 
                 ## see if any of the projects had no action and should be discarded
+                for project in self.state.projects.projects_for_status(ProjectState.IN_PROGRESS):
+                    # got skill this turn?
+
+                    skilled = False
+                    for act in self.state.phase_actions:
+                        if act[1] in set(['SUCCESS_SKILL', 'FAILED_SKILL',
+                                          'SUCCESS_SKILL_EMPATH', 'FAILED_SKILL_EMPATH']) and act[2] == tech:
+                            skilled = True
+                            break
+                    if not skilled:
+                        proj_player = self.state.projects[project.name]['player']
+                        self.state.projects.abandon(project.name)
+                        del self.state.players[proj_player].tech[self.state.players[proj_player].projects.index[project]]
+                
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                      'target' : project.name,
+                                      'memo' : 'project abandoned',
+                                      'state' : self.state.to_json() } )
 
                 ## see if any of the projects was finished and apply its actions
+                for project in self.state.projects.projects_for_status(ProjectState.IN_PROGRESS):
+                    for act in self.state.phase_actions:
+                        if act[1] in set(['SUCCESS_SKILL', 'SUCCESS_SKILL_EMPATH']) and act[2] == tech:
+                            missing = self.state.projects[project.name]['missing']
+                            if act[3][0] not in missing:
+                                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                              'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                              'target' : project.name,
+                                              'memo' : 'project overskilled for "{}"'.format(act[3][0]),
+                                              'state' : self.state.to_json() } )
+                            else:
+                                del missing[missing.index(act[3][0])]
+                                self.state.projects[project.name]['missing'] = missing
+                    if len(self.state.projects[project.name]['missing']) == 0:
+                        # finished
+                        proj_player = self.state.projects[project.name]['player']
+                        self.state.projects.finish(project.name)
+                        del self.state.players[proj_player].tech[self.state.players[proj_player].projects.index[project]]
+
+                        log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                      'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                      'target' : project.name,
+                                      'memo' : 'project finished',
+                                      'state' : self.state.to_json() } )
+                        
+                        # apply effects
+                        for fix in project.fixes:
+                            fixn = self.game_def.graph.node_names[fix]
+                            if self.graph[fixn]['status'] == GraphState.IN_CRISIS:
+                                if self.graph[fixn]['auto-protected']:
+                                    self.graph[fixn]['status'] = GraphState.PROTECTED
+                                else:
+                                    self.graph[fixn]['status'] = GraphState.STABLE
+                                    
+                                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                              'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                              'target' : fixn,
+                                              'memo' : 'crisis resolved (project: {})'.format(project.name),
+                                              'state' : self.state.to_json() } )
+                                    
+                        for trigger in project.triggers:
+                            triggern = self.game_def.graph.node_names[trigger]
+                            if self.graph[triggern]['status'] == GraphState.STABLE:
+                                self.graph[triggern]['status'] = GraphState.IN_CRISIS
+                                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                              'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                              'target' : triggern,
+                                              'memo' : 'in crisis (project: {})'.format(project.name),
+                                              'state' : self.state.to_json() } )
+                            elif self.graph[triggern]['status'] == GraphState.PROTECTED:
+                                self.graph[triggern]['status'] = GraphState.STABLE
+                                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                              'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                              'target' : triggern,
+                                              'memo' : 'loses protection (project: {})'.format(project.name),
+                                              'state' : self.state.to_json() } )
+                            else: # in crisis, cascade
+                                cascaded = self.cascade(trigger)
+                                if cascaded:
+                                    for trigger2 in cascaded:
+                                        trigger2n = self.game_def.graph.node_names[trigger2]
+                                        if self.graph[trigger2n]['status'] == GraphState.STABLE:
+                                            self.graph[trigger2n]['status'] = GraphState.IN_CRISIS
+                                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                                          'target' : trigger2n,
+                                                          'memo' : 'in crisis (project: {})'.format(project.name),
+                                                         'state' : self.state.to_json() } )
+                                        elif self.graph[trigger2n]['status'] == GraphState.PROTECTED:
+                                            self.graph[trigger2n]['status'] = GraphState.STABLE
+                                            log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                                          'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                                          'target' : trigger2n,
+                                                          'memo' : 'loses protection (project: {})'.format(project.name),
+                                                          'state' : self.state.to_json() } )
+                                else:
+                                    self.state.crisis_chip += 1
+                                    log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                                  'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                                  'target' : triggern,
+                                                  'memo' : 'crisis chip',
+                                                  'state' : self.state.to_json() } )
+                                    
+                        for protect in project.protects:
+                            protectn = self.game_def.graph.node_names[protect]
+                            if self.graph[protectn]['status'] == GraphState.STABLE:
+                                self.graph[protectn]['status'] = GraphState.PROTECTED
+                                    
+                                log.append( { 'phase' : Game.PHASES[self.state.phase],
+                                              'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
+                                              'target' : protectn,
+                                              'memo' : 'protected (project: {})'.format(project.name),
+                                              'state' : self.state.to_json() } )
 
                 ## see if any of the policies had no action and should be discarded
 
