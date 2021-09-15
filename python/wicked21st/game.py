@@ -878,7 +878,7 @@ class Game:
                                     log.append( { 'phase' : Game.PHASES[self.state.phase],
                                                   'step' : Game.STEPS_PER_PHASE[self.state.phase][0],
                                                   'target' : triggern,
-                                                  'memo' : 'crisis chip',
+                                                  'memo' : 'crisis chip (project: {})'.format(project.name),
                                                   'state' : self.state.to_json() } )
                                     
                         for protect in project.protects:
