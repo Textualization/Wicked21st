@@ -209,8 +209,12 @@ class PolicyState(ValidKeysDict):
         del self[policy_name]
 
     def finish(self, policy_name):
-        self[policy_name]['missing'] = []
+        self[policy_name]['missing_turns'] = 0
         self[policy_name]['status'] = PolicyState.FINISHED
+
+    def has_passed(self, policy_name):
+        self[policy_name]['missing_power'] = 0
+        self[policy_name]['status'] = PolicyState.PASSED
 
     def policies_for_status(self, status: str):
         result = ()
