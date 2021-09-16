@@ -4,12 +4,14 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 
 import random
-import copy
+
+import graphviz
 
 from .tojson import to_json
 from .policy import Policy
 from .project import Project
 from .techtree import Tech
+from .graph import Graph
 
 
 class ValidKeysDict(dict):
@@ -89,6 +91,25 @@ class GraphState(ValidKeysDict):
             if obj['auto-protected']:
                 copy[n]['auto-protected'] = True
         return copy
+
+    def show(self, size=Graph.GRAPH_PRINT_SIZE):
+        digraph = graphviz.Digraph(graph_attr={"size": size, "landscape":"portrait"})
+
+        for _id, name in self.graph.node_names.items():
+            shape = "box"
+            if self[name]['status'] == GraphState.PROTECTED:
+                shape = "box3d"
+            elif self[name]['status'] == GraphState.IN_CRISIS:
+                shape = "diamond"
+            color = "#707070"
+            if self[name]['auto-protected']:
+                color = '#000000'
+            digraph.node(name, shape=shape, color=color, fillcolor=self.graph.class_for_node[_id], style='filled')
+        for base, dests in self.graph.outlinks.items():
+            basetext = self.graph.node_names[base]
+            for dest in dests:
+                digraph.edge(basetext, self.graph.node_names[dest])
+        return digraph
     
 
 class BoardState(ValidKeysDict):

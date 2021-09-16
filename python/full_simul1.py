@@ -19,8 +19,8 @@ from wicked21st.player import Player
 from wicked21st.state import GraphState
 from wicked21st.game import Game
 
-SEED = 42
-NUM_PLAYERS = 4
+SEED = 43
+NUM_PLAYERS = 3
 
 rand = random.Random(SEED)
 
