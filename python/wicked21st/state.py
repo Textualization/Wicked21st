@@ -32,6 +32,7 @@ class ValidKeysDict(dict):
     def to_json(self):
         return { k: to_json(v) for k,v in self.items() }
 
+
 class GraphState(ValidKeysDict):
 
     STABLE = 0
@@ -61,24 +62,45 @@ class GraphState(ValidKeysDict):
                     result.add(k)
         return result
 
-    def is_staturated(self, node_name):
+    def is_saturated(self, node_name, visited=None):
+        if visited is None:
+            visited = list()
+        elif node_name in visited:
+            return True
+            #raise Exception("Graph has a cycle! {} - {}".format(node_name, list(map(lambda x: self[x], visited))))
         if self[node_name]['status'] != GraphState.IN_CRISIS:
             return False
+        visited.append(node_name)
 
         node = self[node_name]['id']
         for outlink in self.graph.outlinks[node]:
-            outlinkn = self.game_def.graph.node_names[outlink]
-            if not self.is_saturated(outlinkn):
+            outlinkn = self.graph.node_names[outlink]
+            if not self.is_saturated(outlinkn, list(visited)):
                 return False
             
         return True
         
+    def copy(self):
+        copy = GraphState(self.graph)
+        for n, obj in self.items():
+            st =  obj['status']
+            if st != GraphState.STABLE:
+                copy[n]['status'] = st
+            if obj['auto-protected']:
+                copy[n]['auto-protected'] = True
+        return copy
     
 
 class BoardState(ValidKeysDict):
     def __init__(self, board):
         super().__init__(board.locations)
-        
+        self.board = board
+
+    def copy(self):
+        copy = BoardState(self.board)
+        for k, v in self.items():
+            copy[k] = set(v)
+        return copy
 
 # keys: object 'state' : 
 class ProjectState(ValidKeysDict):
@@ -119,7 +141,7 @@ class ProjectState(ValidKeysDict):
                 if project.name not in self:
                     result.append(project)
         else:
-            for obj in self.items():
+            for obj in self.values():
                 if obj['status'] == status:
                     result.append(obj['project'])
         return result
@@ -138,6 +160,13 @@ class ProjectState(ValidKeysDict):
                         return project
                 # else, continue
         raise Exception("Not found: find_project({}, {}, {}, {})".format(type_, fix, trigger, protect))
+
+    def copy(self):
+        copy = ProjectState(self.projects)
+        for n, obj in self.items():
+            copy[n] = dict(obj)
+        return copy
+    
 
 class TechTreeState(ValidKeysDict):
     
@@ -204,13 +233,19 @@ class TechTreeState(ValidKeysDict):
                 if tech.parents.intersection(researched) == tech.parents:
                     result.append(tech)
         return result
+    
+    def copy(self):
+        copy = TechTreeState(self.tree)
+        for n, obj in self.items():
+            copy[n] = dict(obj)
+        return copy
 
 class PolicyState(ValidKeysDict):
 
     AVAILABLE   = 'available'
     IN_PROGRESS = 'in progress'
     PASSED      = 'passed'
-    EXPIRED     = 'expired'
+    FINISHED    = 'finished'
     
     def __init__(self, policies):
         super().__init__(policies.names)
@@ -249,7 +284,7 @@ class PolicyState(ValidKeysDict):
                 if policy.name not in self:
                     result.append(policy)
         else:
-            for obj in self.items():
+            for obj in self.values():
                 if obj['status'] == status:
                     result.append(obj['policy'])
         return result
@@ -273,3 +308,9 @@ class PolicyState(ValidKeysDict):
         print("\n\n".join(map(lambda x:str(x.to_json()), self.policies.policies)))
         raise Exception("Not found: find_policy({} [{}], {}, {}, {})".format(Policy.TYPES[type_], type_, fix, trigger, protect))
 
+    def copy(self):
+        copy = PolicyState(self.policies)
+        for n, obj in self.items():
+            copy[n] = dict(obj)
+        return copy
+    

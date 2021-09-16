@@ -20,7 +20,7 @@ from wicked21st.state import GraphState
 from wicked21st.game import Game
 
 SEED = 42
-NUM_PLAYERS = 4
+NUM_PLAYERS = 3
 
 rand = random.Random(SEED)
 
@@ -50,17 +50,15 @@ game_def = GameDef(game_init, NUM_PLAYERS, classes_def, graph_def, board_def, tr
 players = [ Player("Player{}".format(p+1), p, classes_def.pick(rand)) for p in range(NUM_PLAYERS) ]
 
 game = Game(game_def, players)
-game.start(rand)
 
-while not game.finished and game.state.turn < 12:
-    print('turn', game.state.turn, 'player', game.state.player, Game.PHASES[game.state.phase])
-    #print("\t\t", ",".join(game.state.graph.are_in_crisis('ECONOMIC')))
-    log0 = len(game.log)
-    game.step(rand)
-    for e in game.log[log0:]:
-        print("{}\t{}\t{}\t\t{}".format(e['phase'], e['step'], e.get('target', "-"), e.get('memo', "-")))
+count = 0
+won = 0
+for _ in range(100):
+    game.start(rand)
+    while not game.finished and game.state.turn < 12:
+        game.step(rand)
 
-if game.finished:
-    print("GAME LOST")
-else:
-    print("GAME WON")
+    count += 1
+    if not game.finished:
+        won += 1
+    print(count, won)

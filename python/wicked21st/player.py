@@ -91,3 +91,9 @@ class PlayerState:
                  'technologies' : self.tech,
                 }
     
+    def copy(self):
+        copy = PlayerState(self.player, dict(self.resources), list(self.cards), self.location)
+        copy.projects = list(self.projects)
+        copy.policies = list(self.policies)
+        copy.tech = list(self.tech)
+        return copy
