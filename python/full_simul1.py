@@ -53,7 +53,7 @@ game = Game(game_def, players)
 game.start(rand)
 
 while not game.finished and game.state.turn < 12:
-    print('turn', game.state.turn, 'player', game.state.player)
+    print('turn', game.state.turn, 'player', game.state.player, Game.PHASES[game.state.phase])
     #print("\t\t", ",".join(game.state.graph.are_in_crisis('ECONOMIC')))
     log0 = len(game.log)
     game.step(rand)

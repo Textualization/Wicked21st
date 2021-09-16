@@ -24,17 +24,21 @@ class Policy:
         self.protects = protects
         self.cost = cost
         self.parent = parent
+        self.tojson_memo = None
 
     def to_json(self):
-        result = { 'name':     self.name,
-                   'type':     Policy.TYPES[ self.type_ ],
-                   'fixes':    list(self.fixes),
-                   'triggers': list(self.triggers),
-                   'protects': list(self.protects),
-                   'cost':     self.cost
-                  }
-        if parent is not None:
-            result['parent'] = self.parent.name
+        if self.tojson_memo is None:
+            self.tojson_memo = {
+                'name':     self.name,
+                'type':     Policy.TYPES[ self.type_ ],
+                'fixes':    list(self.fixes),
+                'triggers': list(self.triggers),
+                'protects': list(self.protects),
+                'cost':     self.cost
+            }
+            if self.parent is not None:
+                self.tojson_memo['parent'] = self.parent.name
+        return self.tojson_memo
    
 class Policies:
 
@@ -84,8 +88,7 @@ class Policies:
                         for other2, other2n in graph.node_names.items():
                             if other2 != other:
                                 cost = ( 6, 6 )
-                                improvC = Policy("Improv-C fix '{}' protect '{}'"+
-                                                 " ({}) protect '{}'".format(nn1, othern, othern, c1[0], other2n), Policy.C,
+                                improvC = Policy("Improv-C fix '{}' protect '{}' ({}) protect '{}'".format(nn1, othern, c1[0], other2n), Policy.C,
                                                  set([n1]), set(), set([other, other2]),
                                                  cost, improvB)
                                 self.policies.append(improvC)

@@ -40,14 +40,18 @@ class GameDef:
         self.projects = project_def
         self.policies = policy_def
         self.tech = techtree_def
+        self.tojson_memo = None
         
     def to_json(self):
-        return { 'num_players' : self.num_players,
-                 'game_init' : self.game_init.to_json(),
-                 'classes' : self.classes_def.to_json(),
-                 'graph' : self.graph.to_json(),
-                 'tech' : self.tech.to_json(),
-                 'projects' : self.projects.to_json(),
-                 'policies' : self.policies.to_json(),
-                 'board': self.board.to_json() }
+        if self.tojson_memo is None:
+            self.tojson_memo = {
+                'num_players' : self.num_players,
+                'game_init' : self.game_init.to_json(),
+                'classes' : self.classes_def.to_json(),
+                'graph' : self.graph.to_json(),
+                'tech' : self.tech.to_json(),
+                'projects' : self.projects.to_json(),
+                'policies' : self.policies.to_json(),
+                'board': self.board.to_json() }
+        return self.tojson_memo
 

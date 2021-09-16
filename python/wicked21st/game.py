@@ -46,7 +46,7 @@ class GameState:
         self.drawpiles = drawpiles_state
 
     def quorum(self):
-        return len(self.players_state) // 2 + 1
+        return len(self.players) // 2 + 1
 
     def to_json(self):
         return { 'players' : to_json(self.players),
@@ -91,10 +91,10 @@ class Game:
         for idx in range(num):
             result += self.players[player].roll("{}, {} of {}".format(memo, idx+1, num), rand, 6)
         self.log.append( { 'phase' : Game.PHASES[self.state.phase],
-                      'step' : Game.STEPS_PER_PHASE[self.state.phase][step],
-                      'target' : result,
-                      'memo' : 'dice roll {}D6'.format(num),
-                      'state' : self.state.to_json() } )
+                           'step' : Game.STEPS_PER_PHASE[Game.PHASES[self.state.phase]][step],
+                           'target' : result,
+                           'memo' : 'dice roll {}D6: {}'.format(num, memo),
+                           'state' : self.state.to_json() } )
         return result
         
 
@@ -229,10 +229,10 @@ class Game:
                     [ True, False ],
                     rand, self.state.players[self.state.player], self.phase_start_state)
                 self.log.append( { 'phase' : phase,
-                              'step' : Game.STEPS_PER_PHASE[phase][0],
-                              'target' : start,
-                              'memo' : 'start project?',
-                              'state' : self.state.to_json() } )
+                                   'step' : Game.STEPS_PER_PHASE[phase][0],
+                                   'target' : start,
+                                   'memo' : 'start project?',
+                                   'state' : self.state.to_json() } )
                 if start:
                     fix_cat = self.players[self.state.player].pick(
                         Player.START_PROJECT_FIX_CAT,
@@ -373,10 +373,10 @@ class Game:
                         value = min(11, value + 2)
                         if base > value:
                             self.log.append( { 'phase' : phase,
-                                          'step' : Game.STEPS_PER_PHASE[phase][0],
-                                          'target' : (value - base),
-                                          'memo' : 'using tech "{}"'.format(expanded_tech.name),
-                                          'state' : self.state.to_json() } )
+                                               'step' : Game.STEPS_PER_PHASE[phase][0],
+                                               'target' : (value - base),
+                                               'memo' : 'using tech "{}"'.format(expanded_tech.name),
+                                               'state' : self.state.to_json() } )
                         
                     if value < 11 and self.state.players[self.state.player].resources['$'] > 0:
                         moneys = min(11 - value, self.state.players[self.state.player].resources['$'])
@@ -405,9 +405,9 @@ class Game:
                                       'state' : self.state.to_json() } )
 
                 if succeeded:
-                    self.phase_actions.append( ( self.state.player, 'SUCCESS_SKILL', self.states.projects[play_card[3]], play_card[0] ) )
+                    self.phase_actions.append( ( self.state.player, 'SUCCESS_SKILL', self.state.projects[play_card[3]], play_card[0] ) )
                 else:
-                    self.phase_actions.append( ( self.state.player, 'FAILED_SKILL', self.states.projects[play_card[3]], play_card[0]) )
+                    self.phase_actions.append( ( self.state.player, 'FAILED_SKILL',  self.state.projects[play_card[3]], play_card[0] ) )
                     
                 # closing the project is left to the empathy phase
                 self.state.drawpiles.return_card(play_card[0], play_card[1])
@@ -419,6 +419,10 @@ class Game:
                     elif card_choices[idx][2] == play_card[2]:
                         del card_choices[idx]
                     else:
+                        if card_choices[idx][2] > play_card[2]:
+                            l = list(card_choices[idx])
+                            l[2] -= 1
+                            card_choices[idx] = tuple(l)
                         idx += 1
 
             
@@ -442,20 +446,20 @@ class Game:
                         list(map(lambda x:x[0], Graph.CATEGORIES)),
                         rand, self.state.players[self.state.player], self.phase_start_state)
                     self.log.append( { 'phase' : phase,
-                                  'step' : Game.STEPS_PER_PHASE[phase][1],
-                                  'target' : fix_cat,
-                                  'memo' : 'start policy: fix category',
-                                  'state' : self.state.to_json() } )
+                                       'step' : Game.STEPS_PER_PHASE[phase][1],
+                                       'target' : fix_cat,
+                                       'memo' : 'start policy: fix category',
+                                       'state' : self.state.to_json() } )
                     fix_cat_id = self.game_def.graph.category_for_name[fix_cat]
                     fix_node =  self.players[self.state.player].pick(
                         Player.START_POLICY_FIX_NODE,
                         list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[fix_cat_id])),
                         rand, self.state.players[self.state.player], self.phase_start_state)
                     self.log.append( { 'phase' : phase,
-                                  'step' : Game.STEPS_PER_PHASE[phase][1],
-                                  'target' : fix_node,
-                                  'memo' : 'start policy: fix node',
-                                  'state' : self.state.to_json() } )
+                                       'step' : Game.STEPS_PER_PHASE[phase][1],
+                                       'target' : fix_node,
+                                       'memo' : 'start policy: fix node',
+                                       'state' : self.state.to_json() } )
                     fix_node_id = self.game_def.graph.name_to_id[fix_node]
 
                     # type?
@@ -487,7 +491,7 @@ class Game:
                                       'state' : self.state.to_json() } )
                         trigger_node_id = self.game_def.graph.name_to_id[trigger_node]
                         policy = self.state.policies.find_policy(Policy.BASE, set([fix_node_id]), set([trigger_node_id]))
-                    elif policy_type_ == Policy.A:
+                    elif policy_type_ == Policy.A: # remove-tradeoff
                         policy = self.state.policies.find_policy(Policy.A, set([fix_node_id]))
                     else:
                         protected_node =  self.players[self.state.player].pick(
@@ -495,10 +499,10 @@ class Game:
                             list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[fix_cat_id])),
                             rand, self.state.players[self.state.player], self.phase_start_state)
                         self.log.append( { 'phase' : phase,
-                                      'step' : Game.STEPS_PER_PHASE[phase][1],
-                                      'target' : protected_node,
-                                      'memo' : 'start policy: protect node in same category',
-                                      'state' : self.state.to_json() } )
+                                           'step' : Game.STEPS_PER_PHASE[phase][1],
+                                           'target' : protected_node,
+                                           'memo' : 'start policy: protect node in same category',
+                                           'state' : self.state.to_json() } )
                         protected_node_id = self.game_def.graph.name_to_id[protected_node]
 
                         if policy_type_ == Policy.B:
@@ -526,7 +530,7 @@ class Game:
                                   'target' : policy.name,
                                   'memo' : 'start policy',
                                   'state' : self.state.to_json() } )
-                    self.state.policy.player_starts(policy, self.state.player, self.state.turn, self.state.quorum())
+                    self.state.policies.player_starts(policy, self.state.player, self.state.turn, self.state.quorum())
                     self.state.players[self.state.player].policies.append(policy.name)
                     self.phase_actions.append( ( self.state.player, 'START_POLICY', policy ) )
                     started_policy = policy
@@ -598,22 +602,22 @@ class Game:
                     [ True, False ],
                     rand, self.state.players[self.state.player], self.phase_start_state)
                 self.log.append( { 'phase' : phase,
-                              'step' : Game.STEPS_PER_PHASE[phase][2],
-                              'target' : start,
-                              'memo' : 'start researching?',
-                              'state' : self.state.to_json() } )
+                                   'step' : Game.STEPS_PER_PHASE[phase][2],
+                                   'target' : start,
+                                   'memo' : 'start researching?',
+                                   'state' : self.state.to_json() } )
                 if start:
-                    boundary = self.state.tech.boundary()
+                    boundary = self.state.tech.research_boundary()
                     chosen_tech = self.players[self.state.player].pick(
                         Player.START_RESEARCH_TECH,
                         list(map(lambda x:x.name, boundary)),
                         rand, self.state.players[self.state.player], self.phase_start_state)
                     self.log.append( { 'phase' : phase,
-                                  'step' : Game.STEPS_PER_PHASE[phase][2],
-                                  'target' : chosen_tech,
-                                  'memo' : 'start researching',
-                                  'state' : self.state.to_json() } )
-                    tech = self.state.tech[chosen_tech]
+                                       'step' : Game.STEPS_PER_PHASE[phase][2],
+                                       'target' : chosen_tech,
+                                       'memo' : 'start researching',
+                                       'state' : self.state.to_json() } )
+                    tech = self.state.tech[chosen_tech]['tech']
                     self.state.tech.player_starts(tech, self.state.player, self.state.turn)
                     self.state.players[self.state.player].tech.append(tech.name)
                     self.phase_actions.append( ( self.state.player, 'START_RESEARCH', tech ) )
@@ -680,20 +684,20 @@ class Game:
 
                 chosen_to_fund = self.players[self.state.player].pick(
                     Player.FUND_RESEARCH,
-                    list(map(lambda x:x.name, to_fund)),
+                    list(map(lambda x:None if x is None else x.name, to_fund)),
                     rand, self.state.players[self.state.player], self.phase_start_state)
-                if chosen_to_found is None:
+                if chosen_to_fund is None:
                     self.log.append( { 'phase' : phase,
-                                  'step' : Game.STEPS_PER_PHASE[phase][2],
-                                  'target' : False,
-                                  'memo' : 'funds for research',
-                                  'state' : self.state.to_json() } )
+                                       'step' : Game.STEPS_PER_PHASE[phase][2],
+                                       'target' : False,
+                                       'memo' : 'funds for research',
+                                       'state' : self.state.to_json() } )
                     break
                 self.log.append( { 'phase' : phase,
-                              'step' : Game.STEPS_PER_PHASE[phase][0],
-                              'target' : chosen_to_fund,
-                              'memo' : 'funds for research',
-                              'state' : self.state.to_json() } )
+                                   'step' : Game.STEPS_PER_PHASE[phase][0],
+                                   'target' : chosen_to_fund,
+                                   'memo' : 'funds for research',
+                                   'state' : self.state.to_json() } )
                 self.phase_actions.append( ( self.state.player, 'FUND_RESEARCH', self.state.tech[chosen_to_fund] ) )
                 self.state.players[self.state.player].resources['$'] -= 1
                 
@@ -708,7 +712,7 @@ class Game:
                           if p[0] == self.state.player and p[1] == 'SUCCESS_SKILL' ]
             failed = [ (p[0], p[2], p[3], idx) for idx, p in enumerate(self.phase_actions)
                        if p[0] != self.state.player and p[1] == 'FAILED_SKILL' ]
-            empath_pairs = ()
+            empath_pairs = list()
             for sproject, scard, sidx in succeeded:
                 for player, fproject, fcard, fidx in failed:
                     if scard[0] == fcard[0]: # potential empath
@@ -747,7 +751,7 @@ class Game:
                         idx += 1
 
         else: # the end
-            if self.player != self.leader:
+            if self.state.player != self.state.leader:
                 pass
             else:
                 # FINALIZING

@@ -7,6 +7,9 @@ import random
 import copy
 
 from .tojson import to_json
+from .policy import Policy
+from .project import Project
+from .techtree import Tech
 
 
 class ValidKeysDict(dict):
@@ -189,7 +192,7 @@ class TechTreeState(ValidKeysDict):
                         return tech
                 # else, continue
             # else, continue
-        raise Exception("Not found: find_policy({}, {}, {}, {})".format(type_, fix, trigger, protect))
+        raise Exception("Not found: find_tech({} [{}], {}, {}, {})".format(Tech.TYPES[type_], type_, fix, trigger, protect))
 
     def research_boundary(self):
         result = list()
@@ -219,7 +222,7 @@ class PolicyState(ValidKeysDict):
         return self[policy_name]['status']
 
     def player_starts(self, policy, player: int, turn: int, quorum: int):
-        self[policy_name] = {
+        self[policy.name] = {
             'name':    policy.name,
             'policy':  policy,
             'status':  PolicyState.IN_PROGRESS,
@@ -257,11 +260,16 @@ class PolicyState(ValidKeysDict):
                 if trigger is None:
                     if policy.triggers:
                         continue
+                    if protect is None:
+                        return policy
+                    if protect == policy.protects:
+                        return policy                    
                 elif trigger == policy.triggers:
                     if protect is None:
                         return policy
                     if protect == policy.protects:
                         return policy
                 # else, continue
-        raise Exception("Not found: find_policy({}, {}, {}, {})".format(type_, fix, trigger, protect))
+        print("\n\n".join(map(lambda x:str(x.to_json()), self.policies.policies)))
+        raise Exception("Not found: find_policy({} [{}], {}, {}, {})".format(Policy.TYPES[type_], type_, fix, trigger, protect))
 
