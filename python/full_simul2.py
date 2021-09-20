@@ -53,10 +53,25 @@ game = Game(game_def, players)
 
 count = 0
 won = 0
-for _ in range(100):
+VERBOSE = False
+for run in range(100):
     game.start(rand)
     while not game.finished and game.state.turn < 12:
+        log0 = len(game.log)
         game.step(rand)
+        if VERBOSE:
+            for e in game.log[log0:]:
+                line = "{}\t{}\t{}\t{}".format(run, game.state.turn, e['phase'], e['step'])
+                if 'target' in e:
+                    line = "{}\t{}".format(line, e['target'])
+                    if 'memo' in e:
+                        memo = e['memo']
+                        if 'args' in e:
+                            args = e['args']
+                            memo = memo.format(*args)
+                    line = "{}\t{}".format(line, memo)
+                print(line)
+        
 
     count += 1
     if not game.finished:

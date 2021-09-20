@@ -120,6 +120,7 @@ class Game:
     L_SKILL_FOR_RESEARCH  = 'Skill for research'
     L_FUNDS_FOR_RESEARCH  = 'Funds for research'
     L_EMPATHIZE           = 'Empathize'
+    L_ABANDON_RESEARCH    = 'Removing repeated tech started by {}'
     L_OVERSKILLED         = 'Tech project overskilled by {}'
     L_OVERFUNDED          = 'Tech project overfunded by {}'
     L_RESEARCH_CYCLE      = 'Research cycle finished, remain: {}'
@@ -134,11 +135,11 @@ class Game:
     L_CRISIS_FIX_PROJECT  = 'Crisis resolved (project: {})'
     L_CRISIS_TRIGGERED    = 'Now in crisis (trade-off from project: {})'
     L_PROT_LOSS_PROJECT   = 'Lost protection (trade-off from project: {})'
-    L_CHIP_PROJECT = 'Crisis chip (trade-off from project: {})'
+    L_CHIP_PROJECT        = 'Crisis chip (trade-off from project: {})'
     L_POLICY_ABANDONED    = 'Policy abandoned'
     L_POLICY_OVERPOWERED  = 'Policy overpowered by {}'
     L_POLICY_PASSED       = 'Policy passed'
-    L_POLICY_IN_ACTION    = 'Policy  in action'
+    L_POLICY_IN_ACTION    = 'Policy in action'
     L_CRISIS_FIX_POLICY   = 'Crisis resolved (policy: {})'
     L_POLICY_PROTECT      = 'Problem protected (policy: {})'
     L_CHIP_FULL_CAT       = 'Crisis chip: full category'
@@ -189,6 +190,9 @@ class Game:
                                ProjectState(self.game_def.projects),
                                PolicyState(self.game_def.policies),
                                drawpiles)
+        self.log = list()
+        self.phase_start_state = None
+        self.phase_actions = None
 
     def advance(self):
         "Returns True is the game has ended"
@@ -636,7 +640,7 @@ class Game:
             # research
             start = False
             if self.state.players[self.state.player].available_research_slots():
-                boundary = self.state.tech.research_boundary()
+                boundary = self.phase_start_state.tech.research_boundary()
                 chosen_tech = self.players[self.state.player].pick(
                     Player.START_RESEARCH,
                     list(map(lambda x:x.name, boundary)) + [ None ],
@@ -784,6 +788,21 @@ class Game:
                 pass
             else:
                 # FINALIZING
+
+                ## see if two players started researching the same tech and close the one with less resources applied to it
+                tech_started = [ ( p[2], p[0] ) for p in self.phase_actions if p[1] == Game.A_START_RESEARCH ]
+                counts = dict()
+                for tech, player in tech_started:
+                    counts[tech.name] = counts.get(tech.name, list()) + [ player ]
+                for n, players in counts.items():
+                    players = sorted(players)
+                    for p in players[1:]:
+                        self.state.players[p].tech.remove(n)
+                        self.log.append( { 'phase' : phase,
+                                           'step' : Game.STEPS_PER_PHASE[phase][0],
+                                           'target' : n,
+                                           'memo' : Game.L_ABANDON_RESEARCH, 'args' : [ players[0] ],
+                                           'state' : self.state.to_json() } )
 
                 ## see if any of the techs was researched and apply its actions
                 for tech in self.state.tech.techs_for_status(TechTreeState.IN_PROGRESS):
@@ -1132,7 +1151,7 @@ class Game:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                'target' : noden,
-                                               'memo' : L_PROT_LOSS,
+                                               'memo' : Game.L_PROT_LOSS,
                                                'state' : self.state.to_json() } )
                         ## if the node was in crisis, activate all the nodes reachable from it and further cascade as needed
                         else: 
