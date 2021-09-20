@@ -48,9 +48,9 @@ class Projects:
         self.projects = list()
         for c1, c2, s1, s2 in Projects.BASE_TABLE:
             
-            for n1 in graph.node_classes[c1[1]]:
+            for n1 in sorted(graph.node_classes[c1[1]], key=lambda x:graph.node_names[x]):
                 nn1 = graph.node_names[n1]
-                for n2 in graph.node_classes[c2[1]]:
+                for n2 in sorted(graph.node_classes[c2[1]], key=lambda x:graph.node_names[x]):
                     nn2 = graph.node_names[n2]
                     cost = [s1,s2]
                     # base
@@ -100,7 +100,7 @@ class Projects:
                         #                     cost + [ 'S', 'C', 'D', 'S' ], improvA))
         
         self.project_for_name = { project.name: project for project in self.projects }
-        self.names = list(self.project_for_name.keys())
+        self.names = sorted(list(self.project_for_name.keys()))
         
     def to_json(self):
         return self.projects

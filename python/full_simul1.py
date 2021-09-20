@@ -23,6 +23,7 @@ SEED = 43
 NUM_PLAYERS = 3
 
 rand = random.Random(SEED)
+print(repr(rand.randbytes(1)))
 
 # definitions
 graph_def = load_graph("map20210812.mm")
@@ -50,12 +51,15 @@ game_def = GameDef(game_init, NUM_PLAYERS, classes_def, graph_def, board_def, tr
 players = [ Player("Player{}".format(p+1), p) for p in range(NUM_PLAYERS) ]
 for player in players:
     player.set_class(classes_def.class_for_name(player.pick(Player.INIT_ROLE, classes_def.names(), rand)))
+print(repr(rand.randbytes(1)))
 
 game = Game(game_def, players)
 game.start(rand)
+print(repr(rand.randbytes(1)))
 
 while not game.finished and game.state.turn < 12:
     print('turn', game.state.turn, 'player', game.state.player, Game.PHASES[game.state.phase])
+    print(repr(rand.randbytes(1)))
     #print("\t\t", ",".join(game.state.graph.are_in_crisis('ECONOMIC')))
     log0 = len(game.log)
     game.step(rand)

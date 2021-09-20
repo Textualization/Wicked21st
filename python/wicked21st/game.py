@@ -114,6 +114,7 @@ class Game:
     L_POLICY_PROTECT_SAME = 'Start policy: protect node in same category'
     L_POLICY_PROTECT_ANY  = 'Start policy: protect node in any category'
     L_POLICY_STARTED      = 'Policy started'
+    L_POLICY_IGNORED      = 'Repeated policy ignored'
     L_POLICY_TO_EMPOWER   = 'Chosen policy to empower'
     L_EMPOWER_POLICY      = 'Empower policy "{}"'
     L_START_RESEARCH      = 'Start researching'
@@ -273,7 +274,7 @@ class Game:
             # draw cards
             accessible_piles = set([self.players[self.state.player].player_class.suit_a, self.players[self.state.player].player_class.suit_b ])
             accessible_piles.add(self.game_def.board.suits[new_loc])
-            accessible_piles = list(accessible_piles)
+            accessible_piles = sorted(list(accessible_piles))
             
             draw_pile = self.players[self.state.player].pick(
                 Player.PILE_DRAW,
@@ -286,7 +287,7 @@ class Game:
                                'target' : drawn,
                                'memo' : Game.L_CARD_DRAWN, 'args' : [ 1 ],
                                'state' : self.state.to_json() } )
-            accessible_piles = list(set(accessible_piles) - set([draw_pile]))
+            accessible_piles = sorted(list(set(accessible_piles) - set([draw_pile])))
             draw_pile = self.players[self.state.player].pick(
                 Player.PILE_DRAW,
                 accessible_piles,
@@ -326,17 +327,17 @@ class Game:
                 if start:
                     fix_cat = self.players[self.state.player].pick(
                         Player.START_PROJECT_FIX_CAT,
-                        list(map(lambda x:x[0], Graph.CATEGORIES)),
+                        sorted(list(map(lambda x:x[0], Graph.CATEGORIES))),
                         rand, self.state.players[self.state.player], self.phase_start_state)
                     self.log.append( { 'phase' : phase,
-                                  'step' : Game.STEPS_PER_PHASE[phase][0],
-                                  'target' : fix_cat,
-                                  'memo' : Game.L_PROJECT_CAT,
-                                  'state' : self.state.to_json() } )
+                                       'step' : Game.STEPS_PER_PHASE[phase][0],
+                                       'target' : fix_cat,
+                                       'memo' : Game.L_PROJECT_CAT,
+                                       'state' : self.state.to_json() } )
                     fix_cat_id = self.game_def.graph.category_for_name[fix_cat]
                     fix_node =  self.players[self.state.player].pick(
                         Player.START_PROJECT_FIX_NODE,
-                        list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[fix_cat_id])),
+                        sorted(list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[fix_cat_id]))),
                         rand, self.state.players[self.state.player], self.phase_start_state)
                     self.log.append( { 'phase' : phase,
                                        'step' : Game.STEPS_PER_PHASE[phase][0],
@@ -355,7 +356,7 @@ class Game:
                                 break
                         trigger_node =  self.players[self.state.player].pick(
                             Player.START_PROJECT_TRIGGER_NODE,
-                            list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[trigger_cat_id])),
+                            sorted(list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[trigger_cat_id]))),
                             rand, self.state.players[self.state.player], self.phase_start_state)
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][0],
@@ -395,6 +396,7 @@ class Game:
                         projects_for_card.append( (project, card[0]) )
                 for project, suit in projects_for_card:
                     card_choices.append( ( card, suit, idx, project.name ) )
+            card_choices = sorted(card_choices)
                     
             while True:
                 if None not in card_choices:
@@ -509,7 +511,7 @@ class Game:
                 if start:
                     fix_cat = self.players[self.state.player].pick(
                         Player.START_POLICY_FIX_CAT,
-                        list(map(lambda x:x[0], Graph.CATEGORIES)),
+                        sorted(list(map(lambda x:x[0], Graph.CATEGORIES))),
                         rand, self.state.players[self.state.player], self.phase_start_state)
                     self.log.append( { 'phase' : phase,
                                        'step' : Game.STEPS_PER_PHASE[phase][1],
@@ -519,7 +521,7 @@ class Game:
                     fix_cat_id = self.game_def.graph.category_for_name[fix_cat]
                     fix_node =  self.players[self.state.player].pick(
                         Player.START_POLICY_FIX_NODE,
-                        list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[fix_cat_id])),
+                        sorted(list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[fix_cat_id]))),
                         rand, self.state.players[self.state.player], self.phase_start_state)
                     self.log.append( { 'phase' : phase,
                                        'step' : Game.STEPS_PER_PHASE[phase][1],
@@ -535,7 +537,7 @@ class Game:
                     else:
                         protected_node =  self.players[self.state.player].pick(
                             Player.START_POLICY_PROTECT_NODE,
-                            list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[fix_cat_id])),
+                            sorted(list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[fix_cat_id]))),
                             rand, self.state.players[self.state.player], self.phase_start_state)
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][1],
@@ -548,13 +550,13 @@ class Game:
                             policy = self.state.policies.find_policy(Policy.B, set([fix_node_id]), None, set([protected_node_id]))
                         else:
                             all_nodes = list()
-                            for node_name in self.game_def.graph.node_names.values():
+                            for node_name in sorted(self.game_def.graph.node_names.values()):
                                 if node_name != protected_node:
                                     all_nodes.append(node_name)
                             
                             protected_node2 =  self.players[self.state.player].pick(
                                 Player.START_POLICY_PROTECT_NODE,
-                                all_nodes,
+                                sorted(all_nodes),
                                 rand, self.state.players[self.state.player], self.phase_start_state)
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][1],
@@ -563,16 +565,24 @@ class Game:
                                                'state' : self.state.to_json() } )
                             protected_node2_id = self.game_def.graph.name_to_id[protected_node2]
                             policy = self.state.policies.find_policy(Policy.C, set([fix_node_id]), None, set([protected_node_id, protected_node2_id]))
-                
-                    self.log.append( { 'phase' : phase,
-                                       'step' : Game.STEPS_PER_PHASE[phase][1],
-                                       'target' : policy.name,
-                                       'memo' : Game.L_POLICY_STARTED,
-                                       'state' : self.state.to_json() } )
-                    self.state.policies.player_starts(policy, self.state.player, self.state.turn, self.state.quorum())
-                    self.state.players[self.state.player].policies.append(policy.name)
-                    self.phase_actions.append( ( self.state.player, Game.A_START_POLICY, policy ) )
-                    started_policy = policy
+
+                    if policy.name in self.phase_start_state.policies:
+                        self.log.append( { 'phase' : phase,
+                                           'step' : Game.STEPS_PER_PHASE[phase][1],
+                                           'target' : policy.name,
+                                           'memo' : Game.L_POLICY_IGNORED,
+                                           'state' : self.state.to_json() } )
+                        start = False
+                    else:
+                        self.log.append( { 'phase' : phase,
+                                           'step' : Game.STEPS_PER_PHASE[phase][1],
+                                           'target' : policy.name,
+                                           'memo' : Game.L_POLICY_STARTED,
+                                           'state' : self.state.to_json() } )
+                        self.state.policies.player_starts(policy, self.state.player, self.state.turn, self.state.quorum())
+                        self.state.players[self.state.player].policies.append(policy.name)
+                        self.phase_actions.append( ( self.state.player, Game.A_START_POLICY, policy ) )
+                        started_policy = policy
 
             ## pass power for any policies
             policy_choices = self.phase_start_state.policies.policies_for_status(PolicyState.IN_PROGRESS) + \
@@ -580,7 +590,7 @@ class Game:
             if start:
                 policy_choices.append(started_policy)
 
-            policy_choices = list(map(lambda x:x.name, policy_choices))
+            policy_choices = sorted(list(map(lambda x:x.name, policy_choices)))
 
             while True:
                 if self.state.players[self.state.player].resources['!'] == 0:
@@ -632,7 +642,7 @@ class Game:
                 
                 self.state.players[self.state.player].resources['!'] -= chosen_power
                 self.state.policies[chosen_policy]['missing_power'] -=  chosen_power
-                del policy_choices[policy_choices.index(chosen_policy)]
+                policy_choices.remove(chosen_policy)
                 self.phase_actions.append( ( self.state.player, Game.A_EMPOWER_POLICY,
                                              self.state.policies[chosen_policy]['policy'], chosen_power ) )
                 # policy effects, etc are left for the end
@@ -643,7 +653,7 @@ class Game:
                 boundary = self.phase_start_state.tech.research_boundary()
                 chosen_tech = self.players[self.state.player].pick(
                     Player.START_RESEARCH,
-                    list(map(lambda x:x.name, boundary)) + [ None ],
+                    sorted(list(map(lambda x:x.name, boundary))) + [ None ],
                     rand, self.state.players[self.state.player], self.phase_start_state)
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][2],
@@ -668,6 +678,7 @@ class Game:
                 for tech in researching:
                     if card[0] == tech.suit or card[1] == 14:
                         cards_for_tech.append( (tech.name, card, idx, tech.suit) )
+            cards_for_tech = sorted(cards_for_tech)
                         
             while True:
                 if None not in cards_for_tech:
@@ -706,7 +717,7 @@ class Game:
                         idx += 1
                 
             ## funds for research
-            to_fund = researching
+            to_fund = sorted(researching, key=lambda x:x.name)
 
             while True:
                 if self.state.players[self.state.player].resources['$'] == 0:
@@ -750,6 +761,7 @@ class Game:
                     if scard[0] == fcard[0] and sroll <= fvalue and froll <= svalue: # potential empath
                         empath_pairs.append( ( sproject.name, fproject.name, player,
                                                self.players[player].name, scard, fcard, sidx, fidx, sroll, froll ) )
+            empath_pairs = sorted(empath_pairs)
             while True:
                 if None not in empath_pairs:
                     empath_pairs.append( None )
@@ -803,6 +815,7 @@ class Game:
                                            'target' : n,
                                            'memo' : Game.L_ABANDON_RESEARCH, 'args' : [ players[0] ],
                                            'state' : self.state.to_json() } )
+                    self.state.tech[n]['player'] = players[0]
 
                 ## see if any of the techs was researched and apply its actions
                 for tech in self.state.tech.techs_for_status(TechTreeState.IN_PROGRESS):
@@ -961,7 +974,7 @@ class Game:
                             else: # in crisis, cascade
                                 cascaded = self.cascade(trigger)
                                 if cascaded:
-                                    for trigger2 in cascaded:
+                                    for trigger2 in sorted(cascaded, key=lambda x:self.game_def.graph.node_names[x]):
                                         trigger2n = self.game_def.graph.node_names[trigger2]
                                         if self.state.graph[trigger2n]['status'] == GraphState.STABLE:
                                             self.state.graph[trigger2n]['status'] = GraphState.IN_CRISIS
@@ -984,7 +997,9 @@ class Game:
                                                        'target' : triggern,
                                                        'memo' : Game.L_CHIP_PROJECT, 'args' : [ project.name ],
                                                        'state' : self.state.to_json() } )
-                                    
+
+                ## TODO see if two identical policies got created and remove one
+                
                 ## see if any of the policies had no action and should be discarded
                 for policy in self.state.policies.policies_for_status(PolicyState.IN_PROGRESS) + \
                     self.state.policies.policies_for_status(PolicyState.PASSED):
@@ -1094,7 +1109,7 @@ class Game:
                         continue
 
                     ## roll a node in category, if in crisis and all its descendants are in crisis, add a crisis chip and roll again
-                    nodes = list(self.game_def.graph.node_classes[catid])
+                    nodes = sorted(list(self.game_def.graph.node_classes[catid]))
                     dice = 1
                     if len(nodes) > 6:
                         dice += 1
@@ -1156,7 +1171,7 @@ class Game:
                         ## if the node was in crisis, activate all the nodes reachable from it and further cascade as needed
                         else: 
                             cascaded = self.cascade(node)
-                            for node2 in cascaded:
+                            for node2 in sorted(cascaded, key=lambda x:self.game_def.graph.node_names[x]):
                                 node2n = self.game_def.graph.node_names[node2]
                                 if self.state.graph[node2n]['status'] == GraphState.STABLE:
                                     self.state.graph[node2n]['status'] = GraphState.IN_CRISIS

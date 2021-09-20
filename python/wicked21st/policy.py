@@ -56,7 +56,7 @@ class Policies:
         self.policies = list()
         for c1, c2 in Policies.BASE_TABLE:
             
-            for n1 in graph.node_classes[c1[1]]:
+            for n1 in sorted(graph.node_classes[c1[1]], key=lambda x:graph.node_names[x]):
                     nn1 = graph.node_names[n1]
                 #for n2 in graph.node_classes[c2[1]]:
                     #nn2 = graph.node_names[n2]
@@ -75,7 +75,7 @@ class Policies:
                     self.policies.append(improvA)
 
                     # improv-B, protect another in same cat
-                    for other in graph.node_classes[c1[1]]:
+                    for other in sorted(graph.node_classes[c1[1]], key=lambda x:graph.node_names[x]):
                         othern = graph.node_names[other]
                         cost = ( 4, 4 )
                         improvB = Policy("Policy-B fix '{}' protect '{}' ({})".format(nn1, othern, c1[0]), Policy.B,
@@ -93,7 +93,7 @@ class Policies:
                                 self.policies.append(improvC)
         
         self.policy_for_name = { policy.name: policy for policy in self.policies }
-        self.names = list(self.policy_for_name.keys())
+        self.names = sorted(list(self.policy_for_name.keys()))
         
     def to_json(self):
         return self.policies
