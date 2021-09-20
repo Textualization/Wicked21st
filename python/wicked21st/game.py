@@ -93,6 +93,65 @@ class Game:
     A_START_RESEARCH = 'START_RESEARCH'
     A_SKILL_RESEARCH = 'SKILL_RESEARCH'
     A_FUND_RESEARCH  = 'FUND_RESEARCH'
+
+    L_DICE_ROLL           = 'Dice roll {}D6: {}'
+    L_MOVED               = 'Moved'
+    L_POWER_DRAWN         = 'Power drawn'
+    L_MONEY_DRAWN         = 'Money drawn'
+    L_CARD_DRAWN          = 'Card drawn: {}'
+    L_PROJECT_TYPE        = 'Start project: type'
+    L_PROJECT_CAT         = 'Start project: fix category'
+    L_PROJECT_NODE        = 'Start project: fix problem'
+    L_PROJECT_TRIGGER     = 'Start project: trade-off problem'
+    L_PROJECT_STARTED     = 'Project started'
+    L_SKILL_PROJECT       = 'Skill for project'
+    L_USING_TECH          = 'Using tech "{}"'
+    L_CONSULTANT_FEES     = 'Consultant fees'
+    L_CHIP_ADDED          = 'Added a crisis chip'
+    L_POLICY_TYPE         = 'Start policy: type'
+    L_POLICY_CAT          = 'Start policy: fix category'
+    L_POLICY_NODE         = 'Start policy: fix problem'
+    L_POLICY_PROTECT_SAME = 'Start policy: protect node in same category'
+    L_POLICY_PROTECT_ANY  = 'Start policy: protect node in any category'
+    L_POLICY_STARTED      = 'Policy started'
+    L_POLICY_TO_EMPOWER   = 'Chosen policy to empower'
+    L_EMPOWER_POLICY      = 'Empower policy "{}"'
+    L_START_RESEARCH      = 'Start researching'
+    L_SKILL_FOR_RESEARCH  = 'Skill for research'
+    L_FUNDS_FOR_RESEARCH  = 'Funds for research'
+    L_EMPATHIZE           = 'Empathize'
+    L_OVERSKILLED         = 'Tech project overskilled by {}'
+    L_OVERFUNDED          = 'Tech project overfunded by {}'
+    L_RESEARCH_CYCLE      = 'Research cycle finished, remain: {}'
+    L_RESEARCHED          = 'Tech researched'
+    L_AUTO_PROTECTED      = 'Problem auto-protected'
+    L_PROTECTED           = 'Problem protected'
+    L_FUNDED_NOT_SKILLED  = 'Tech funded but not skilled, ignoring'
+    L_SKILLED_NOT_FUNDED  = 'Tech skilled but not funded, ignoring'
+    L_PROJECT_ABANDONED   = 'Project abandoned'
+    L_PROJECT_OVERSKILLED = 'Project overskilled for "{}"'
+    L_PROJECT_FINISHED    = 'Project finished'
+    L_CRISIS_FIX_PROJECT  = 'Crisis resolved (project: {})'
+    L_CRISIS_TRIGGERED    = 'Now in crisis (trade-off from project: {})'
+    L_PROT_LOSS_PROJECT   = 'Lost protection (trade-off from project: {})'
+    L_CHIP_PROJECT = 'Crisis chip (trade-off from project: {})'
+    L_POLICY_ABANDONED    = 'Policy abandoned'
+    L_POLICY_OVERPOWERED  = 'Policy overpowered by {}'
+    L_POLICY_PASSED       = 'Policy passed'
+    L_POLICY_IN_ACTION    = 'Policy  in action'
+    L_CRISIS_FIX_POLICY   = 'Crisis resolved (policy: {})'
+    L_POLICY_PROTECT      = 'Problem protected (policy: {})'
+    L_CHIP_FULL_CAT       = 'Crisis chip: full category'
+    L_CRISIS_CAT          = 'Category for crisis'
+    L_CHIP_SATURATED      = 'Crisis chip: overwhelmed problem'
+    L_CRISIS_NODE         = 'Problem for crisis'
+    L_CRISIS_ROLL         = 'Crisis roll for node "{}"'
+    L_CRISIS_AVERTED      = 'Crisis averted'
+    L_IN_CRISIS           = 'Now in crisis'
+    L_PROT_LOSS           = 'Lost protection'
+    L_IN_CRISIS_CASCADE   = 'Now in crisis (cascaded from: {})'
+    L_PROT_LOSS_CASCADE   = 'Lost protection (cascaded from: {})'
+    
     
     def __init__(self, game_def: GameDef, players: list):
         self.game_def = game_def
@@ -108,7 +167,7 @@ class Game:
         self.log.append( { 'phase' : Game.PHASES[self.state.phase],
                            'step' : Game.STEPS_PER_PHASE[Game.PHASES[self.state.phase]][step],
                            'target' : result,
-                           'memo' : 'dice roll {}D6: {}'.format(num, memo),
+                           'memo' : Game.L_DICE_ROLL, 'args' : [ num, memo ],
                            'state' : self.state.to_json() } )
         return result
         
@@ -185,6 +244,7 @@ class Game:
             self.log.append( { 'phase' : phase,
                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                'target' : new_loc,
+                               'memo' : Game.L_MOVED,
                                'state' : self.state.to_json() } )
             # drawing power
             drawn = 1 + \
@@ -192,9 +252,10 @@ class Game:
                 (1 if self.players[self.state.player].player_class.resource == '!' else 0)
             self.state.players[self.state.player].resources['!'] += drawn
             self.log.append( { 'phase' : phase,
-                          'step' : Game.STEPS_PER_PHASE[phase][1],
-                          'target' : drawn,
-                          'state' : self.state.to_json() } )
+                               'step' : Game.STEPS_PER_PHASE[phase][1],
+                               'target' : drawn,
+                               'memo' : Game.L_POWER_DRAWN,
+                               'state' : self.state.to_json() } )
             # drawing money
             drawn = max(0, 5 - len(self.state.graph.are_in_crisis('ECONOMIC'))) + 2 *  (
                 (1 if self.game_def.board.resources[new_loc] == '$' else 0) + \
@@ -203,6 +264,7 @@ class Game:
             self.log.append( { 'phase' : phase,
                                'step' : Game.STEPS_PER_PHASE[phase][2],
                                'target' : drawn,
+                               'memo' : Game.L_MONEY_DRAWN,
                                'state' : self.state.to_json() } )
             # draw cards
             accessible_piles = set([self.players[self.state.player].player_class.suit_a, self.players[self.state.player].player_class.suit_b ])
@@ -218,7 +280,7 @@ class Game:
             self.log.append( { 'phase' : phase,
                                'step' : Game.STEPS_PER_PHASE[phase][3],
                                'target' : drawn,
-                               'memo' : 'first',
+                               'memo' : Game.L_CARD_DRAWN, 'args' : [ 1 ],
                                'state' : self.state.to_json() } )
             accessible_piles = list(set(accessible_piles) - set([draw_pile]))
             draw_pile = self.players[self.state.player].pick(
@@ -230,13 +292,13 @@ class Game:
             self.log.append( { 'phase' : phase,
                           'step' : Game.STEPS_PER_PHASE[phase][3],
                           'target' : drawn,
-                          'memo' : 'second',
+                          'memo' : Game.L_CARD_DRAWN, 'args' : [ 2 ],
                           'state' : self.state.to_json() } )
             # crisis rising
             self.state.crisis_chips += 1
             self.log.append( { 'phase' : phase,
-                          'step' : Game.STEPS_PER_PHASE[phase][4],
-                          'state' : self.state.to_json() } )
+                               'step' : Game.STEPS_PER_PHASE[phase][4],
+                               'state' : self.state.to_json() } )
         elif self.state.phase == 1: # activate
             if self.state.player == 0:
                 self.phase_start_state = self.state.copy()
@@ -254,7 +316,7 @@ class Game:
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                    'target' : project_type,
-                                   'memo' : 'start project: choose type',
+                                   'memo' : Game.L_PROJECT_TYPE,
                                    'state' : self.state.to_json() } )
                 start = project_type is not None
                 if start:
@@ -265,7 +327,7 @@ class Game:
                     self.log.append( { 'phase' : phase,
                                   'step' : Game.STEPS_PER_PHASE[phase][0],
                                   'target' : fix_cat,
-                                  'memo' : 'start project: fix category',
+                                  'memo' : Game.L_PROJECT_CAT,
                                   'state' : self.state.to_json() } )
                     fix_cat_id = self.game_def.graph.category_for_name[fix_cat]
                     fix_node =  self.players[self.state.player].pick(
@@ -273,10 +335,10 @@ class Game:
                         list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[fix_cat_id])),
                         rand, self.state.players[self.state.player], self.phase_start_state)
                     self.log.append( { 'phase' : phase,
-                                  'step' : Game.STEPS_PER_PHASE[phase][0],
-                                  'target' : fix_node,
-                                  'memo' : 'start project: fix node',
-                                  'state' : self.state.to_json() } )
+                                       'step' : Game.STEPS_PER_PHASE[phase][0],
+                                       'target' : fix_node,
+                                       'memo' : Game.L_PROJECT_NODE,
+                                       'state' : self.state.to_json() } )
                     fix_node_id = self.game_def.graph.name_to_id[fix_node]
 
                     project_type_ = Project.TYPES.index(project_type)
@@ -292,10 +354,10 @@ class Game:
                             list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[trigger_cat_id])),
                             rand, self.state.players[self.state.player], self.phase_start_state)
                         self.log.append( { 'phase' : phase,
-                                      'step' : Game.STEPS_PER_PHASE[phase][0],
-                                      'target' : trigger_node,
-                                      'memo' : 'start project: trigger node',
-                                      'state' : self.state.to_json() } )
+                                           'step' : Game.STEPS_PER_PHASE[phase][0],
+                                           'target' : trigger_node,
+                                           'memo' : Game.L_PROJECT_TRIGGER,
+                                           'state' : self.state.to_json() } )
                         trigger_node_id = self.game_def.graph.name_to_id[trigger_node]
 
                         project = self.state.projects.find_project(Project.BASE, fix_node_id, trigger_node_id)
@@ -305,7 +367,7 @@ class Game:
                     self.log.append( { 'phase' : phase,
                                        'step' : Game.STEPS_PER_PHASE[phase][0],
                                        'target' : project.name,
-                                       'memo' : 'start project',
+                                       'memo' : Game.L_PROJECT_STARTED,
                                        'state' : self.state.to_json() } )
                     self.state.projects.player_starts(project, self.state.player, self.state.turn)
                     self.state.players[self.state.player].projects.append(project.name)
@@ -335,24 +397,18 @@ class Game:
                     card_choices.append( None )
                 if len(card_choices) <= 1:
                     break
-                
 
                 play_card = self.players[self.state.player].pick(
                     Player.PLAY_CARD,
                     card_choices,
                     rand, self.state.players[self.state.player], self.phase_start_state)
-                if play_card is None:
-                    self.log.append( { 'phase' : phase,
-                                       'step' : Game.STEPS_PER_PHASE[phase][0],
-                                       'target' : False,
-                                       'memo' : 'skill for project',
-                                       'state' : self.state.to_json() } )
-                    break
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                    'target' : play_card,
-                                   'memo' : 'skill for project',
+                                   'memo' : Game.L_SKILL_PROJECT,
                                    'state' : self.state.to_json() } )
+                if play_card is None:
+                    break
 
                 succeeded = False
                 if play_card[0][1] == 14: # joker
@@ -369,7 +425,7 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][0],
                                            'target' : 1,
-                                           'memo' : 'using tech "{}"'.format(base_tech.name),
+                                           'memo' : Game.L_USING_TECH, 'args': [ base_tech.name ],
                                            'state' : self.state.to_json() } )
                     if self.state.tech.status(expanded_tech.name) == TechTreeState.RESEARCHED:
                         base = value
@@ -378,7 +434,7 @@ class Game:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                'target' : (value - base),
-                                               'memo' : 'using tech "{}"'.format(expanded_tech.name),
+                                               'memo' : Game.L_USING_TECH, 'args': [ expanded_tech.name ],
                                                'state' : self.state.to_json() } )
                         
                     if value < 11 and self.state.players[self.state.player].resources['$'] > 0:
@@ -391,7 +447,7 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][0],
                                            'target' : consultant,
-                                           'memo' : 'consultant fees',
+                                           'memo' : Game.L_CONSULTANT_FEES,
                                            'state' : self.state.to_json() } )
                         self.state.players[self.state.player].resources['$'] -= consultant
                         value += consultant
@@ -403,8 +459,8 @@ class Game:
                         self.state.crisis_chips += 1
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][0],
-                                           'target' : self.state.crisis_chips,
-                                           'memo' : 'crisis chip',
+                                           'target' : 1,
+                                           'memo' : Game.L_CHIP_ADDED,
                                            'state' : self.state.to_json() } )
 
                 if succeeded:
@@ -443,7 +499,7 @@ class Game:
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][1],
                                    'target' : policy_type,
-                                   'memo' : 'start policy',
+                                   'memo' : Game.L_POLICY_TYPE,
                                    'state' : self.state.to_json() } )
                 start = policy_type is not None
                 if start:
@@ -454,7 +510,7 @@ class Game:
                     self.log.append( { 'phase' : phase,
                                        'step' : Game.STEPS_PER_PHASE[phase][1],
                                        'target' : fix_cat,
-                                       'memo' : 'start policy: fix category',
+                                       'memo' : Game.L_POLICY_CAT,
                                        'state' : self.state.to_json() } )
                     fix_cat_id = self.game_def.graph.category_for_name[fix_cat]
                     fix_node =  self.players[self.state.player].pick(
@@ -464,7 +520,7 @@ class Game:
                     self.log.append( { 'phase' : phase,
                                        'step' : Game.STEPS_PER_PHASE[phase][1],
                                        'target' : fix_node,
-                                       'memo' : 'start policy: fix node',
+                                       'memo' : Game.L_POLICY_NODE,
                                        'state' : self.state.to_json() } )
                     fix_node_id = self.game_def.graph.name_to_id[fix_node]
 
@@ -480,7 +536,7 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][1],
                                            'target' : protected_node,
-                                           'memo' : 'start policy: protect node in same category',
+                                           'memo' : Game.L_POLICY_PROTECT_SAME,
                                            'state' : self.state.to_json() } )
                         protected_node_id = self.game_def.graph.name_to_id[protected_node]
 
@@ -499,7 +555,7 @@ class Game:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][1],
                                                'target' : protected_node2,
-                                               'memo' : 'start policy: protect node in any category',
+                                               'memo' : Game.L_POLICY_PROTECT_ANY,
                                                'state' : self.state.to_json() } )
                             protected_node2_id = self.game_def.graph.name_to_id[protected_node2]
                             policy = self.state.policies.find_policy(Policy.C, set([fix_node_id]), None, set([protected_node_id, protected_node2_id]))
@@ -507,7 +563,7 @@ class Game:
                     self.log.append( { 'phase' : phase,
                                        'step' : Game.STEPS_PER_PHASE[phase][1],
                                        'target' : policy.name,
-                                       'memo' : 'start policy',
+                                       'memo' : Game.L_POLICY_STARTED,
                                        'state' : self.state.to_json() } )
                     self.state.policies.player_starts(policy, self.state.player, self.state.turn, self.state.quorum())
                     self.state.players[self.state.player].policies.append(policy.name)
@@ -539,8 +595,8 @@ class Game:
                 if chosen_policy is None:
                     self.log.append( { 'phase' : phase,
                                        'step' : Game.STEPS_PER_PHASE[phase][1],
-                                       'target' : False,
-                                       'memo' : 'empower a policy',
+                                       'target' : None,
+                                       'memo' : Game.L_POLICY_TO_EMPOWER,
                                        'state' : self.state.to_json() } )
                     break
                 chosen_power = None
@@ -567,7 +623,7 @@ class Game:
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][1],
                                    'target' : chosen_power,
-                                   'memo' : 'empower policy "{}"'.format(chosen_policy),
+                                   'memo' : Game.L_EMPOWER_POLICY, 'args': [ chosen_policy ],
                                    'state' : self.state.to_json() } )
                 
                 self.state.players[self.state.player].resources['!'] -= chosen_power
@@ -588,7 +644,7 @@ class Game:
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][2],
                                    'target' : chosen_tech,
-                                   'memo' : 'start researching',
+                                   'memo' : Game.L_START_RESEARCH,
                                    'state' : self.state.to_json() } )
                 start = chosen_tech is not None
                 if start:
@@ -620,18 +676,13 @@ class Game:
                     Player.CARD_FOR_RESEARCH,
                     cards_for_tech,
                     rand, self.state.players[self.state.player], self.phase_start_state)
-                if chosen_card_for_tech is None:
-                    self.log.append( { 'phase' : phase,
-                                       'step' : Game.STEPS_PER_PHASE[phase][2],
-                                       'target' : False,
-                                       'memo' : 'skill for research',
-                                       'state' : self.state.to_json() } )
-                    break
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                    'target' : chosen_card_for_tech,
-                                   'memo' : 'skill for research',
+                                   'memo' : Game.L_SKILL_FOR_RESEARCH,
                                    'state' : self.state.to_json() } )
+                if chosen_card_for_tech is None:
+                    break
                 self.phase_actions.append( ( self.state.player, Game.A_SKILL_RESEARCH,
                                              chosen_card_for_tech[1], self.state.tech[chosen_card_for_tech[0]] ) )
                 self.state.drawpiles.return_card(chosen_card_for_tech[1], chosen_card_for_tech[3])
@@ -666,18 +717,13 @@ class Game:
                     Player.FUND_RESEARCH,
                     list(map(lambda x:None if x is None else x.name, to_fund)),
                     rand, self.state.players[self.state.player], self.phase_start_state)
-                if chosen_to_fund is None:
-                    self.log.append( { 'phase' : phase,
-                                       'step' : Game.STEPS_PER_PHASE[phase][2],
-                                       'target' : False,
-                                       'memo' : 'funds for research',
-                                       'state' : self.state.to_json() } )
-                    break
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                    'target' : chosen_to_fund,
-                                   'memo' : 'funds for research',
+                                   'memo' : Game.L_FUNDS_FOR_RESEARCH,
                                    'state' : self.state.to_json() } )
+                if chosen_to_fund is None:
+                    break
                 self.phase_actions.append( ( self.state.player, Game.A_FUND_RESEARCH, self.state.tech[chosen_to_fund] ) )
                 self.state.players[self.state.player].resources['$'] -= 1
                 
@@ -709,18 +755,13 @@ class Game:
                     Player.EMPATHIZE,
                     empath_pairs,
                     rand, self.state.players[self.state.player], self.phase_start_state)
-                if empathize is None:
-                    self.log.append( { 'phase' : phase,
-                                       'step' : Game.STEPS_PER_PHASE[phase][0],
-                                       'target' : False,
-                                       'memo' : 'empathize',
-                                       'state' : self.state.to_json() } )
-                    break
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                    'target' : empathize,
-                                   'memo' : 'empathize',
+                                   'memo' : Game.L_EMPATHIZE,
                                    'state' : self.state.to_json() } )
+                if empathize is None:
+                    break
                 l = list(self.phase_actions[empathize[6]])
                 l[4] = empathize[9]
                 self.phase_actions[empathize[6]] = tuple(l)
@@ -761,13 +802,13 @@ class Game:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                'target' : tech.name,
-                                               'memo' : 'overskilled',
+                                               'memo' : Game.L_OVERSKILLED, 'args' : [ skills - 1],
                                                'state' : self.state.to_json() } )
                         if funds >= 0:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                'target' : tech.name,
-                                               'memo' : 'overfunded',
+                                               'memo' : Game.L_OVERFUNDED, 'args' : [ funds - 1],
                                                'state' : self.state.to_json() } )
                         self.state.tech[tech.name]['missing_turns'] -= 1
                         
@@ -775,7 +816,7 @@ class Game:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                'target' : tech.name,
-                                               'memo' : 'research cycle, {} remain'.format(self.state.tech[tech.name]['missing_turns']),
+                                               'memo' : Game.L_RESEARCH_CYCLE, 'args' : [ self.state.tech[tech.name]['missing_turns'] ],
                                                'state' : self.state.to_json() } )
                         else:
                             # finished!
@@ -786,7 +827,7 @@ class Game:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                'target' : tech.name,
-                                               'memo' : 'researched',
+                                               'memo' : Game.L_RESEARCHED,
                                                'state' : self.state.to_json() } )
 
                             if tech.type_ == Tech.B:
@@ -796,7 +837,7 @@ class Game:
                                 self.log.append( { 'phase' : phase,
                                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                                    'target' : node,
-                                                   'memo' : 'auto-protected',
+                                                   'memo' : Game.L_AUTO_PROTECTED,
                                                    'state' : self.state.to_json() } )
                                 
                                 if self.state.graph[node]['status'] == GraphState.STABLE:
@@ -804,20 +845,20 @@ class Game:
                                     self.log.append( { 'phase' : phase,
                                                        'step' : Game.STEPS_PER_PHASE[phase][0],
                                                        'target' : node,
-                                                       'memo' : 'protected',
+                                                       'memo' : Game.L_PROTECTED,
                                                        'state' : self.state.to_json() } )
                     else:
                         if skills == 0:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                'target' : tech.name,
-                                               'memo' : 'funded but not skilled, ignoring',
+                                               'memo' : Game.L_FUNDED_NOT_SKILLED,
                                                'state' : self.state.to_json() } )
                         elif funds == 0:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                'target' : tech.name,
-                                               'memo' : 'skilled but not funded, ignoring',
+                                               'memo' : Game.L_SKILLED_NOT_FUNDED,
                                                'state' : self.state.to_json() } )
                             
 
@@ -838,7 +879,7 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][0],
                                            'target' : project.name,
-                                           'memo' : 'project abandoned',
+                                           'memo' : Game.L_PROJECT_ABANDONED,
                                            'state' : self.state.to_json() } )
 
                 ## see if any of the projects was finished and apply its actions
@@ -850,7 +891,7 @@ class Game:
                                 self.log.append( { 'phase' : phase,
                                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                                    'target' : project.name,
-                                                   'memo' : 'project overskilled for "{}"'.format(act[3][0]),
+                                                   'memo' : Game.L_PROJECT_OVERSKILLED, 'args' : [ act[3][0] ],
                                                    'state' : self.state.to_json() } )
                             else:
                                 del missing[missing.index(act[3][0])]
@@ -864,7 +905,7 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][0],
                                            'target' : project.name,
-                                           'memo' : 'project finished',
+                                           'memo' : Game.L_PROJECT_FINISHED,
                                            'state' : self.state.to_json() } )
                         
                         # apply effects
@@ -879,7 +920,7 @@ class Game:
                                 self.log.append( { 'phase' : phase,
                                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                                    'target' : fixn,
-                                                   'memo' : 'crisis resolved (project: {})'.format(project.name),
+                                                   'memo' : Game.L_CRISIS_FIX_PROJECT, 'args' : [ project.name ],
                                                    'state' : self.state.to_json() } )
                                     
                         for trigger in project.triggers:
@@ -889,14 +930,14 @@ class Game:
                                 self.log.append( { 'phase' : phase,
                                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                                    'target' : triggern,
-                                                   'memo' : 'in crisis (project: {})'.format(project.name),
+                                                   'memo' : Game.L_CRISIS_TRIGGERED, 'args' : [ project.name ],
                                                    'state' : self.state.to_json() } )
                             elif self.state.graph[triggern]['status'] == GraphState.PROTECTED:
                                 self.state.graph[triggern]['status'] = GraphState.STABLE
                                 self.log.append( { 'phase' : phase,
                                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                                    'target' : triggern,
-                                                   'memo' : 'loses protection (project: {})'.format(project.name),
+                                                   'memo' : Game.L_PROT_LOSS_PROJECT, 'args' : [ project.name ],
                                                    'state' : self.state.to_json() } )
                             else: # in crisis, cascade
                                 cascaded = self.cascade(trigger)
@@ -908,34 +949,23 @@ class Game:
                                             self.log.append( { 'phase' : phase,
                                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                                'target' : trigger2n,
-                                                               'memo' : 'in crisis (project: {})'.format(project.name),
+                                                               'memo' : Game.L_CRISIS_TRIGGERED, 'args' : [ project.name ],
                                                                'state' : self.state.to_json() } )
                                         elif self.state.graph[trigger2n]['status'] == GraphState.PROTECTED:
                                             self.state.graph[trigger2n]['status'] = GraphState.STABLE
                                             self.log.append( { 'phase' : phase,
                                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                                'target' : trigger2n,
-                                                               'memo' : 'loses protection (project: {})'.format(project.name),
+                                                               'memo' : Game.L_PROT_LOSS_PROJECT, 'args' : [ project.name ],
                                                                'state' : self.state.to_json() } )
                                 else:
                                     self.state.crisis_chips += 1
                                     self.log.append( { 'phase' : phase,
                                                        'step' : Game.STEPS_PER_PHASE[phase][0],
                                                        'target' : triggern,
-                                                       'memo' : 'crisis chip (project: {})'.format(project.name),
+                                                       'memo' : Game.L_CHIP_PROJECT, 'args' : [ project.name ],
                                                        'state' : self.state.to_json() } )
                                     
-                        for protect in project.protects:
-                            protectn = self.game_def.graph.node_names[protect]
-                            if self.state.graph[protectn]['status'] == GraphState.STABLE:
-                                self.state.graph[protectn]['status'] = GraphState.PROTECTED
-                                    
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : protectn,
-                                                   'memo' : 'protected (project: {})'.format(project.name),
-                                                   'state' : self.state.to_json() } )
-
                 ## see if any of the policies had no action and should be discarded
                 for policy in self.state.policies.policies_for_status(PolicyState.IN_PROGRESS) + \
                     self.state.policies.policies_for_status(PolicyState.PASSED):
@@ -954,9 +984,9 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][0],
                                            'target' : policy.name,
-                                           'memo' : 'policy abandoned',
-                                          'state' : self.state.to_json() } )
-
+                                           'memo' : Game.L_POLICY_ABANDONED,
+                                           'state' : self.state.to_json() } )
+                        
                 ## see if any of the policies was passed
                 for policy in self.state.policies.policies_for_status(PolicyState.IN_PROGRESS):
                     if self.state.policies[policy.name]['missing_power'] <= 0:
@@ -965,7 +995,7 @@ class Game:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                'target' : policy.name,
-                                               'memo' : 'policy overpowered',
+                                               'memo' : Game.L_POLICY_OVERPOWERED, 'args' : [ abs(self.state.policies[policy.name]['missing_power']) ],
                                                'state' : self.state.to_json() } )
 
                         self.state.policies.has_passed(policy.name)
@@ -973,7 +1003,7 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][0],
                                            'target' : policy.name,
-                                           'memo' : 'policy passed',
+                                           'memo' : Game.L_POLICY_PASSED,
                                            'state' : self.state.to_json() } )
                 
                 ## see if any of the passed policies started and apply its actions
@@ -987,7 +1017,7 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][0],
                                            'target' : policy.name,
-                                           'memo' : 'policy in action',
+                                           'memo' : Game.L_POLICY_IN_ACTION,
                                            'state' : self.state.to_json() } )
 
                         for fix in policy.fixes:
@@ -1001,52 +1031,9 @@ class Game:
                                 self.log.append( { 'phase' : phase,
                                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                                    'target' : fixn,
-                                                   'memo' : 'crisis resolved (policy: {})'.format(policy.name),
+                                                   'memo' : Game.L_CRISIS_FIX_POLICY, 'args' : [ policy.name ],
                                                    'state' : self.state.to_json() } )
-                                    
-                        for trigger in policy.triggers:
-                            triggern = self.game_def.graph.node_names[trigger]
-                            if self.state.graph[triggern]['status'] == GraphState.STABLE:
-                                self.state.graph[triggern]['status'] = GraphState.IN_CRISIS
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : triggern,
-                                                   'memo' : 'in crisis (policy: {})'.format(policy.name),
-                                                   'state' : self.state.to_json() } )
-                            elif self.state.graph[triggern]['status'] == GraphState.PROTECTED:
-                                self.state.graph[triggern]['status'] = GraphState.STABLE
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : triggern,
-                                                   'memo' : 'loses protection (policy: {})'.format(policy.name),
-                                                   'state' : self.state.to_json() } )
-                            else: # in crisis, cascade
-                                cascaded = self.cascade(trigger)
-                                if cascaded:
-                                    for trigger2 in cascaded:
-                                        trigger2n = self.game_def.graph.node_names[trigger2]
-                                        if self.state.graph[trigger2n]['status'] == GraphState.STABLE:
-                                            self.state.graph[trigger2n]['status'] = GraphState.IN_CRISIS
-                                            self.log.append( { 'phase' : phase,
-                                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                               'target' : trigger2n,
-                                                               'memo' : 'in crisis (policy: {})'.format(policy.name),
-                                                               'state' : self.state.to_json() } )
-                                        elif self.state.graph[trigger2n]['status'] == GraphState.PROTECTED:
-                                            self.state.graph[trigger2n]['status'] = GraphState.STABLE
-                                            self.log.append( { 'phase' : phase,
-                                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                               'target' : trigger2n,
-                                                               'memo' : 'loses protection (policy: {})'.format(policy.name),
-                                                               'state' : self.state.to_json() } )
-                                else:
-                                    self.state.crisis_chips += 1
-                                    self.log.append( { 'phase' : phase,
-                                                       'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                       'target' : triggern,
-                                                       'memo' : 'crisis chip (policy: {})'.format(policy.name),
-                                                       'state' : self.state.to_json() } )
-                                    
+                                                                        
                         for protect in policy.protects:
                             protectn = self.game_def.graph.node_names[protect]
                             if self.state.graph[protectn]['status'] == GraphState.STABLE:
@@ -1055,7 +1042,7 @@ class Game:
                                 self.log.append( { 'phase' : phase,
                                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                                    'target' : protectn,
-                                                   'memo' : 'protected (policy: {})'.format(policy.name),
+                                                   'memo' : Game.L_POLICY_PROTECT, 'args' : [ policy.name ],
                                                    'state' : self.state.to_json() } )
 
                 # CRISIS ROLLING
@@ -1066,7 +1053,7 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][1],
                                            'target' : cat,
-                                           'memo' : 'crisis chip full category',
+                                           'memo' : Game.L_CHIP_FULL_CAT,
                                            'state' : self.state.to_json() } )
 
                 while self.state.crisis_chips and len(self.state.graph.are_in_crisis()) < len(self.game_def.graph):
@@ -1076,14 +1063,14 @@ class Game:
                     self.log.append( { 'phase' : phase,
                                        'step' : Game.STEPS_PER_PHASE[phase][1],
                                        'target' : cat,
-                                       'memo' : 'crisis category',
+                                       'memo' : Game.L_CRISIS_CAT,
                                        'state' : self.state.to_json() } )
 
                     if len(self.state.graph.are_in_crisis(cat)) == len(self.game_def.graph.node_classes[catid]):
                         self.log.append( { 'phase' : phase,
                                       'step' : Game.STEPS_PER_PHASE[phase][1],
                                       'target' : cat,
-                                      'memo' : 'crisis chip full category',
+                                      'memo' : Game.L_CHIP_FULL_CAT,
                                       'state' : self.state.to_json() } )
                         continue
 
@@ -1099,14 +1086,14 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][1],
                                            'target' : noden,
-                                           'memo' : 'crisis chip saturated node',
+                                           'memo' : Game.L_CHIP_SATURATED,
                                            'state' : self.state.to_json() } )
                         continue
                     
                     self.log.append( { 'phase' : phase,
                                        'step' : Game.STEPS_PER_PHASE[phase][1],
                                        'target' : noden,
-                                       'memo' : 'crisis node',
+                                       'memo' : Game.L_CRISIS_NODE,
                                        'state' : self.state.to_json() } )
                         
                     ## with a node in hand, roll crisis chips until either the roll is successful or all the crisis chips are exhausted
@@ -1116,7 +1103,7 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][1],
                                            'target' : crisis_roll,
-                                           'memo' : 'crisis roll for node "{}"'.format(noden),
+                                           'memo' : Game.L_CRISIS_ROLL, 'args' : [ noden ],
                                            'state' : self.state.to_json() } )
                         self.state.crisis_chips -= 1
                         if crisis_roll > 6:
@@ -1127,7 +1114,7 @@ class Game:
                         self.log.append( { 'phase' : phase,
                                            'step' : Game.STEPS_PER_PHASE[phase][1],
                                            'target' : noden,
-                                           'memo' : 'crisis averted!',
+                                           'memo' : Game.L_CRISIS_AVERTED,
                                            'state' : self.state.to_json() } )
                     else:
                         ## if node was stable, set in crisis
@@ -1136,7 +1123,7 @@ class Game:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][1],
                                                'target' : noden,
-                                               'memo' : 'in crisis',
+                                               'memo' : Game.L_IN_CRISIS,
                                                'state' : self.state.to_json() } )
                             
                         ## if the node was protected, remove the protection
@@ -1145,7 +1132,7 @@ class Game:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                'target' : noden,
-                                               'memo' : 'loses protection',
+                                               'memo' : L_PROT_LOSS,
                                                'state' : self.state.to_json() } )
                         ## if the node was in crisis, activate all the nodes reachable from it and further cascade as needed
                         else: 
@@ -1157,14 +1144,14 @@ class Game:
                                     self.log.append( { 'phase' : phase,
                                                        'step' : Game.STEPS_PER_PHASE[phase][1],
                                                        'target' : node2n,
-                                                       'memo' : 'in crisis (cascaded from: {})'.format(noden),
+                                                       'memo' : Game.L_IN_CRISIS_CASCADE, 'args': [ noden ],
                                                        'state' : self.state.to_json() } )
                                 elif self.state.graph[node2n]['status'] == GraphState.PROTECTED:
                                     self.state.graph[node2n]['status'] = GraphState.STABLE
                                     self.log.append( { 'phase' : phase,
                                                        'step' : Game.STEPS_PER_PHASE[phase][1],
                                                        'target' : node2n,
-                                                       'memo' : 'loses protection (project: {})'.format(project.name),
+                                                       'memo' : Game.L_PROT_LOSS_CASCADE, 'args': [ noden ],
                                                        'state' : self.state.to_json() } )
                         
 

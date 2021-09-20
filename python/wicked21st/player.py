@@ -32,10 +32,26 @@ class Player:
     EMPATHIZE                  = 19
     
 
-    decision_names = [ 'Initial location',
+    decision_names = [ 'Initial role',
+                       'Initial location',
                        'New location',
-                       'Pile to draw',
+                       'Pile to draw from',
                        'Project type to start',
+                       'New project, fix category',
+                       'New project, fix problem',
+                       'New project, trade-off problem',
+                       'Play a card',
+                       'Add consultant fees',
+                       'Policy type to start',
+                       'New policy, fix category',
+                       'New policy, fix problem',
+                       'New policy, protect node',
+                       'Policy to empower',
+                       'Power amount',
+                       'Teach to start researching',
+                       'Card for research',
+                       'Fund research',
+                       'Empathize',
                       ]
     
     def __init__(self, name: str, ordering: int, pclass=None):

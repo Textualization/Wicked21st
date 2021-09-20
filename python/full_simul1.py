@@ -60,7 +60,16 @@ while not game.finished and game.state.turn < 12:
     log0 = len(game.log)
     game.step(rand)
     for e in game.log[log0:]:
-        print("{}\t{}\t{}\t\t{}".format(e['phase'], e['step'], e.get('target', "-"), e.get('memo', "-")))
+        line = "{}\t{}".format(e['phase'], e['step'])
+        if 'target' in e:
+            line = "{}\t{}".format(line, e['target'])
+            if 'memo' in e:
+                memo = e['memo']
+                if 'args' in e:
+                    args = e['args']
+                    memo = memo.format(*args)
+            line = "{}\t{}".format(line, memo)
+        print(line)
 
 if game.finished:
     print("GAME LOST")
