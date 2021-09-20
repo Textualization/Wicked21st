@@ -18,16 +18,20 @@ class BaseClass:
         self.project_slots = 1
         self.policy_slots = 1
         self.research_slots = 1
+        self.json_memo = None
 
     def to_json(self):
-        return { 'name' : self.name,
-                 'suit_a' : self.suit_a,
-                 'suit_b' : self.suit_b,
-                 'resource' : self.resource,
-                 'project_slots' : self.project_slots,
-                 'policy_slots' : self.policy_slots,
-                 'research_slots' : self.research_slots,
-                }
+        if self.json_memo is None:
+            self.json_memo = {
+                'name' : self.name,
+                'suit_a' : self.suit_a,
+                'suit_b' : self.suit_b,
+                'resource' : self.resource,
+                'project_slots' : self.project_slots,
+                'policy_slots' : self.policy_slots,
+                'research_slots' : self.research_slots,
+            }
+        return self.json_memo
 
 # missing: special abilities
 
@@ -90,4 +94,12 @@ class Classes:
 
     def pick(self, rand: random.Random):
         return rand.choice(self.classes)
+
+    def names(self):
+        return [ clazz.name for clazz in self.classes ]
+    def class_for_name(self, name: str):
+        for clazz in self.classes:
+            if clazz.name == name:
+                return clazz
+        raise Exception("Not found '{}'".format(name))
 

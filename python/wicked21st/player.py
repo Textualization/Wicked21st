@@ -10,47 +10,48 @@ from .classes import BaseClass
 class Player:
 
     # decisions
-    INIT_LOC  = 0
-    NEW_LOC   = 1
-    PILE_DRAW = 2
-    START_PROJECT_YN           = 3
-    START_PROJECT_FIX_CAT      = 4
-    START_PROJECT_FIX_NODE     = 5
-    START_PROJECT_TYPE         = 6
-    START_PROJECT_TRIGGER_NODE = 7
-    START_PROJECT_PROTECT_NODE = 8
-    PLAY_CARD       = 9
-    CONSULTANT      = 10
-    START_POLICY_YN           = 11
-    START_POLICY_FIX_CAT      = 12
-    START_POLICY_FIX_NODE     = 13
-    START_POLICY_TYPE         = 14
-    START_POLICY_TRIGGER_NODE = 15
-    START_POLICY_PROTECT_NODE = 16
-    POLICY_TO_EMPOWER = 17
-    POWER_AMOUNT      = 18
-    START_RESEARCH_YN   = 19
-    START_RESEARCH_TECH = 20
-    CARD_FOR_RESEARCH   = 21
-    FUND_RESEARCH       = 22
-    EMPATHIZE = 23
+    INIT_ROLE                  =  0
+    INIT_LOC                   =  1
+    NEW_LOC                    =  2
+    PILE_DRAW                  =  3
+    START_PROJECT              =  4
+    START_PROJECT_FIX_CAT      =  5
+    START_PROJECT_FIX_NODE     =  6
+    START_PROJECT_TRIGGER_NODE =  7
+    PLAY_CARD                  =  8
+    CONSULTANT                 =  9
+    START_POLICY               = 10
+    START_POLICY_FIX_CAT       = 11
+    START_POLICY_FIX_NODE      = 12
+    START_POLICY_PROTECT_NODE  = 13
+    POLICY_TO_EMPOWER          = 14
+    POWER_AMOUNT               = 15
+    START_RESEARCH             = 16
+    CARD_FOR_RESEARCH          = 17
+    FUND_RESEARCH              = 18
+    EMPATHIZE                  = 19
     
 
     decision_names = [ 'Initial location',
                        'New location',
-                       'Pile draw',
-                       'Start a new project?',
+                       'Pile to draw',
+                       'Project type to start',
                       ]
     
-    def __init__(self, name: str, ordering: int, pclass: BaseClass):
+    def __init__(self, name: str, ordering: int, pclass=None):
         self.name = name
         self.ordering = ordering
         self.player_class = pclass
 
+    def set_class(self, pclass: BaseClass):
+        self.player_class = pclass
+
     def to_json(self):
-        return { 'name' : self.name,
-                 'ordering' : self.ordering,
-                 'player_class' : self.player_class.to_json() }
+        result = { 'name' : self.name,
+                   'ordering' : self.ordering }
+        if self.player_class:
+            result['player_class'] = self.player_class.to_json()
+        return result
 
     def pick(self, decision: int, decisions: list,
              # state: PlayerState

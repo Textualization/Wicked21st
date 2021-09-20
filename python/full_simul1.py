@@ -47,7 +47,9 @@ game_def = GameDef(game_init, NUM_PLAYERS, classes_def, graph_def, board_def, tr
 
 # assemble random players
 
-players = [ Player("Player{}".format(p+1), p, classes_def.pick(rand)) for p in range(NUM_PLAYERS) ]
+players = [ Player("Player{}".format(p+1), p) for p in range(NUM_PLAYERS) ]
+for player in players:
+    player.set_class(classes_def.class_for_name(player.pick(Player.INIT_ROLE, classes_def.names(), rand)))
 
 game = Game(game_def, players)
 game.start(rand)

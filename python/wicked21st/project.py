@@ -8,10 +8,9 @@ from .graph import Graph
 class Project:
 
     BASE  = 0
-    A1    = 1
-    A2    = 2
+    A     = 1
 
-    TYPES = [ 'Base', 'Remove-Tradeoff', 'Add-Protect' ]
+    TYPES = [ 'Base', 'Remove-Tradeoff' ]
 
     def __init__(self, name, type_, fixes: set, triggers: set, protects: set, cost: list, parent):
         self.name = name
@@ -61,8 +60,8 @@ class Projects:
                     self.projects.append(base)
                     
                     # improv-A, no trade-off
-                    improvA = Project("Improv-A1 fix '{}' ({})".format(nn1, c1[0]),
-                                      Project.A1, set([n1]), set(), set(),
+                    improvA = Project("Improved fix '{}' ({})".format(nn1, c1[0]),
+                                      Project.A, set([n1]), set(), set(),
                                       cost + [ 'H', 'D' ], base)
                     self.projects.append(improvA)
                     # improv-B
@@ -78,12 +77,12 @@ class Projects:
                     #                                  cost + [ 'H', 'D', 'D', 'S' ], improvA))
                                 
                     # improv-A, protect
-                    for other in graph.node_classes[c1[1]]:
-                        othern = graph.node_names[other]
-                        improvA = Project("Improv-A2 fix '{}' protect '{}' ({}) triggers '{}' ({})".format(nn1, othern, c1[0], nn2, c2[0]),
-                                          Project.A2, set([n1]), set([n2]), set([other]),
-                                          cost + [ 'S', 'C' ], base)
-                        self.projects.append(improvA)
+                    # for other in graph.node_classes[c1[1]]:
+                    #     othern = graph.node_names[other]
+                    #     improvA = Project("Improv-A2 fix '{}' protect '{}' ({}) triggers '{}' ({})".format(nn1, othern, c1[0], nn2, c2[0]),
+                    #                       Project.A2, set([n1]), set([n2]), set([other]),
+                    #                       cost + [ 'S', 'C' ], base)
+                    #     self.projects.append(improvA)
 
                         # # improv-B
                         # for other2 in graph.node_classes[c1[1]]:

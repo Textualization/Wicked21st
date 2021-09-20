@@ -7,12 +7,11 @@ from .graph import Graph
 
 class Policy:
 
-    BASE = 0
-    A = 1
-    B = 2
-    C = 3
+    A = 0
+    B = 1
+    C = 2
 
-    TYPES = [ 'Base', 'Remove-Tradeoff', 'Protect-Extra', 'Protect-Any' ]
+    TYPES = [ 'Base', 'Protect-Extra', 'Protect-Any' ]
 
     # cost is 'quorum': int, 'turns': int
     # added value on top of quorum and turns is the number of turns to wait after it passes
@@ -58,28 +57,28 @@ class Policies:
         for c1, c2 in Policies.BASE_TABLE:
             
             for n1 in graph.node_classes[c1[1]]:
-                nn1 = graph.node_names[n1]
-                for n2 in graph.node_classes[c2[1]]:
-                    nn2 = graph.node_names[n2]
-                    cost = ( 0, 0 )
+                    nn1 = graph.node_names[n1]
+                #for n2 in graph.node_classes[c2[1]]:
+                    #nn2 = graph.node_names[n2]
+                    #cost = ( 0, 0 )
                     # base
-                    base = Policy("Base fix '{}' ({}) triggers '{}' ({})".format(nn1, c1[0], nn2, c2[0]), Policy.BASE,
-                                                 set([n1]), set([n2]), set([]),
-                                                 cost, None)
-                    self.policies.append(base)
+                    #base = Policy("Base fix '{}' ({}) triggers '{}' ({})".format(nn1, c1[0], nn2, c2[0]), Policy.BASE,
+                    #                             set([n1]), set([n2]), set([]),
+                    #                             cost, None)
+                    #self.policies.append(base)
                     
                     # improv-A, no trade-off
                     cost = ( 2, 2 )
-                    improvA = Policy("Improv-A fix '{}' ({})".format(nn1, c1[0]), Policy.A,
+                    improvA = Policy("Policy-A fix '{}' ({})".format(nn1, c1[0]), Policy.A,
                                       set([n1]), set(), set(),
-                                      cost, base)
+                                      cost, None)
                     self.policies.append(improvA)
 
                     # improv-B, protect another in same cat
                     for other in graph.node_classes[c1[1]]:
                         othern = graph.node_names[other]
                         cost = ( 4, 4 )
-                        improvB = Policy("Improv-B fix '{}' protect '{}' ({})".format(nn1, othern, c1[0]), Policy.B,
+                        improvB = Policy("Policy-B fix '{}' protect '{}' ({})".format(nn1, othern, c1[0]), Policy.B,
                                          set([n1]), set(), set([other]),
                                          cost, improvA)
                         self.policies.append(improvB)
@@ -88,7 +87,7 @@ class Policies:
                         for other2, other2n in graph.node_names.items():
                             if other2 != other:
                                 cost = ( 6, 6 )
-                                improvC = Policy("Improv-C fix '{}' protect '{}' ({}) protect '{}'".format(nn1, othern, c1[0], other2n), Policy.C,
+                                improvC = Policy("Policy-C fix '{}' protect '{}' ({}) protect '{}'".format(nn1, othern, c1[0], other2n), Policy.C,
                                                  set([n1]), set(), set([other, other2]),
                                                  cost, improvB)
                                 self.policies.append(improvC)
