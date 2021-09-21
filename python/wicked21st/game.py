@@ -422,7 +422,7 @@ class Game:
                     roll  = -1
                     value = -1
                 else:
-                    value = min(10, play_card[0][1])
+                    value = min(10, play_card[0][1] if play_card[0][1] > 1 else 10)
                     base_tech = self.state.tech.find_tech(Tech.BASE, play_card[0][0])
                     expanded_tech = self.state.tech.find_tech(Tech.A, play_card[0][0])
                     
