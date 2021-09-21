@@ -1,6 +1,6 @@
 GAME INIT
 
-Each player chooses a role and an initial location.
+Each player chooses a role (see table at the end) and an initial location (see table at the end).
 
 All players have 1 research slot, 1 project slot and 1 policy slot.
 
@@ -86,15 +86,7 @@ TURN
 
                 Decision START_PROJECT_FIX_NODE: choose among all the problems in that category
 
-                If the player has chosen to start a base project, the player needs to choose also a trade-off problem in the trade-off category for the chosen category (based on the table):
-
-        ( Graph.ENVIRONMENTAL,          Graph.LIVING_STANDARDS,	'C', 'D' ),
-        ( Graph.LIVING_STANDARDS,	Graph.CLASS,	        'H', 'C' ),
-        ( Graph.SOCIAL,	                Graph.INDUSTRIAL,	'H', 'D' ),
-        ( Graph.CLASS,	                Graph.SOCIAL,	        'H', 'S' ),
-        ( Graph.ECONOMIC,	        Graph.ENVIRONMENTAL,	'S', 'D' ),
-        ( Graph.INDUSTRIAL,	        Graph.ECONOMIC,	        'S', 'C' ),
-
+                If the player has chosen to start a base project, the player needs to choose also a trade-off problem in the trade-off category for the chosen category (based on the table at the end of the document):
 
                       Decision START_PROJECT_TRIGGER_NODE: Choose from all the problems in the trade-off category
 
@@ -137,7 +129,7 @@ TURN
 
                          If the roll equals 12, a crisis chip is added to the turn, immediately.
 
-                         The cards used are returned to the drawpiles, with the jokers being returned to the pile of the suit they were used in replacement (not necessarily the suit they were taken from).
+                         The cards used are thrown to the discard piles for each suit, with the jokers being returned to the pile of the suit they were used in replacement (not necessarily the suit they were taken from).
 
      PASSING POLICY
 
@@ -182,577 +174,243 @@ TURN
 
                      Phase action recorded: EMPOWER_POLICY (policy, power units)
 
+                     Reduce the number of power units for the player accordingly
+
+
      DOING RESEARCH
-                                      ],
-            # research
-            start = False
-            if self.state.players[self.state.player].available_research_slots():
-                boundary = self.phase_start_state.tech.research_boundary()
-                chosen_tech = self.players[self.state.player].pick(
-                    Player.START_RESEARCH,
-                    sorted(list(map(lambda x:x.name, boundary))) + [ None ],
-                    rand, self.state.players[self.state.player], self.phase_start_state)
-                self.log.append( { 'phase' : phase,
-                                   'step' : Game.STEPS_PER_PHASE[phase][2],
-                                   'target' : chosen_tech,
-                                   'memo' : Game.L_START_RESEARCH,
-                                   'state' : self.state.to_json() } )
-                start = chosen_tech is not None
-                if start:
-                    tech = self.state.tech[chosen_tech]['tech']
-                    self.state.tech.player_starts(tech, self.state.player, self.state.turn)
-                    self.state.players[self.state.player].tech.append(tech.name)
-                    self.phase_actions.append( ( self.state.player, Game.A_START_RESEARCH, tech ) )
-                    started_tech = tech
 
-            researching = self.state.tech.techs_for_status(TechTreeState.IN_PROGRESS)
-            if start:
-                researching.append(started_tech)
+            If the player has research slots available, the player has to decide whether to start research on a specific technology or not start researching at:
+            Decision START_RESEARCH: Choose between the research boundary (tech that can be researched given what we know already) or not starting new research.
 
-            ## cards for research
-            cards_for_tech = list()
-            for idx, card in enumerate(self.state.players[self.state.player].cards):
-                for tech in researching:
-                    if card[0] == tech.suit or card[1] == 14:
-                        cards_for_tech.append( (tech.name, card, idx, tech.suit) )
-            cards_for_tech = sorted(cards_for_tech)
-                        
-            while True:
-                if None not in cards_for_tech:
-                    cards_for_tech.append( None )
-                
-                if len(cards_for_tech) <= 1:
-                    break
-                
-                chosen_card_for_tech = self.players[self.state.player].pick(
-                    Player.CARD_FOR_RESEARCH,
-                    cards_for_tech,
-                    rand, self.state.players[self.state.player], self.phase_start_state)
-                self.log.append( { 'phase' : phase,
-                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                   'target' : chosen_card_for_tech,
-                                   'memo' : Game.L_SKILL_FOR_RESEARCH,
-                                   'state' : self.state.to_json() } )
-                if chosen_card_for_tech is None:
-                    break
-                self.phase_actions.append( ( self.state.player, Game.A_SKILL_RESEARCH,
-                                             chosen_card_for_tech[1], self.state.tech[chosen_card_for_tech[0]] ) )
-                self.state.drawpiles.return_card(chosen_card_for_tech[1], chosen_card_for_tech[3])
-                del self.state.players[self.state.player].cards[chosen_card_for_tech[2]]
-                
-                idx = 0
-                while idx < len(cards_for_tech):
-                    if cards_for_tech[idx] is None:
-                        idx += 1
-                    elif cards_for_tech[idx][2] == chosen_card_for_tech[2]:
-                        del cards_for_tech[idx]
-                    else:
-                        if cards_for_tech[idx][2] > chosen_card_for_tech[2]:
-                            l = list(cards_for_tech[idx])
-                            l[2] -= 1
-                            cards_for_tech[idx] = tuple(l)
-                        idx += 1
-                
-            ## funds for research
-            to_fund = sorted(researching, key=lambda x:x.name)
+            If the player decided to start researching new technology, it is added to the player's research slot:
 
-            while True:
-                if self.state.players[self.state.player].resources['$'] == 0:
-                    break
-                if None not in to_fund:
-                    to_fund.append( None )
+                    Phase action recorded: START_RESEARCH (tech)
 
-                if len(to_fund) <= 1:
-                    break
+            After potentially creating a new policy, the player can decide to contribute skills or funds to any tech currently being researched either by the player itself or by others (but not new tech which research started by other players this phase).
 
-                chosen_to_fund = self.players[self.state.player].pick(
-                    Player.FUND_RESEARCH,
-                    list(map(lambda x:None if x is None else x.name, to_fund)),
-                    rand, self.state.players[self.state.player], self.phase_start_state)
-                self.log.append( { 'phase' : phase,
-                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                   'target' : chosen_to_fund,
-                                   'memo' : Game.L_FUNDS_FOR_RESEARCH,
-                                   'state' : self.state.to_json() } )
-                if chosen_to_fund is None:
-                    break
-                self.phase_actions.append( ( self.state.player, Game.A_FUND_RESEARCH, self.state.tech[chosen_to_fund] ) )
-                self.state.players[self.state.player].resources['$'] -= 1
-                
-                for idx, tech in enumerate(to_fund):
-                    if tech is not None and tech.name == chosen_to_fund:
-                        break
-                del to_fund[idx]
+            While the player has cards that can be contributed to techs being researched the player hasn't yet contributed to, or the player decides not to contribute cards to any further research:
 
+                    Decision CARD_FOR_RESEARCH: Choose a card and a tech to contribute that card or nothing to stop contributing cards
+
+                    If the player chose a card to contribute to a specific tech research efforts:
+
+                            Phase action recorded: SKILL_RESEARCH (tech, card)
+                            
+                            Discard the card to the suitable draw pile
+
+            While the player has money units to contribute to any techs being researched the player hasn't yet contributed to, or the player decides not to contribute money units to any further research:
+
+                    Decision FUND_RESEARCH: Choose a tech to contribute a money unit or nothing to stop contributing money units
+
+                    If the player chose a card to contribute to a specific tech research efforts:
+
+                            Phase action recorded: FUND_RESEARCH (tech, amount)
 
 
   REFLECT
 
+     For the reflect phase, all the blind actions of the activate phase are revealed. In order, each player can openly do the reflect actions (only empathizing in the basic version of the game).
+
      EMPATHIZING
-     
-            succeeded = [ (p[2], p[3], idx, p[4], p[5])       for idx, p in enumerate(self.phase_actions)
-                          if p[0] == self.state.player and p[1] == Game.A_SUCCESS_SKILL ]
-            failed    = [ (p[0], p[2], p[3], idx, p[4], p[5]) for idx, p in enumerate(self.phase_actions)
-                          if p[0] != self.state.player and p[1] == Game.A_FAILED_SKILL ]
-            empath_pairs = list()
-            for sproject, scard, sidx, sroll, svalue in succeeded:
-                if sroll < 0: # joker
-                    continue
-                for player, fproject, fcard, fidx, froll, fvalue in failed:
-                    if scard[0] == fcard[0] and sroll <= fvalue and froll <= svalue: # potential empath
-                        empath_pairs.append( ( sproject.name, fproject.name, player,
-                                               self.players[player].name, scard, fcard, sidx, fidx, sroll, froll ) )
-            empath_pairs = sorted(empath_pairs)
-            while True:
-                if None not in empath_pairs:
-                    empath_pairs.append( None )
-                if len(empath_pairs) <= 1:
-                    break
-                empathize = self.players[self.state.player].pick(
-                    Player.EMPATHIZE,
-                    empath_pairs,
-                    rand, self.state.players[self.state.player], self.phase_start_state)
-                self.log.append( { 'phase' : phase,
-                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                   'target' : empathize,
-                                   'memo' : Game.L_EMPATHIZE,
-                                   'state' : self.state.to_json() } )
-                if empathize is None:
-                    break
-                l = list(self.phase_actions[empathize[6]])
-                l[4] = empathize[9]
-                self.phase_actions[empathize[6]] = tuple(l)
-                l = list(self.phase_actions[empathize[7]])
-                l[1] = Game.A_SUCCESS_SKILL
-                l[4] = empathize[8]
-                self.phase_actions[empathize[7]] = tuple(l)
-                
-                idx = 0
-                while idx < len(empath_pairs):
-                    if empath_pairs[idx] is None:
-                        idx += 1
-                    elif empath_pairs[idx][6] == empathize[6] or empath_pairs[idx][7] == empathize[7]:
-                        del empath_pairs[idx]
-                    else:
-                        idx += 1
+
+            For a given player, look if any SUCCESS_SKILL in the player's activate phase actions can be used to transform a FAILED_SKILL for another player. That happens when both players did a roll against the same suit and the roll for the current player (that succeeded) was low enough to make the other player succeed, while the value of the current player was high enough that would have succeeded with the other players' roll. For example, if the current player did a roll of 5 against a value of 8 (which succeeded) for Diamonds, and another player did a roll of 7 against a 5 (which failed), trading their rolls will mean both players succeeded (because 5<=5 and 7<=8).
+
+            If there are any empathetic such pairings, the player is then presented with the choice:
+
+            Decide EMPATHIZE: Choose one empathetic change or nothing to stop making changes
+
+            A player can make as many empathetic changes as the player wishes but they are executed strictly in player order and decided exclusively based on the SUCCESS_SKILL player wishes.
 
 
   END
 
     FINALIZING
 
-                ## see if two players started researching the same tech and close the one with less resources applied to it
-                tech_started = [ ( p[2], p[0] ) for p in self.phase_actions if p[1] == Game.A_START_RESEARCH ]
-                counts = dict()
-                for tech, player in tech_started:
-                    counts[tech.name] = counts.get(tech.name, list()) + [ player ]
-                for n, players in counts.items():
-                    players = sorted(players)
-                    for p in players[1:]:
-                        self.state.players[p].tech.remove(n)
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][0],
-                                           'target' : n,
-                                           'memo' : Game.L_ABANDON_RESEARCH, 'args' : [ players[0] ],
-                                           'state' : self.state.to_json() } )
-                    self.state.tech[n]['player'] = players[0]
+            Research
+           
+            See if many players started researching the same tech. Keep the one from the lower player (the resources are aggregated).
 
-                ## see if any of the techs was researched and apply its actions
-                for tech in self.state.tech.techs_for_status(TechTreeState.IN_PROGRESS):
-                    # got skill and funds this turn?
-                    skills = 0
-                    funds  = 0
-                    for act in self.phase_actions:
-                        if act[1] == Game.A_SKILL_RESEARCH and act[2] == tech:
-                            skills += 1
-                        elif act[1] == Game.A_FUND_RESEARCH and act[2] == tech:
-                            funds  += 1
-                    if skills == 0 and funds == 0:
-                        continue
-                    if skills >= 1 and funds >= 1:
-                        if skills >= 0:
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                               'target' : tech.name,
-                                               'memo' : Game.L_OVERSKILLED, 'args' : [ skills - 1],
-                                               'state' : self.state.to_json() } )
-                        if funds >= 0:
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                               'target' : tech.name,
-                                               'memo' : Game.L_OVERFUNDED, 'args' : [ funds - 1],
-                                               'state' : self.state.to_json() } )
-                        self.state.tech[tech.name]['missing_turns'] -= 1
-                        
-                        if self.state.tech[tech.name]['missing_turns'] > 0:
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                               'target' : tech.name,
-                                               'memo' : Game.L_RESEARCH_CYCLE, 'args' : [ self.state.tech[tech.name]['missing_turns'] ],
-                                               'state' : self.state.to_json() } )
-                        else:
-                            # finished!
-                            self.state.tech.finish(tech.name)
-                            tech_player = self.state.tech[tech.name]['player']
-                            del self.state.players[tech_player].tech[self.state.players[tech_player].tech.index(tech.name)]
-                            
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                               'target' : tech.name,
-                                               'memo' : Game.L_RESEARCHED,
-                                               'state' : self.state.to_json() } )
+            Check for techs that were over-funded or over-skilled and report them. Techs that were fully (or over-) skilled and funded can count the turn as a research cycle.
 
-                            if tech.type_ == Tech.B:
-                                # auto-protect, apply protection
-                                node = self.game_def.graph.node_names[tech.node]
-                                self.state.graph[node]['auto-protected'] = True
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : node,
-                                                   'memo' : Game.L_AUTO_PROTECTED,
-                                                   'state' : self.state.to_json() } )
-                                
-                                if self.state.graph[node]['status'] == GraphState.STABLE:
-                                    self.state.graph[node]['status'] = GraphState.PROTECTED
-                                    self.log.append( { 'phase' : phase,
-                                                       'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                       'target' : node,
-                                                       'memo' : Game.L_PROTECTED,
-                                                       'state' : self.state.to_json() } )
-                    else:
-                        if skills == 0:
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                               'target' : tech.name,
-                                               'memo' : Game.L_FUNDED_NOT_SKILLED,
-                                               'state' : self.state.to_json() } )
-                        elif funds == 0:
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                               'target' : tech.name,
-                                               'memo' : Game.L_SKILLED_NOT_FUNDED,
-                                               'state' : self.state.to_json() } )
-                            
+            Techs that were under-funded or under-skilled do not get to count the turn as a research cycle.
 
-                ## see if any of the projects had no action and should be discarded
-                for project in self.state.projects.projects_for_status(ProjectState.IN_PROGRESS):
-                    # got skill this turn?
+            See if any of the techs was researched, for all techs that were researched, they clear the player's research slot and become usable in the next turn. For auto-protect technologies, if the problem auto-protected is fixed, then it gets protected.
 
-                    skilled = False
-                    for act in self.phase_actions:
-                        if act[1] in set([Game.A_SUCCESS_SKILL, Game.A_FAILED_SKILL]) and act[2] == project:
-                            skilled = True
-                            break
-                    if not skilled:
-                        proj_player = self.state.projects[project.name]['player']
-                        self.state.projects.abandon(project.name)
-                        del self.state.players[proj_player].projects[self.state.players[proj_player].projects.index(project.name)]
-                
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][0],
-                                           'target' : project.name,
-                                           'memo' : Game.L_PROJECT_ABANDONED,
-                                           'state' : self.state.to_json() } )
 
-                ## see if any of the projects was finished and apply its actions
-                for project in self.state.projects.projects_for_status(ProjectState.IN_PROGRESS):
-                    for act in self.phase_actions:
-                        if act[1] == Game.A_SUCCESS_SKILL and act[2] == project:
-                            missing = self.state.projects[project.name]['missing']
-                            if act[3][0] not in missing:
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : project.name,
-                                                   'memo' : Game.L_PROJECT_OVERSKILLED, 'args' : [ act[3][0] ],
-                                                   'state' : self.state.to_json() } )
-                            else:
-                                del missing[missing.index(act[3][0])]
-                                self.state.projects[project.name]['missing'] = missing
-                    if len(self.state.projects[project.name]['missing']) == 0:
-                        # finished
-                        proj_player = self.state.projects[project.name]['player']
-                        self.state.projects.finish(project.name)
-                        del self.state.players[proj_player].projects[self.state.players[proj_player].projects.index(project.name)]
+            Projects
+            
+            See if many players started the same project. Keep the one from the lower player (the resources are aggregated).
+            
+            See if any of the projects had no skill applied to them and discard them. The projects are considered abandoned and the project slot from the player carrying the project is freed.
 
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][0],
-                                           'target' : project.name,
-                                           'memo' : Game.L_PROJECT_FINISHED,
-                                           'state' : self.state.to_json() } )
-                        
-                        # apply effects
-                        for fix in project.fixes:
-                            fixn = self.game_def.graph.node_names[fix]
-                            if self.state.graph[fixn]['status'] == GraphState.IN_CRISIS:
-                                if self.state.graph[fixn]['auto-protected']:
-                                    self.state.graph[fixn]['status'] = GraphState.PROTECTED
-                                else:
-                                    self.state.graph[fixn]['status'] = GraphState.STABLE
-                                    
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : fixn,
-                                                   'memo' : Game.L_CRISIS_FIX_PROJECT, 'args' : [ project.name ],
-                                                   'state' : self.state.to_json() } )
-                                    
-                        for trigger in project.triggers:
-                            triggern = self.game_def.graph.node_names[trigger]
-                            if self.state.graph[triggern]['status'] == GraphState.STABLE:
-                                self.state.graph[triggern]['status'] = GraphState.IN_CRISIS
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : triggern,
-                                                   'memo' : Game.L_CRISIS_TRIGGERED, 'args' : [ project.name ],
-                                                   'state' : self.state.to_json() } )
-                            elif self.state.graph[triggern]['status'] == GraphState.PROTECTED:
-                                self.state.graph[triggern]['status'] = GraphState.STABLE
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : triggern,
-                                                   'memo' : Game.L_PROT_LOSS_PROJECT, 'args' : [ project.name ],
-                                                   'state' : self.state.to_json() } )
-                            else: # in crisis, cascade
-                                cascaded = self.cascade(trigger)
-                                if cascaded:
-                                    for trigger2 in sorted(cascaded, key=lambda x:self.game_def.graph.node_names[x]):
-                                        trigger2n = self.game_def.graph.node_names[trigger2]
-                                        if self.state.graph[trigger2n]['status'] == GraphState.STABLE:
-                                            self.state.graph[trigger2n]['status'] = GraphState.IN_CRISIS
-                                            self.log.append( { 'phase' : phase,
-                                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                               'target' : trigger2n,
-                                                               'memo' : Game.L_CRISIS_TRIGGERED, 'args' : [ project.name ],
-                                                               'state' : self.state.to_json() } )
-                                        elif self.state.graph[trigger2n]['status'] == GraphState.PROTECTED:
-                                            self.state.graph[trigger2n]['status'] = GraphState.STABLE
-                                            self.log.append( { 'phase' : phase,
-                                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                               'target' : trigger2n,
-                                                               'memo' : Game.L_PROT_LOSS_PROJECT, 'args' : [ project.name ],
-                                                               'state' : self.state.to_json() } )
-                                else:
-                                    self.state.crisis_chips += 1
-                                    self.log.append( { 'phase' : phase,
-                                                       'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                       'target' : triggern,
-                                                       'memo' : Game.L_CHIP_PROJECT, 'args' : [ project.name ],
-                                                       'state' : self.state.to_json() } )
+            See if any of the projects was finished and apply their actions. Check whether any of the projects got over-skilled and report.
 
-                ## TODO see if two identical policies got created and remove one
-                
-                ## see if any of the policies had no action and should be discarded
-                for policy in self.state.policies.policies_for_status(PolicyState.IN_PROGRESS) + \
-                    self.state.policies.policies_for_status(PolicyState.PASSED):
-                    # got power this turn?
+                    To apply the actions, the problem fixed by the project is fixed. If the tech associated with auto-protecting that problem has been researched (even in this turn), it gets protected.
 
-                    empowered = False
-                    for act in self.phase_actions:
-                        if act[1] == Game.A_EMPOWER_POLICY:
-                            empowered = True
-                            break
-                    if not empowered:
-                        pol_player = self.state.policies[policy.name]['player']
-                        self.state.policies.abandon(policy.name)
-                        del self.state.players[pol_player].policies[self.state.players[pol_player].policies.index(policy.name)]
-                
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][0],
-                                           'target' : policy.name,
-                                           'memo' : Game.L_POLICY_ABANDONED,
-                                           'state' : self.state.to_json() } )
-                        
-                ## see if any of the policies was passed
-                for policy in self.state.policies.policies_for_status(PolicyState.IN_PROGRESS):
-                    if self.state.policies[policy.name]['missing_power'] <= 0:
+                    If the project has a trade-off problem associated, it is set as in-crisis. If the problem is already in crisis, it cascades (see explanation of cascading in crisis rolling). If the problem cascades but all the problems reachable are already in crisis, the problem is said to be "saturated" and a crisis chip is added to the turn. Otherwise all the cascading problems are either mark as in-crisis or lost their protection if they were protected.
 
-                        if self.state.policies[policy.name]['missing_power'] < 0:
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                               'target' : policy.name,
-                                               'memo' : Game.L_POLICY_OVERPOWERED, 'args' : [ abs(self.state.policies[policy.name]['missing_power']) ],
-                                               'state' : self.state.to_json() } )
+                    The project slot associated with the project for the corresponding player is freed.
 
-                        self.state.policies.has_passed(policy.name)
+
+            Policy
+
+            See if many players started the same policy. Keep the one from the lower player (the resources are aggregated).
                        
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][0],
-                                           'target' : policy.name,
-                                           'memo' : Game.L_POLICY_PASSED,
-                                           'state' : self.state.to_json() } )
-                
-                ## see if any of the passed policies started and apply its actions
-                for policy in self.state.policies.policies_for_status(PolicyState.PASSED):
-                    self.state.policies[policy.name]['missing_turns'] -= 1
-                    if self.state.policies[policy.name]['missing_turns'] == 0:
-                        self.state.policies.finish(policy.name)
-                        pol_player = self.state.policies[policy.name]['player']
-                        del self.state.players[pol_player].policies[self.state.players[pol_player].policies.index(policy.name)]
-                       
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][0],
-                                           'target' : policy.name,
-                                           'memo' : Game.L_POLICY_IN_ACTION,
-                                           'state' : self.state.to_json() } )
+            See if any of the policies had no power passed to them this turn and discard them. These policies are considered abandoned and the policy slot from the player carrying the policy is freed.
 
-                        for fix in policy.fixes:
-                            fixn = self.game_def.graph.node_names[fix]
-                            if self.state.graph[fixn]['status'] == GraphState.IN_CRISIS:
-                                if self.state.graph[fixn]['auto-protected']:
-                                    self.state.graph[fixn]['status'] = GraphState.PROTECTED
-                                else:
-                                    self.state.graph[fixn]['status'] = GraphState.STABLE
-                                    
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : fixn,
-                                                   'memo' : Game.L_CRISIS_FIX_POLICY, 'args' : [ policy.name ],
-                                                   'state' : self.state.to_json() } )
-                                                                        
-                        for protect in policy.protects:
-                            protectn = self.game_def.graph.node_names[protect]
-                            if self.state.graph[protectn]['status'] == GraphState.STABLE:
-                                self.state.graph[protectn]['status'] = GraphState.PROTECTED
-                                    
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : protectn,
-                                                   'memo' : Game.L_POLICY_PROTECT, 'args' : [ policy.name ],
-                                                   'state' : self.state.to_json() } )
+            Check whether any of the policies got over-powered and report.
+
+            See if any of the policies has obtained its necessary amount of power. If so, it is marked as "passed" and needs a number of turns (depending on the policy type) to be in action. The number of turn for application starts when the policy has passed. 
+
+            See if any of the passed policies has gone through all the turns needed and apply its actions:
+
+                    To apply the actions, the problem fixed by the policy is fixed. If the tech associated with auto-protecting that problem has been researched (even in this turn), it gets protected.
+
+                    If the policy protects other problems and the problems are not in crisis, they get protected.
+
+                    The policy slot associated with the policy for the corresponding player is freed.
+                    
+
     CRISIS ROLLING
 
-                ## add crisis chip for each category fully in crisis
-                for cat, catid in Graph.CATEGORIES:
-                    if len(self.state.graph.are_in_crisis(cat)) == len(self.game_def.graph.node_classes[catid]):
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][1],
-                                           'target' : cat,
-                                           'memo' : Game.L_CHIP_FULL_CAT,
-                                           'state' : self.state.to_json() } )
+                All throught the crisis rolling the players can talk with each other, strategize and discuss what to do depending on the different problems that will get in crisis.
+                
 
-                while self.state.crisis_chips and len(self.state.graph.are_in_crisis()) < len(self.game_def.graph):
-                    ## roll a category, if the category is fully in crisis, add a crisis chip and roll again
-                    catnum = self.roll_dice(1, self.state.player, 'crisis cat', rand, 1)
-                    cat, catid = Graph.CATEGORIES[catnum - 1]
-                    self.log.append( { 'phase' : phase,
-                                       'step' : Game.STEPS_PER_PHASE[phase][1],
-                                       'target' : cat,
-                                       'memo' : Game.L_CRISIS_CAT,
-                                       'state' : self.state.to_json() } )
+                Add crisis chip for each category fully in crisis
 
-                    if len(self.state.graph.are_in_crisis(cat)) == len(self.game_def.graph.node_classes[catid]):
-                        self.log.append( { 'phase' : phase,
-                                      'step' : Game.STEPS_PER_PHASE[phase][1],
-                                      'target' : cat,
-                                      'memo' : Game.L_CHIP_FULL_CAT,
-                                      'state' : self.state.to_json() } )
-                        continue
+                While the whole graph is not in crisis and there are still crisis chips:
 
-                    ## roll a node in category, if in crisis and all its descendants are in crisis, add a crisis chip and roll again
-                    nodes = sorted(list(self.game_def.graph.node_classes[catid]))
-                    dice = 1
-                    if len(nodes) > 6:
-                        dice += 1
-                    nodenum = (self.roll_dice(dice, self.state.player, 'node in ' + cat, rand, 1) - 1) % len(nodes)
-                    node = nodes[nodenum]
-                    noden = self.game_def.graph.node_names[node]
-                    if self.state.graph.is_saturated(noden):
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][1],
-                                           'target' : noden,
-                                           'memo' : Game.L_CHIP_SATURATED,
-                                           'state' : self.state.to_json() } )
-                        continue
+                    Roll Category (1D6), if the category is fully in crisis, add a crisis chip and roll again
                     
-                    self.log.append( { 'phase' : phase,
-                                       'step' : Game.STEPS_PER_PHASE[phase][1],
-                                       'target' : noden,
-                                       'memo' : Game.L_CRISIS_NODE,
-                                       'state' : self.state.to_json() } )
-                        
-                    ## with a node in hand, roll crisis chips until either the roll is successful or all the crisis chips are exhausted
-                    crisis_averted = True
-                    while self.state.crisis_chips:
-                        crisis_roll = self.roll_dice(2, self.state.player, 'crisis roll for ' + noden, rand, 1)
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][1],
-                                           'target' : crisis_roll,
-                                           'memo' : Game.L_CRISIS_ROLL, 'args' : [ noden ],
-                                           'state' : self.state.to_json() } )
-                        self.state.crisis_chips -= 1
-                        if crisis_roll > 6:
-                            crisis_averted = False
-                            break
+                    Roll Problem-in-category (1 or 2D6 depending on size of category), if the roll is bigger than the number of problems in the category, substract the number of problems in the category to obtain the actual problem.
 
-                    if crisis_averted:
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][1],
-                                           'target' : noden,
-                                           'memo' : Game.L_CRISIS_AVERTED,
-                                           'state' : self.state.to_json() } )
-                    else:
-                        ## if node was stable, set in crisis
-                        if self.state.graph[noden]['status'] == GraphState.STABLE:
-                            self.state.graph[noden]['status'] = GraphState.IN_CRISIS
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][1],
-                                               'target' : noden,
-                                               'memo' : Game.L_IN_CRISIS,
-                                               'state' : self.state.to_json() } )
-                            
-                        ## if the node was protected, remove the protection
-                        elif self.state.graph[noden]['status'] == GraphState.PROTECTED:
-                            self.state.graph[noden]['status'] = GraphState.STABLE
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                               'target' : noden,
-                                               'memo' : Game.L_PROT_LOSS,
-                                               'state' : self.state.to_json() } )
-                        ## if the node was in crisis, activate all the nodes reachable from it and further cascade as needed
-                        else: 
-                            cascaded = self.cascade(node)
-                            for node2 in sorted(cascaded, key=lambda x:self.game_def.graph.node_names[x]):
-                                node2n = self.game_def.graph.node_names[node2]
-                                if self.state.graph[node2n]['status'] == GraphState.STABLE:
-                                    self.state.graph[node2n]['status'] = GraphState.IN_CRISIS
-                                    self.log.append( { 'phase' : phase,
-                                                       'step' : Game.STEPS_PER_PHASE[phase][1],
-                                                       'target' : node2n,
-                                                       'memo' : Game.L_IN_CRISIS_CASCADE, 'args': [ noden ],
-                                                       'state' : self.state.to_json() } )
-                                elif self.state.graph[node2n]['status'] == GraphState.PROTECTED:
-                                    self.state.graph[node2n]['status'] = GraphState.STABLE
-                                    self.log.append( { 'phase' : phase,
-                                                       'step' : Game.STEPS_PER_PHASE[phase][1],
-                                                       'target' : node2n,
-                                                       'memo' : Game.L_PROT_LOSS_CASCADE, 'args': [ noden ],
-                                                       'state' : self.state.to_json() } )
-                        
+                    If the problem is saturated (it is in crisis and all its reachable problems are also in crisis), add a crisis chip and start again.
 
-                    ## if there are more crisis chips, continue by selecting a new category
-        return self.advance()
+                    With the problem in hand, roll crisis chips until either the roll is successful or all the crisis chips are exhausted
+
+                    While there are crisis chips or the problem is in crisis:
+                    
+                           Roll Crisis (2D6), if crisis roll > 6, the node is in crisis
+
+                           remove one crisis chip per roll (successful or otherwise)
+
+                    If the problem should be marked in crisis:
+
+                           If the problem was stable, set it as in crisis
+
+                           If the problem was protected, it loses its protection
+
+                           If the problem was already in crisis, it cascades as follows:
+                           
+                                For each of the problems reachable from the problem in crisis, check whether if any them are not in crisis, if so, all of them will be used as cascading result. If all the problems reachable are also in crisis, then cascade again on each and every one of them.
+
+                                For all the problems identified in the cascading, mark them in crisis or remove the protection if they were protected.
 
 
 
+Tech details:
+
+Technologies take a discard of a given suit plus a unit of money to make a research cycle in a turn. It takes 3 research cycles to research a technology.
+
+The tech tree is as follows: Base-<suit> can be researched right away and needs <suit> as the discard card. Expanded-<suit> can be researched once Base-<suit> has been researched. It also needs a <suit> discard. Finally, once Expanded-<suit 1> and Base-<suit 2> have been researched, Auto-Protect-<problem-in-CAT> can be researched. It takes card of suit 3 for discard:
+
+              CAT                 suit1  2    3
+        ( Graph.ENVIRONMENTAL,    'C', 'D', 'H' ),
+        ( Graph.LIVING_STANDARDS, 'H', 'C', 'S' ),
+        ( Graph.SOCIAL,	          'D', 'H', 'S' ),
+        ( Graph.CLASS,	          'H', 'S', 'D' ),
+        ( Graph.ECONOMIC,	  'S', 'D', 'C' ),
+        ( Graph.INDUSTRIAL,	  'S', 'C', 'D' ),
+
+At any given time, the "research boundary" (or "state of the art") are the techs that can be researched at a given point.
+
+For example, at the start of the game, Base-C, Base-H, Base-D, Base-S can be researched.
+
+Upon researching Base-D, the research boundary is Base-C, Base-H, Expanded-D, Base-S
+
+Upon researching Expanded-D, the research boundary is Base-C, Base-H, Base-S
+
+Upon researching Base-H, according to the table above, any node in the category "SOCIAL" can be researched, so the boundary becomes:
+
+Base-C, Base-S, Auto-Protect-"Weak Political Voice", Auto-Protect-"Social Inequity", Auto-Protect-"Food Shortage", Auto-Protect-"Affordable Housing", Auto-Protect-"Clean Water Shortage"
 
 
-    def cascade(self, node, visited=None):
-        "A node in crisis has been selected, deal with it. Returns the activated nodes."
-        if visited is None:
-            visited = list()
-        if node in visited:
-            return list()
-        visited.append(node)
-        result = list()
-        outlinks = list(self.game_def.graph.outlinks[node])
-        for outlink in outlinks:
-            outlinkn = self.game_def.graph.node_names[outlink]
-            if self.state.graph[outlinkn]['status'] != GraphState.IN_CRISIS:
-                result.append(outlink)
-        if result:
-            return result
-        # recurse
-        for outlink in outlinks:
-            result = result + self.cascade(outlink, list(visited))
-            
-        return result
+Project details:
 
+There are two types of projects: base projects, that have a trade-off and improved projects that do not have the trade-off (but need more resources).
+
+For base projects, use the following table:
+
+             fixed problem                   trade-off
+        ( Graph.ENVIRONMENTAL,          Graph.LIVING_STANDARDS,	'C', 'D' ),
+        ( Graph.LIVING_STANDARDS,	Graph.CLASS,	        'H', 'C' ),
+        ( Graph.SOCIAL,	                Graph.INDUSTRIAL,	'H', 'D' ),
+        ( Graph.CLASS,	                Graph.SOCIAL,	        'H', 'S' ),
+        ( Graph.ECONOMIC,	        Graph.ENVIRONMENTAL,	'S', 'D' ),
+        ( Graph.INDUSTRIAL,	        Graph.ECONOMIC,	        'S', 'C' ),
+
+Improved projects also require and additional H, D.
+
+Note that the problems (fix and, if needed, tradeoff) are decided when the project is created. Over time that problem might no longer be relevant and thus the project might be abandoned.
+
+
+
+Policy details
+
+Policies requires a number of power units to "pass" and a number of turns to get in action. After they have passed, they need one power unit in each of the waiting turns.
+
+The policies need power units based on the number of players divided by 2, rounded to the lowest number. This is called "quorum".
+
+There are three types of policies:
+
+Base, which fixes a problem. It takes quorum + 2 power units and 2 turns to get in action.
+
+Protect-Category, which fixes a problem also protects a problem in the same category as the original problem (it can protect the original problem). It costs quorum +4 and takes 4 turns to get into action.
+
+Protect-Any, which fixes a problem, protects a problem in the same category and additionally protectes any other problem in any category. It costs quorum+6 and takes 6 turns to get into action.
+
+Note that the problems (to fix and protect) are decided when the policy is created. Over time that problem might no longer be relevant and thus the policy might be abandoned.
+
+
+
+Roles
+
+These are the roles with their associated suits and power-or-money:
+
+Engineer, S, C, !
+Investor, S, C, $
+Union Rep, S, H, !
+Social Worker, S, H, $
+Artist, S, D, !
+Service Worker, S, D, $
+Researcher, C, H, !
+Scientist, C, H, $
+Journalist, C, D, $
+Councilor, C, D, !
+Activist, H, D, !
+Local Organizer, H, D, $
+
+
+
+
+
+Locations
+
+resources
+            University: !,
+            Industry Assoc: !,
+            NGO Offices: !,
+            Downtown Centre: !,
+            Patent Office: $,
+            Industrial Park: $,
+            Hospital: $,
+            Cultural District: $ 
+suits
+            University: S,
+            Industry Assoc: C,
+            NGO Offices: H,
+            Downtown Centre: D,
+            Patent Office: S,
+            Industrial Park: C,
+            Hospital: H,
+            Cultural District: D 

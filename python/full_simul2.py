@@ -53,7 +53,7 @@ game = Game(game_def, players)
 
 count = 0
 won = 0
-VERBOSE = False
+VERBOSE = True
 for run in range(100):
     game.start(rand)
     while not game.finished and game.state.turn < 12:
