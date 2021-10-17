@@ -5,6 +5,15 @@
 
 from .graph import Graph
 
+
+###
+### Project details:
+###
+### There are two types of projects: base projects, that have a trade-off and improved projects that do not have the trade-off (but need more resources).
+###
+### For base projects, use the following table:
+
+
 class Project:
 
     BASE  = 0
@@ -34,6 +43,20 @@ class Project:
    
 class Projects:
 
+### | fixed problem    | trade-off         | suits needed |
+### | ENVIRONMENTAL    | LIVING_STANDARDS  | C, D |
+### | LIVING_STANDARDS | CLASS             | H, C |
+### | SOCIAL           | INDUSTRIAL        | H, D |
+### | CLASS            | SOCIAL            | H, S |
+### | ECONOMIC         | ENVIRONMENTAL     | S, D |
+### | INDUSTRIAL       | ECONOMIC          | S, C |
+###
+### Improved projects also require an additional H, D.
+###
+### Note that the problems (fix and, if needed, tradeoff) are decided when the project is created. Over time that problem might no longer be relevant and thus the project might be abandoned.
+
+##TODO this changed    
+    
     BASE_TABLE =  [ 
         ( Graph.ENVIRONMENTAL,          Graph.LIVING_STANDARDS,	'C', 'D' ),
         ( Graph.LIVING_STANDARDS,	Graph.CLASS,	        'H', 'C' ),
@@ -42,6 +65,14 @@ class Projects:
         ( Graph.ECONOMIC,	        Graph.ENVIRONMENTAL,	'S', 'D' ),
         ( Graph.INDUSTRIAL,	        Graph.ECONOMIC,	        'S', 'C' ),
     ]
+
+
+
+## Improved projects also require an additional H, D.
+
+
+Note that the problems (fix and, if needed, tradeoff) are decided when the project is created. Over time that problem might no longer be relevant and thus the project might be abandoned.
+    
     
     def __init__(self, graph: Graph):
 

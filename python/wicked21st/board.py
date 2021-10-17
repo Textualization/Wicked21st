@@ -4,6 +4,32 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 
 
+###
+### Locations
+###
+### resources
+###
+###         	University: !,
+###         	Industry Assoc: !,
+###         	NGO Offices: !,
+###         	Downtown Centre: !,
+###         	Patent Office: $,
+###         	Industrial Park: $,
+###         	Hospital: $,
+###         	Cultural District: $
+###
+### suits
+###
+###         	University: S,
+###         	Industry Assoc: C,
+###         	NGO Offices: H,
+###         	Downtown Centre: D,
+###         	Patent Office: S,
+###         	Industrial Park: C,
+###         	Hospital: H,
+###         	Cultural District: D
+###
+
 class Board:
     def __init__(self):
         self.locations = [

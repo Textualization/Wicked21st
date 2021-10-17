@@ -11,7 +11,7 @@ class Player:
 
     # decisions
     INIT_ROLE                  =  0
-    INIT_LOC                   =  1
+    INIT_LOC                   =  1 #
     NEW_LOC                    =  2
     PILE_DRAW                  =  3
     START_PROJECT              =  4
@@ -20,16 +20,16 @@ class Player:
     START_PROJECT_TRIGGER_NODE =  7
     PLAY_CARD                  =  8
     CONSULTANT                 =  9
-    START_POLICY               = 10
-    START_POLICY_FIX_CAT       = 11
-    START_POLICY_FIX_NODE      = 12
-    START_POLICY_PROTECT_NODE  = 13
-    POLICY_TO_EMPOWER          = 14
-    POWER_AMOUNT               = 15
+    START_POLICY               = 10 #
+    START_POLICY_FIX_CAT       = 11 #
+    START_POLICY_FIX_NODE      = 12 #
+    START_POLICY_PROTECT_NODE  = 13 #
+    POLICY_TO_EMPOWER          = 14 #
+    POWER_AMOUNT               = 15 #
     START_RESEARCH             = 16
     CARD_FOR_RESEARCH          = 17
     FUND_RESEARCH              = 18
-    EMPATHIZE                  = 19
+    EMPATHIZE                  = 19 #
     
 
     decision_names = [ 'Initial role',

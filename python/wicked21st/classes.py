@@ -9,6 +9,26 @@ import copy
 import numpy as np
 
 
+### Roles
+###
+###
+### These are the roles with their associated suits and power-or-money:
+###
+### |Engineer       | S| C| !|
+### |Investor       | S| C| $|
+### |Union Rep      | S| H| !|
+### |Social Worker  | S| H| $|
+### |Artist         | S| D| !|
+### |Service Worker | S| D| $|
+### |Researcher     | C| H| !|
+### |Scientist      | C| H| $|
+### |Journalist     | C| D| $|
+### |Councilor      | C| D| !|
+### |Activist       | H| D| !|
+### |Local Organizer| H| D| $|
+###
+
+
 class BaseClass:
     def __init__(self, name, suit_a, suit_b, resource):
         self.name = name

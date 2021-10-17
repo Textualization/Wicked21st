@@ -85,15 +85,6 @@ class Game:
                                  'CRISIS ROLLING' ]
                        }
 
-    A_START_PROJECT  = 'START_PROJECT'
-    A_SUCCESS_SKILL  = 'SUCCESS_SKILL'
-    A_FAILED_SKILL   = 'FAILED_SKILL'
-    A_START_POLICY   = 'START_POLICY'
-    A_EMPOWER_POLICY = 'EMPOWER_POLICY'
-    A_START_RESEARCH = 'START_RESEARCH'
-    A_SKILL_RESEARCH = 'SKILL_RESEARCH'
-    A_FUND_RESEARCH  = 'FUND_RESEARCH'
-
     L_DICE_ROLL           = 'Dice roll {}D6: {}'
     L_MOVED               = 'Moved'
     L_POWER_DRAWN         = 'Power drawn'
@@ -172,7 +163,18 @@ class Game:
                            'memo' : Game.L_DICE_ROLL, 'args' : [ num, memo ],
                            'state' : self.state.to_json() } )
         return result
-        
+
+
+### GAME INIT
+###
+### Each player chooses a class (see table at the end) and an initial location (see table at the end).
+###
+###      Decision CLASS
+###      Decision INIT_LOC
+###
+### All players have 1 research slot, 1 project slot and 1 policy slot.
+###
+### The can contribute to research, projects and policies from any other player but not in the turn the project, policy or research is started.
 
     def start(self, rand):
         self.finished = False
@@ -230,6 +232,10 @@ class Game:
             result = result + self.cascade(outlink, list(visited))
             
         return result
+###
+###
+### TURN
+###
 
     def step(self, rand):
         phase = Game.PHASES[self.state.phase]
@@ -237,7 +243,17 @@ class Game:
             if self.state.player == 0:
                 self.phase_start_state = self.state.copy()
 
-            # moving
+###   ENGAGE PHASE
+###
+###   	for each player in parallel, without knowing what the other players do, they do, in order:
+###
+
+###
+###   	MOVING
+###         	if turn is not the first
+###
+###             	Decision NEW_LOC: Player chooses a new location from all the locations in the board
+
             new_loc = self.players[self.state.player].pick(
                 Player.NEW_LOC,
                 self.game_def.board.locations,
@@ -251,7 +267,13 @@ class Game:
                                'target' : new_loc,
                                'memo' : Game.L_MOVED,
                                'state' : self.state.to_json() } )
-            # drawing power
+###
+###       	DRAWING POWER
+###
+###         	The player draws a number of power units equals to
+###             	1 +
+###             	(1 if the location in the board where the player has moved has a '!' associated with it, 0 otherwise) +
+###             	(1 if the player role has a resource of '!', 0 otherwise)
             drawn = 1 + \
                 (1 if self.game_def.board.resources[new_loc] == '!' else 0) + \
                 (1 if self.players[self.state.player].player_class.resource == '!' else 0)
@@ -261,7 +283,13 @@ class Game:
                                'target' : drawn,
                                'memo' : Game.L_POWER_DRAWN,
                                'state' : self.state.to_json() } )
-            # drawing money
+###
+###   	DRAWING MONEY
+###         	The player draws a number of money units equals to
+###             	5 - number of crisis in category 'ECONOMIC' + 2 * (
+###               	(1 if the location in the board where the player has moved has a '$' associated with it, 0 otherwise) +
+###               	(1 if the player role has a resource of '$', 0 otherwise)
+###             	)            
             drawn = max(0, 5 - len(self.state.graph.are_in_crisis('ECONOMIC'))) + 2 *  (
                 (1 if self.game_def.board.resources[new_loc] == '$' else 0) + \
                 (1 if self.players[self.state.player].player_class.resource == '$' else 0))
@@ -271,7 +299,19 @@ class Game:
                                'target' : drawn,
                                'memo' : Game.L_MONEY_DRAWN,
                                'state' : self.state.to_json() } )
-            # draw cards
+###
+###   	DRAWING CARDS
+###         	The player has access to potentially three piles to draw from: two piles from the card suits associated with the player's class plus a card suit associated with the player's current location. We call these piles the 'accessible piles'
+### 
+###         	If the number of accessible piles is 2, then the player draws one card from each.
+###
+###         	If the number of accessible piles is 3, then the player makes two decisions:
+###
+###             	Decision PILE_DRAW: decide from which of the 3 piles to draw a card
+###             	Decision PILE_DRAW: decide from which of the remaining 2 piles to draw a card
+### 
+###            If a suit pile is consumed, shuffle the discard pile and set it as the new pile for the suit.
+
             accessible_piles = set([self.players[self.state.player].player_class.suit_a, self.players[self.state.player].player_class.suit_b ])
             accessible_piles.add(self.game_def.board.suits[new_loc])
             accessible_piles = sorted(list(accessible_piles))
@@ -299,7 +339,9 @@ class Game:
                           'target' : drawn,
                           'memo' : Game.L_CARD_DRAWN, 'args' : [ 2 ],
                           'state' : self.state.to_json() } )
-            # crisis rising
+###            
+###   	CRISIS RISING
+###         	A crisis chip to the turn is added for each player      
             self.state.crisis_chips += 1
             self.log.append( { 'phase' : phase,
                                'step' : Game.STEPS_PER_PHASE[phase][4],
@@ -308,10 +350,43 @@ class Game:
             if self.state.player == 0:
                 self.phase_start_state = self.state.copy()
                 self.phase_actions = list()
-            
-            # projects
+###
+###   ACTIVATE PHASE
+###
+###  	Once the engage phase is completed by all players, the players see where in the board the other players are.
+###
+###  	Then the activate phase starts, again, parallel blind.
+###
+###  	The actions recorded separately by each player are presented in the next section
+###
+###        	Each player performs the actions described
+###
+###  	ATTEMPTING PROJECTS
+###
 
             ## decide whether to start a new project?
+
+
+###         	If the player has project slots available, the player has to decide whether to start a project of a given type or not start any project:
+###
+###         	Decision START_PROJECT: Choose between the two types of projects (base or remove-tradeoff) or nothing to not start a project this turn.
+###
+###         	If the player picked a project type to start, then the player decides which category of problem they want to fix with their project:
+###
+###             	Decision START_PROJECT_FIX_CAT: Choose among the six categories of problems.
+###
+###             	With the chosen category, the player can choose which problem to fix:
+###
+###             	Decision START_PROJECT_FIX_NODE: choose among all the problems in that category
+###
+###             	If the player has chosen to start a base project, the player needs to choose also a trade-off problem in the trade-off category for the chosen category (based on the table at the end of the document):
+###
+###                   	Decision START_PROJECT_TRIGGER_NODE: Choose from all the problems in the trade-off category
+###
+###             	With the above decisions, the new project is created, added to the player project slot.
+###
+###             	Phase action recorded: START_PROJECT (project)
+
             start = False
             if self.state.players[self.state.player].available_project_slots():
                 project_type = self.players[self.state.player].pick(
@@ -380,6 +455,47 @@ class Game:
                     started_project = project
             
             ## play cards for any projects
+
+###
+###         	After potentially creating a new project, the player can decide to play cards for any projects.
+### 
+###         	That includes projects existing at the beginning of the phase or projects the player has created this turn (but not projects created by other players this phase).
+### 
+###         	The player is then presented with a choice of playing a particular card for a particular project or nothing to stop playing cards.
+###
+###         	While the player does not choose to play nothing and there are cards that can be played against available projects:
+###
+###
+###                 	Decision PLAY_CARD: Choose a card and a project to play it for
+###
+###                 	If the card is a joker, it automatically succeeds.
+###
+###                 	If the card is not a joker, the value of the card is its face value or 10 if the card is Ace, Knight, Queen or King.
+### 
+###                      	To the value of the card, if the table has researched a base technology for the skill, the value is increased by 1. The value cannot exceed 11.
+###
+###                      	To the value of the card, if the table has researched an expanded technology for the skill, the value is further increased by 2. The value cannot exceed 11.
+###
+###                      	To this value, the player can decide to use money units (if the player has them) as consultant fees to further increase its value:
+###
+###                          	Decision CONSULTANT: Choose between 0 to the minimum between the amount of money the player has and the number that will take the current value to 11.
+###
+###                      	The final value to roll against (card value + research boost + consultant fees) is then rolled with 2D6:
+###
+###                      	Roll Skill Check: 2D6
+###
+###                      	If the roll is less or equal to the value, the check is successful:
+###
+###                         	Phase action recorded: SUCCESS_SKILL (project, card, value, roll)
+###
+###                      	If the roll is greater than value, the check failed:
+###
+###                         	Phase action recorded: FAILED_SKILL (project, card, value, roll)
+###
+###                      	If the roll equals 12, a crisis chip is added to the turn, immediately.
+###
+###                      	The cards used are thrown to the discard piles for each suit, with the jokers being returned to the pile of the suit they were used in replacement (not necessarily the suit they were taken from).
+            
             in_progress = self.phase_start_state.projects.projects_for_status(ProjectState.IN_PROGRESS)
             if start:
                 in_progress.append(started_project)
@@ -491,11 +607,38 @@ class Game:
                             l[2] -= 1
                             card_choices[idx] = tuple(l)
                         idx += 1
-
-            
+###
+###
+###     	PASSING POLICY
+###
+###         	If the player has policy slots available, the player has to decide whether to start a policy of a given type or not start any policy:                    
+###            
             # policies
             
             ## decide whether to start a new policy?
+
+###         	Decision START_POLICY: Choose between the three types of policies (remove-tradeoff, protect-category or protect-any) or nothing to not start a policy this turn.
+###
+###         	If the player picked a policy type to start, then the player decides which category of problem they want to fix with their policy:
+###
+###             	Decision START_POLICY_FIX_CAT: Choose among the six categories of problems.
+###
+###             	With the chosen category, the player can choose which problem to fix:
+###
+###             	Decision START_POLICY_FIX_NODE: choose among all the problems in that category
+###
+###             	If the player has chosen a protect-category type of policy, the player can
+###
+###                   	Decision START_POLICY_PROTECT_NODE: Choose a problem in that category to protect (it can be the same one the policy is also fixing)
+###
+###             	Besides, if the player has chosen a protect-any type of policy, the player also chooses an extra problem to protect:
+###
+###                    	Decision START_POLICY_PROTECT_NODE: Choose a problem in any category to protect
+###
+###             	With the above decisions, the new policy is created, added to the player policy slot.
+###
+###             	Phase action recorded: START_POLICY (policy)
+            
             start = False
             if self.state.players[self.state.player].available_policy_slots():
                 policy_type = self.players[self.state.player].pick(
@@ -584,6 +727,28 @@ class Game:
                         self.phase_actions.append( ( self.state.player, Game.A_START_POLICY, policy ) )
                         started_policy = policy
 
+###
+###            	After potentially creating a new policy, the player can decide to use power units to pass power for any policy in the table at the beginning of the turn or a policy the player has created this turn (but not policies created by other players this phase). Policies are divided between policies in progress (need many power units) and passed policies (that need one power unit for several turns until they pass).
+###
+###         	The player is then presented with a choice of empowering different policies.
+###
+###         	While the player has power units and policies to choose from:
+###
+###             	Decision POLICY_TO_EMPOWER: Choose among policies that the player has not yet empowered or nothing to stop empowering policies
+### 
+###             	If the player has chosen a policy to empower:
+###
+###                  	If the policy has passed or the policy is in progress and only missing one unit, then the player will contribute one power unit to it.
+### 
+###                  	Otherwise the player has to choose how many power units to use to empower the policy:
+###
+###                	 
+###                         	Decision POWER_AMOUNT: Choose a number between 1 and the minimum between the total number of power units the player has and the power units needed by the policy.
+### 
+###                  	Phase action recorded: EMPOWER_POLICY (policy, power units)
+### 
+###                  	Reduce the number of power units for the player accordingly
+
             ## pass power for any policies
             policy_choices = self.phase_start_state.policies.policies_for_status(PolicyState.IN_PROGRESS) + \
                 self.phase_start_state.policies.policies_for_status(PolicyState.PASSED)
@@ -647,6 +812,16 @@ class Game:
                                              self.state.policies[chosen_policy]['policy'], chosen_power ) )
                 # policy effects, etc are left for the end
 
+###
+###  	DOING RESEARCH
+###
+###         	If the player has research slots available, the player has to decide whether to start research on a specific technology or not start researching at:
+###
+###         	Decision START_RESEARCH: Choose between the research boundary (tech that can be researched given what we know already) or not starting new research.   
+###            	If the player decided to start researching new technology, it is added to the player's research slot:
+###
+###                 	Phase action recorded: START_RESEARCH (tech)
+            
             # research
             start = False
             if self.state.players[self.state.player].available_research_slots():
@@ -671,6 +846,20 @@ class Game:
             researching = self.state.tech.techs_for_status(TechTreeState.IN_PROGRESS)
             if start:
                 researching.append(started_tech)
+###
+###         	After potentially starting a new research, the player can decide to contribute skills or funds to any tech currently being researched either by the player itself or by others (but not new tech which research started by other players this phase).
+###
+###         	While the player has cards that can be contributed to techs being researched the player hasn't yet contributed to, or the player decides not to contribute cards to any further research:
+###
+###                 	Decision CARD_FOR_RESEARCH: Choose a card and a tech to contribute that card or nothing to stop contributing cards
+###
+###                 	If the player chose a card to contribute to a specific tech research efforts:
+###
+###                         	Phase action recorded: SKILL_RESEARCH (tech, card)
+###
+###                        	 
+###                         	Discard the card to the suitable draw pile
+###
 
             ## cards for research
             cards_for_tech = list()
@@ -715,7 +904,16 @@ class Game:
                             l[2] -= 1
                             cards_for_tech[idx] = tuple(l)
                         idx += 1
-                
+
+###
+###         	While the player has money units to contribute to any techs being researched the player hasn't yet contributed to, or the player decides not to contribute money units to any further research:
+###
+###                 	Decision FUND_RESEARCH: Choose a tech to contribute a money unit or nothing to stop contributing money units
+###
+###                 	If the player chose a card to contribute to a specific tech research efforts:
+###
+###                         	Phase action recorded: FUND_RESEARCH (tech)          
+                        
             ## funds for research
             to_fund = sorted(researching, key=lambda x:x.name)
 
@@ -748,7 +946,23 @@ class Game:
                 del to_fund[idx]
 
         elif self.state.phase == 2: # reflect
-            #EMPATHIZING
+
+###            
+###            
+###    REFLECT
+###
+###  	For the reflect phase, all the blind actions of the activate phase are revealed. In order, each player can openly do the reflect actions (only empathizing in the basic version of the game).          
+            
+###  	EMPATHIZING
+###
+###         	For a given player, look if any SUCCESS_SKILL in the player's activate phase actions can be used to transform a FAILED_SKILL for another player. That happens when both players did a roll against the same suit and the roll for the current player (that succeeded) was low enough to make the other player succeed, while the value of the current player was high enough that would have succeeded with the other players' roll. For example, if the current player did a roll of 5 against a value of 8 (which succeeded) for Diamonds, and another player did a roll of 7 against a 5 (which failed), trading their rolls will mean both players succeeded (because 5<=5 and 7<=8).
+###
+###         	If there are any empathetic such pairings, the player is then presented with the choice:
+###
+###         	Decide EMPATHIZE: Choose one empathetic change or nothing to stop making changes
+###
+###         	A player can make as many empathetic changes as the player wishes but they are executed strictly in player order and decided exclusively based on the SUCCESS_SKILL player wishes.
+            
             succeeded = [ (p[2], p[3], idx, p[4], p[5])       for idx, p in enumerate(self.phase_actions)
                           if p[0] == self.state.player and p[1] == Game.A_SUCCESS_SKILL ]
             failed    = [ (p[0], p[2], p[3], idx, p[4], p[5]) for idx, p in enumerate(self.phase_actions)
@@ -799,7 +1013,20 @@ class Game:
             if self.state.player != self.state.leader:
                 pass
             else:
-                # FINALIZING
+###
+###     END
+###
+###	FINALIZING
+###
+###         	Research
+###
+###         	See if many players started researching the same tech. Keep the one from the lower player (the resources are aggregated).
+###
+###         	Check for techs that were over-funded or over-skilled and report them. Techs that were fully (or over-) skilled and funded can count the turn as a research cycle.
+###
+###         	Techs that were under-funded or under-skilled do not get to count the turn as a research cycle.
+###
+###         	See if any of the techs was researched, for all techs that were researched, they clear the player's research slot and check whether a consultant bump in the FAILED_SKILL checks would change them. For auto-protect technologies, if the problem auto-protected is fixed, then it gets protected.             
 
                 ## see if two players started researching the same tech and close the one with less resources applied to it
                 tech_started = [ ( p[2], p[0] ) for p in self.phase_actions if p[1] == Game.A_START_RESEARCH ]
@@ -894,6 +1121,22 @@ class Game:
                                                'state' : self.state.to_json() } )
                             
 
+                   
+###         	Projects
+###
+###         	See if many players started the same project. Keep the one from the lower player (the resources are aggregated).
+###
+###         	See if any of the projects had no skill applied to them and discard them. The projects are considered abandoned and the project slot from the player carrying the project is freed.
+###
+###         	See if any of the projects were finished and apply their actions. Check whether any of the projects got over-skilled and report.
+###
+###                 	To apply the actions, the problem fixed by the project is fixed. If the tech associated with auto-protecting that problem has been researched (even in this turn), it gets protected.
+###
+###                 	If the project has a trade-off problem associated, it is set as in-crisis (or loses its protection if it was protected). If the problem is already in crisis, it cascades (see explanation of cascading in crisis rolling). If the problem cascades but all the problems reachable are already in crisis, the problem is said to be "saturated" and a crisis chip is added to the turn. Otherwise all the cascading problems are either mark as in-crisis or lost their protection if they were protected.
+###
+###                 	The project slot associated with the project for the corresponding player is freed.
+
+         
                 ## see if any of the projects had no action and should be discarded
                 for project in self.state.projects.projects_for_status(ProjectState.IN_PROGRESS):
                     # got skill this turn?
@@ -998,6 +1241,26 @@ class Game:
                                                        'memo' : Game.L_CHIP_PROJECT, 'args' : [ project.name ],
                                                        'state' : self.state.to_json() } )
 
+
+###         	Policy
+###
+###         	See if many players started the same policy. Keep the one from the lower player (the resources are aggregated).
+###
+###         	See if any of the policies had no power passed to them this turn and discard them. These policies are considered abandoned and the policy slot from the player carrying the policy is freed.
+###
+###         	Check whether any of the policies got over-powered and report.
+###
+###         	See if any of the policies has obtained its necessary amount of power. If so, it is marked as "passed" and needs a number of turns (depending on the policy type) to be in action. The number of turns for application starts when the policy has passed.
+###
+###         	See if any of the passed policies has gone through all the turns needed and apply its actions:
+###
+###                 	To apply the actions, the problem fixed by the policy is fixed. If the tech associated with auto-protecting that problem has been researched (even in this turn), it gets protected.
+###
+###                 	If the policy protects other problems and the problems are not in crisis, they get protected.
+###
+###                 	The policy slot associated with the policy for the corresponding player is freed.
+###
+                            
                 ## TODO see if two identical policies got created and remove one
                 
                 ## see if any of the policies had no action and should be discarded
@@ -1079,7 +1342,40 @@ class Game:
                                                    'memo' : Game.L_POLICY_PROTECT, 'args' : [ policy.name ],
                                                    'state' : self.state.to_json() } )
 
-                # CRISIS ROLLING
+###  	CRISIS ROLLING
+###
+###             	All through the crisis rolling the players can talk with each other, strategize and discuss what to do depending on the different problems that will get in crisis.
+###
+###             	Add crisis chip for each category fully in crisis
+###
+###             	While the whole graph is not in crisis and there are still crisis chips:
+###
+###                 	Roll Category (1D6), if the category is fully in crisis, add a crisis chip and roll again
+###
+###                 	Roll Problem-in-category (1 or 2D6 depending on size of category), if the roll is bigger than the number of problems in the category, subtract the number of problems in the category to obtain the actual problem.
+###
+###                 	If the problem is saturated (it is in crisis and all its reachable problems are also in crisis), add a crisis chip and start again.
+###
+###                 	With the problem in hand, roll crisis chips until either the roll is successful or all the crisis chips are exhausted
+###
+###                 	While there are crisis chips or the problem is in crisis:
+###
+###                        	Roll Crisis (2D6), if crisis roll > 6, the node is in crisis
+###
+###                        	remove one crisis chip per roll (successful or otherwise)
+###
+###                 	If the problem should be marked in crisis:
+###
+###                        	If the problem was stable, set it as in crisis
+###
+###                        	If the problem was protected, it loses its protection
+### 
+###                        	If the problem was already in crisis, it cascades as follows:
+###
+###                             	For each of the problems reachable from the problem in crisis, check whether if any them are not in crisis, if so, all of them will be used as cascading result. If all the problems reachable are also in crisis, then cascade again on each and every one of them.
+### 
+###                             	For all the problems identified in the cascading, mark them in crisis or remove the protection if they were protected.
+
 
                 ## add crisis chip for each category fully in crisis
                 for cat, catid in Graph.CATEGORIES:
@@ -1191,5 +1487,24 @@ class Game:
 
                     ## if there are more crisis chips, continue by selecting a new category
         return self.advance()
+
+### ACTIVATION PHASE ACTIONS RECORDED:
+
+###  	START_PROJECT  = The player started a specific project.
+    A_START_PROJECT  = 'START_PROJECT'
+###  	SUCCESS_SKILL  = The player performed a successful skill check for a given project, with a specific roll value against a specific card value.    
+    A_SUCCESS_SKILL  = 'SUCCESS_SKILL'
+###  	FAILED_SKILL   = The player failed a skill check for a given project, with a specific roll value against a specific card value.
+    A_FAILED_SKILL   = 'FAILED_SKILL'
+###  	START_POLICY   = The player started a specific policy.
+    A_START_POLICY   = 'START_POLICY'
+###  	EMPOWER_POLICY = The player added a specific number of power units to empower a policy.
+    A_EMPOWER_POLICY = 'EMPOWER_POLICY'
+###  	START_RESEARCH = The player started researching a specific technology.
+    A_START_RESEARCH = 'START_RESEARCH'
+###  	SKILL_RESEARCH = The player contributed a skill card to a specific technology being researched.
+    A_SKILL_RESEARCH = 'SKILL_RESEARCH'
+###  	FUND_RESEARCH  = The player contributed a money unit to a specific technology being researched.
+    A_FUND_RESEARCH  = 'FUND_RESEARCH'
 
 

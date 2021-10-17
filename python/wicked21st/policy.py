@@ -5,6 +5,29 @@
 
 from .graph import Graph
 
+
+### Policy details
+###
+### Policies require a number of power units to "pass" and a number of turns to get in action. After they have passed, they need one power unit in each of the waiting turns.
+###
+###
+### The policies need power units based on the number of players divided by 2, rounded to the lowest number. This is called "quorum".
+###
+### There are three types of policies:
+###
+### Base, which fixes a problem. It takes quorum + 2 power units and 1 turn to get in action.
+
+
+Protect-Category, which fixes a problem, also protects a problem in the same category as the original problem (it can protect the original problem). It costs quorum +4 and takes 2 turns to get into action.
+
+
+Protect-Any, which fixes a problem, protects a problem in the same category and additionally protects any other problem in any category. It costs quorum+6 and takes 3 turns to get into action.
+
+
+Note that the problems (to fix and protect) are decided when the policy is created. Over time that problem might no longer be relevant and thus the policy might be abandoned.
+
+
+
 class Policy:
 
     A = 0

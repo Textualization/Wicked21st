@@ -6,6 +6,14 @@
 from .graph import Graph
 from .drawpiles import DrawPiles
 
+
+### Tech details:
+###
+###
+### Technologies take a discard of a given suit plus a unit of money to make a research cycle in a turn. It takes 3 research cycles to research a technology.
+###
+### The tech tree is as follows: Base-<suit> can be researched right away and needs <suit> as the discard card. Expanded-<suit> can be researched once Base-<suit> has been researched. It also needs a <suit> discard. Finally, once Expanded-<suit 1> and Base-<suit 2> have been researched, Auto-Protect-<problem-in-CAT> can be researched. It takes card of suit 3 for discard:
+
 class Tech:
 
     BASE = 0
@@ -33,6 +41,14 @@ class Tech:
         return result
 
 class TechTree:
+###
+### |    CAT          |	suit 1| suit 2| suit 3|
+### |ENVIRONMENTAL    |	C     | D     | H |
+### |LIVING_STANDARDS | H     | C     | S |
+### |SOCIAL           |	D     | H     | S |
+### |CLASS            |	H     | S     | D |
+### |ECONOMIC         | S     | D     | C |
+### |INDUSTRIAL       | S     | C     | D |
 
     BASE_TABLE =  [ 
         ( Graph.ENVIRONMENTAL,    'C', 'D', 'H' ),
@@ -42,7 +58,18 @@ class TechTree:
         ( Graph.ECONOMIC,	  'S', 'D', 'C' ),
         ( Graph.INDUSTRIAL,	  'S', 'C', 'D' ),
     ]
-
+###
+###   At any given time, the "research boundary" (or "state of the art") are the techs that can be researched at a given point.
+###
+### For example, at the start of the game, Base-C, Base-H, Base-D, Base-S can be researched.
+###
+### Upon researching Base-D, the research boundary is Base-C, Base-H, Expanded-D, Base-S
+###
+### Upon researching Expanded-D, the research boundary is Base-C, Base-H, Base-S
+###
+### Upon researching Base-H, according to the table above, any node in the category "SOCIAL" can be researched, so the boundary becomes:
+###
+### Base-C, Base-S, Expanded-H, Auto-Protect-"Weak Political Voice", Auto-Protect-"Social Inequity", Auto-Protect-"Food Shortage", Auto-Protect-"Affordable Housing", Auto-Protect-"Clean Water Shortage" 
     
     def __init__(self, graph: Graph):
         self.technologies = list()
