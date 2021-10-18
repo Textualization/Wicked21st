@@ -12,31 +12,29 @@ import numpy as np
 ### Roles
 ###
 ###
-### These are the roles with their associated suits and power-or-money:
+### These are the roles with their associated suits:
 ###
-### |Engineer       | S| C| !|
-### |Investor       | S| C| $|
-### |Union Rep      | S| H| !|
-### |Social Worker  | S| H| $|
-### |Artist         | S| D| !|
-### |Service Worker | S| D| $|
-### |Researcher     | C| H| !|
-### |Scientist      | C| H| $|
-### |Journalist     | C| D| $|
-### |Councilor      | C| D| !|
-### |Activist       | H| D| !|
-### |Local Organizer| H| D| $|
+### |Engineer       | S| C|
+### |Investor       | S| C|
+### |Union Rep      | S| H|
+### |Social Worker  | S| H|
+### |Artist         | S| D|
+### |Service Worker | S| D|
+### |Researcher     | C| H|
+### |Scientist      | C| H|
+### |Journalist     | C| D|
+### |Councilor      | C| D|
+### |Activist       | H| D|
+### |Local Organizer| H| D|
 ###
 
 
 class BaseClass:
-    def __init__(self, name, suit_a, suit_b, resource):
+    def __init__(self, name, suit_a, suit_b):
         self.name = name
         self.suit_a = suit_a
         self.suit_b = suit_b
-        self.resource = resource
         self.project_slots = 1
-        self.policy_slots = 1
         self.research_slots = 1
         self.json_memo = None
 
@@ -46,9 +44,7 @@ class BaseClass:
                 'name' : self.name,
                 'suit_a' : self.suit_a,
                 'suit_b' : self.suit_b,
-                'resource' : self.resource,
                 'project_slots' : self.project_slots,
-                'policy_slots' : self.policy_slots,
                 'research_slots' : self.research_slots,
             }
         return self.json_memo
@@ -57,40 +53,40 @@ class BaseClass:
 
 class EngineerClass(BaseClass):
     def __init__(self):
-        super().__init__('Engineer', 'S', 'C', '!')
+        super().__init__('Engineer', 'S', 'C')
 class InvestorClass(BaseClass):
     def __init__(self):
-        super().__init__('Investor', 'S', 'C', '$')
+        super().__init__('Investor', 'S', 'C')
 class UnionRepClass(BaseClass):
     def __init__(self):
-        super().__init__('Union Rep', 'S', 'H', '!')
+        super().__init__('Union Rep', 'S', 'H')
 class SocialWorkerClass(BaseClass):
     def __init__(self):
-        super().__init__('Social Worker', 'S', 'H', '$')
+        super().__init__('Social Worker', 'S', 'H')
 class ArtistClass(BaseClass):
     def __init__(self):
-        super().__init__('Artist', 'S', 'D', '!')
+        super().__init__('Artist', 'S', 'D')
 class ServiceWorkerClass(BaseClass):
     def __init__(self):
-        super().__init__('Service Worker', 'S', 'D', '$')
+        super().__init__('Service Worker', 'S', 'D')
 class ResearcherClass(BaseClass):
     def __init__(self):
-        super().__init__('Researcher', 'C', 'H', '!')
+        super().__init__('Researcher', 'C', 'H')
 class ScientistClass(BaseClass):
     def __init__(self):
-        super().__init__('Scientist', 'C', 'H', '$')
+        super().__init__('Scientist', 'C', 'H')
 class JournalistClass(BaseClass):
     def __init__(self):
-        super().__init__('Journalist', 'C', 'D', '$')
+        super().__init__('Journalist', 'C', 'D')
 class CouncilorClass(BaseClass):
     def __init__(self):
-        super().__init__('Councilor', 'C', 'D', '!')
+        super().__init__('Councilor', 'C', 'D')
 class ActivistClass(BaseClass):
     def __init__(self):
-        super().__init__('Activist', 'H', 'D', '!')
+        super().__init__('Activist', 'H', 'D')
 class LocalOrganizerClass(BaseClass):
     def __init__(self):
-        super().__init__('Local Organizer', 'H', 'D', '$')
+        super().__init__('Local Organizer', 'H', 'D')
 
 class Classes:
     def __init__(self):

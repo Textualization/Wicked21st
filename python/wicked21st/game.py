@@ -9,9 +9,8 @@ from .graph import Graph
 from .player import Player, PlayerState
 from .drawpiles import DrawPiles
 from .definitions import GameDef
-from .state import GraphState, ProjectState, PolicyState, TechTreeState, BoardState
+from .state import GraphState, ProjectState, TechTreeState, BoardState
 from .project import Projects, Project
-from .policy import Policies, Policy
 from .techtree import Tech, TechTree
 from .tojson import to_json
 
@@ -28,7 +27,6 @@ class GameState:
                  board_state: BoardState,
                  techtree_state: TechTreeState,
                  project_state: ProjectState,
-                 policy_state: PolicyState,
                  drawpiles_state: DrawPiles):
         self.turn = turn
         self.phase = phase
@@ -41,7 +39,6 @@ class GameState:
         self.board = board_state
         self.projects = project_state
         self.tech = techtree_state
-        self.policies = policy_state
         self.drawpiles = drawpiles_state
 
     def quorum(self):
@@ -58,36 +55,31 @@ class GameState:
                  'graph' : self.graph.to_json(),
                  'tech' : self.tech.to_json(),
                  'projects' : self.projects.to_json(),
-                 'policy' : self.policies.to_json(),
                  'piles' : self.drawpiles.to_json() }
 
     def copy(self):
         return GameState(self.turn, self.phase, self.player, self.leader,
                          self.game, list(map(lambda x:x.copy(), self.players)),  self.crisis_chips,
                          self.graph.copy(), self.board.copy(),
-                         self.tech.copy(), self.projects.copy(), self.policies.copy(),
+                         self.tech.copy(), self.projects.copy(), 
                          self.drawpiles.copy())
 
 class Game:
 
-    PHASES = [ 'ENGAGE', 'ACTIVATE', 'REFLECT', 'END' ]
+    PHASES = [ 'ENGAGE', 'ACTIVATE', 'END' ]
     STEPS_PER_PHASE = { 'ENGAGE' : [ 'MOVING',
-                                     'DRAWING POWER',
                                      'DRAWING MONEY',
                                      'DRAWING CARDS',
                                      'CRISIS RISING' ],
                         'ACTIVATE' : [ 'ATTEMPTING PROJECTS',
-                                       'PASSING POLICY',
                                        'DOING RESEARCH'
                                       ],
-                        'REFLECT' : [ 'EMPATHIZING' ],
                         'END': [ 'FINALIZING',
                                  'CRISIS ROLLING' ]
                        }
 
     L_DICE_ROLL           = 'Dice roll {}D6: {}'
     L_MOVED               = 'Moved'
-    L_POWER_DRAWN         = 'Power drawn'
     L_MONEY_DRAWN         = 'Money drawn'
     L_CARD_DRAWN          = 'Card drawn: {}'
     L_PROJECT_TYPE        = 'Start project: type'
@@ -99,19 +91,9 @@ class Game:
     L_USING_TECH          = 'Using tech "{}"'
     L_CONSULTANT_FEES     = 'Consultant fees'
     L_CHIP_ADDED          = 'Added a crisis chip'
-    L_POLICY_TYPE         = 'Start policy: type'
-    L_POLICY_CAT          = 'Start policy: fix category'
-    L_POLICY_NODE         = 'Start policy: fix problem'
-    L_POLICY_PROTECT_SAME = 'Start policy: protect node in same category'
-    L_POLICY_PROTECT_ANY  = 'Start policy: protect node in any category'
-    L_POLICY_STARTED      = 'Policy started'
-    L_POLICY_IGNORED      = 'Repeated policy ignored'
-    L_POLICY_TO_EMPOWER   = 'Chosen policy to empower'
-    L_EMPOWER_POLICY      = 'Empower policy "{}"'
     L_START_RESEARCH      = 'Start researching'
     L_SKILL_FOR_RESEARCH  = 'Skill for research'
     L_FUNDS_FOR_RESEARCH  = 'Funds for research'
-    L_EMPATHIZE           = 'Empathize'
     L_ABANDON_RESEARCH    = 'Removing repeated tech started by {}'
     L_OVERSKILLED         = 'Tech project overskilled by {}'
     L_OVERFUNDED          = 'Tech project overfunded by {}'
@@ -128,12 +110,6 @@ class Game:
     L_CRISIS_TRIGGERED    = 'Now in crisis (trade-off from project: {})'
     L_PROT_LOSS_PROJECT   = 'Lost protection (trade-off from project: {})'
     L_CHIP_PROJECT        = 'Crisis chip (trade-off from project: {})'
-    L_POLICY_ABANDONED    = 'Policy abandoned'
-    L_POLICY_OVERPOWERED  = 'Policy overpowered by {}'
-    L_POLICY_PASSED       = 'Policy passed'
-    L_POLICY_IN_ACTION    = 'Policy in action'
-    L_CRISIS_FIX_POLICY   = 'Crisis resolved (policy: {})'
-    L_POLICY_PROTECT      = 'Problem protected (policy: {})'
     L_CHIP_FULL_CAT       = 'Crisis chip: full category'
     L_CRISIS_CAT          = 'Category for crisis'
     L_CHIP_SATURATED      = 'Crisis chip: overwhelmed problem'
@@ -172,9 +148,9 @@ class Game:
 ###      Decision CLASS
 ###      Decision INIT_LOC
 ###
-### All players have 1 research slot, 1 project slot and 1 policy slot.
+### All players have 1 research slot and 1 project slot.
 ###
-### The can contribute to research, projects and policies from any other player but not in the turn the project, policy or research is started.
+### The can contribute to research and projects from any other player but not in the turn the project or research is started.
 
     def start(self, rand):
         self.finished = False
@@ -191,7 +167,6 @@ class Game:
                                player_state, 0, graph_state, board_state,
                                TechTreeState(self.game_def.tech),
                                ProjectState(self.game_def.projects),
-                               PolicyState(self.game_def.policies),
                                drawpiles)
         self.log = list()
         self.phase_start_state = None
@@ -268,34 +243,13 @@ class Game:
                                'memo' : Game.L_MOVED,
                                'state' : self.state.to_json() } )
 ###
-###       	DRAWING POWER
-###
-###         	The player draws a number of power units equals to
-###             	1 +
-###             	(1 if the location in the board where the player has moved has a '!' associated with it, 0 otherwise) +
-###             	(1 if the player role has a resource of '!', 0 otherwise)
-            drawn = 1 + \
-                (1 if self.game_def.board.resources[new_loc] == '!' else 0) + \
-                (1 if self.players[self.state.player].player_class.resource == '!' else 0)
-            self.state.players[self.state.player].resources['!'] += drawn
-            self.log.append( { 'phase' : phase,
-                               'step' : Game.STEPS_PER_PHASE[phase][1],
-                               'target' : drawn,
-                               'memo' : Game.L_POWER_DRAWN,
-                               'state' : self.state.to_json() } )
-###
 ###   	DRAWING MONEY
 ###         	The player draws a number of money units equals to
-###             	5 - number of crisis in category 'ECONOMIC' + 2 * (
-###               	(1 if the location in the board where the player has moved has a '$' associated with it, 0 otherwise) +
-###               	(1 if the player role has a resource of '$', 0 otherwise)
-###             	)            
-            drawn = max(0, 5 - len(self.state.graph.are_in_crisis('ECONOMIC'))) + 2 *  (
-                (1 if self.game_def.board.resources[new_loc] == '$' else 0) + \
-                (1 if self.players[self.state.player].player_class.resource == '$' else 0))
+###             	5 - number of crisis in category 'ECONOMIC'
+            drawn = max(0, 5 - len(self.state.graph.are_in_crisis('ECONOMIC')))
             self.state.players[self.state.player].resources['$'] += drawn
             self.log.append( { 'phase' : phase,
-                               'step' : Game.STEPS_PER_PHASE[phase][2],
+                               'step' : Game.STEPS_PER_PHASE[phase][1],
                                'target' : drawn,
                                'memo' : Game.L_MONEY_DRAWN,
                                'state' : self.state.to_json() } )
@@ -323,7 +277,7 @@ class Game:
             drawn = self.state.drawpiles.draw(draw_pile, rand)
             self.state.players[self.state.player].cards.append(drawn)
             self.log.append( { 'phase' : phase,
-                               'step' : Game.STEPS_PER_PHASE[phase][3],
+                               'step' : Game.STEPS_PER_PHASE[phase][2],
                                'target' : drawn,
                                'memo' : Game.L_CARD_DRAWN, 'args' : [ 1 ],
                                'state' : self.state.to_json() } )
@@ -335,16 +289,16 @@ class Game:
             drawn = self.state.drawpiles.draw(draw_pile, rand)
             self.state.players[self.state.player].cards.append(drawn)
             self.log.append( { 'phase' : phase,
-                          'step' : Game.STEPS_PER_PHASE[phase][3],
-                          'target' : drawn,
-                          'memo' : Game.L_CARD_DRAWN, 'args' : [ 2 ],
-                          'state' : self.state.to_json() } )
+                               'step' : Game.STEPS_PER_PHASE[phase][2],
+                               'target' : drawn,
+                               'memo' : Game.L_CARD_DRAWN, 'args' : [ 2 ],
+                               'state' : self.state.to_json() } )
 ###            
 ###   	CRISIS RISING
 ###         	A crisis chip to the turn is added for each player      
             self.state.crisis_chips += 1
             self.log.append( { 'phase' : phase,
-                               'step' : Game.STEPS_PER_PHASE[phase][4],
+                               'step' : Game.STEPS_PER_PHASE[phase][3],
                                'state' : self.state.to_json() } )
         elif self.state.phase == 1: # activate
             if self.state.player == 0:
@@ -592,7 +546,7 @@ class Game:
                     self.phase_actions.append( ( self.state.player, Game.A_FAILED_SKILL,
                                                  self.state.projects[play_card[3]]['project'], play_card[0], roll, value ) )
                     
-                # closing the project is left to the empathy phase
+                # closing the project is left to the end phase
                 self.state.drawpiles.return_card(play_card[0], play_card[1])
                 del self.state.players[self.state.player].cards[play_card[2]]
                 idx = 0
@@ -607,210 +561,6 @@ class Game:
                             l[2] -= 1
                             card_choices[idx] = tuple(l)
                         idx += 1
-###
-###
-###     	PASSING POLICY
-###
-###         	If the player has policy slots available, the player has to decide whether to start a policy of a given type or not start any policy:                    
-###            
-            # policies
-            
-            ## decide whether to start a new policy?
-
-###         	Decision START_POLICY: Choose between the three types of policies (remove-tradeoff, protect-category or protect-any) or nothing to not start a policy this turn.
-###
-###         	If the player picked a policy type to start, then the player decides which category of problem they want to fix with their policy:
-###
-###             	Decision START_POLICY_FIX_CAT: Choose among the six categories of problems.
-###
-###             	With the chosen category, the player can choose which problem to fix:
-###
-###             	Decision START_POLICY_FIX_NODE: choose among all the problems in that category
-###
-###             	If the player has chosen a protect-category type of policy, the player can
-###
-###                   	Decision START_POLICY_PROTECT_NODE: Choose a problem in that category to protect (it can be the same one the policy is also fixing)
-###
-###             	Besides, if the player has chosen a protect-any type of policy, the player also chooses an extra problem to protect:
-###
-###                    	Decision START_POLICY_PROTECT_NODE: Choose a problem in any category to protect
-###
-###             	With the above decisions, the new policy is created, added to the player policy slot.
-###
-###             	Phase action recorded: START_POLICY (policy)
-            
-            start = False
-            if self.state.players[self.state.player].available_policy_slots():
-                policy_type = self.players[self.state.player].pick(
-                    Player.START_POLICY,
-                    Policy.TYPES + [ None ],
-                    rand, self.state.players[self.state.player], self.phase_start_state)
-                self.log.append( { 'phase' : phase,
-                                   'step' : Game.STEPS_PER_PHASE[phase][1],
-                                   'target' : policy_type,
-                                   'memo' : Game.L_POLICY_TYPE,
-                                   'state' : self.state.to_json() } )
-                start = policy_type is not None
-                if start:
-                    fix_cat = self.players[self.state.player].pick(
-                        Player.START_POLICY_FIX_CAT,
-                        sorted(list(map(lambda x:x[0], Graph.CATEGORIES))),
-                        rand, self.state.players[self.state.player], self.phase_start_state)
-                    self.log.append( { 'phase' : phase,
-                                       'step' : Game.STEPS_PER_PHASE[phase][1],
-                                       'target' : fix_cat,
-                                       'memo' : Game.L_POLICY_CAT,
-                                       'state' : self.state.to_json() } )
-                    fix_cat_id = self.game_def.graph.category_for_name[fix_cat]
-                    fix_node =  self.players[self.state.player].pick(
-                        Player.START_POLICY_FIX_NODE,
-                        sorted(list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[fix_cat_id]))),
-                        rand, self.state.players[self.state.player], self.phase_start_state)
-                    self.log.append( { 'phase' : phase,
-                                       'step' : Game.STEPS_PER_PHASE[phase][1],
-                                       'target' : fix_node,
-                                       'memo' : Game.L_POLICY_NODE,
-                                       'state' : self.state.to_json() } )
-                    fix_node_id = self.game_def.graph.name_to_id[fix_node]
-
-                    policy_type_ = Policy.TYPES.index(policy_type)
-
-                    if policy_type_ == Policy.A: # remove-tradeoff
-                        policy = self.state.policies.find_policy(Policy.A, set([fix_node_id]))
-                    else:
-                        protected_node =  self.players[self.state.player].pick(
-                            Player.START_POLICY_PROTECT_NODE,
-                            sorted(list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[fix_cat_id]))),
-                            rand, self.state.players[self.state.player], self.phase_start_state)
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][1],
-                                           'target' : protected_node,
-                                           'memo' : Game.L_POLICY_PROTECT_SAME,
-                                           'state' : self.state.to_json() } )
-                        protected_node_id = self.game_def.graph.name_to_id[protected_node]
-
-                        if policy_type_ == Policy.B:
-                            policy = self.state.policies.find_policy(Policy.B, set([fix_node_id]), None, set([protected_node_id]))
-                        else:
-                            all_nodes = list()
-                            for node_name in sorted(self.game_def.graph.node_names.values()):
-                                if node_name != protected_node:
-                                    all_nodes.append(node_name)
-                            
-                            protected_node2 =  self.players[self.state.player].pick(
-                                Player.START_POLICY_PROTECT_NODE,
-                                sorted(all_nodes),
-                                rand, self.state.players[self.state.player], self.phase_start_state)
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][1],
-                                               'target' : protected_node2,
-                                               'memo' : Game.L_POLICY_PROTECT_ANY,
-                                               'state' : self.state.to_json() } )
-                            protected_node2_id = self.game_def.graph.name_to_id[protected_node2]
-                            policy = self.state.policies.find_policy(Policy.C, set([fix_node_id]), None, set([protected_node_id, protected_node2_id]))
-
-                    if policy.name in self.phase_start_state.policies:
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][1],
-                                           'target' : policy.name,
-                                           'memo' : Game.L_POLICY_IGNORED,
-                                           'state' : self.state.to_json() } )
-                        start = False
-                    else:
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][1],
-                                           'target' : policy.name,
-                                           'memo' : Game.L_POLICY_STARTED,
-                                           'state' : self.state.to_json() } )
-                        self.state.policies.player_starts(policy, self.state.player, self.state.turn, self.state.quorum())
-                        self.state.players[self.state.player].policies.append(policy.name)
-                        self.phase_actions.append( ( self.state.player, Game.A_START_POLICY, policy ) )
-                        started_policy = policy
-
-###
-###            	After potentially creating a new policy, the player can decide to use power units to pass power for any policy in the table at the beginning of the turn or a policy the player has created this turn (but not policies created by other players this phase). Policies are divided between policies in progress (need many power units) and passed policies (that need one power unit for several turns until they pass).
-###
-###         	The player is then presented with a choice of empowering different policies.
-###
-###         	While the player has power units and policies to choose from:
-###
-###             	Decision POLICY_TO_EMPOWER: Choose among policies that the player has not yet empowered or nothing to stop empowering policies
-### 
-###             	If the player has chosen a policy to empower:
-###
-###                  	If the policy has passed or the policy is in progress and only missing one unit, then the player will contribute one power unit to it.
-### 
-###                  	Otherwise the player has to choose how many power units to use to empower the policy:
-###
-###                	 
-###                         	Decision POWER_AMOUNT: Choose a number between 1 and the minimum between the total number of power units the player has and the power units needed by the policy.
-### 
-###                  	Phase action recorded: EMPOWER_POLICY (policy, power units)
-### 
-###                  	Reduce the number of power units for the player accordingly
-
-            ## pass power for any policies
-            policy_choices = self.phase_start_state.policies.policies_for_status(PolicyState.IN_PROGRESS) + \
-                self.phase_start_state.policies.policies_for_status(PolicyState.PASSED)
-            if start:
-                policy_choices.append(started_policy)
-
-            policy_choices = sorted(list(map(lambda x:x.name, policy_choices)))
-
-            while True:
-                if self.state.players[self.state.player].resources['!'] == 0:
-                    break
-
-                if None not in policy_choices:
-                    policy_choices.append( None )
-                
-                if len(policy_choices) <= 1:
-                    break
-                
-                chosen_policy = self.players[self.state.player].pick(
-                    Player.POLICY_TO_EMPOWER,
-                    policy_choices,
-                    rand, self.state.players[self.state.player], self.phase_start_state)
-                if chosen_policy is None:
-                    self.log.append( { 'phase' : phase,
-                                       'step' : Game.STEPS_PER_PHASE[phase][1],
-                                       'target' : None,
-                                       'memo' : Game.L_POLICY_TO_EMPOWER,
-                                       'state' : self.state.to_json() } )
-                    break
-                chosen_power = None
-                
-                if start and chosen_policy == started_policy.name:
-                    powers = min(self.state.players[self.state.player].resources['!'],
-                                 self.state.policies[chosen_policy]['missing_power'])
-                else:
-                    if self.phase_start_state.policies.status(chosen_policy) == PolicyState.PASSED:
-                        chosen_power = 1
-                    else:
-                        powers = min(self.state.players[self.state.player].resources['!'],
-                                     self.phase_start_state.policies[chosen_policy]['missing_power'])
-                if chosen_power is None:
-                    if powers == 1:
-                        chosen_power = 1
-                    else:
-                        powers = list(range(1, powers + 1))
-                        chosen_power = self.players[self.state.player].pick(
-                            Player.POWER_AMOUNT,
-                            powers,
-                            rand, self.state.players[self.state.player], self.phase_start_state)
-                    
-                self.log.append( { 'phase' : phase,
-                                   'step' : Game.STEPS_PER_PHASE[phase][1],
-                                   'target' : chosen_power,
-                                   'memo' : Game.L_EMPOWER_POLICY, 'args': [ chosen_policy ],
-                                   'state' : self.state.to_json() } )
-                
-                self.state.players[self.state.player].resources['!'] -= chosen_power
-                self.state.policies[chosen_policy]['missing_power'] -=  chosen_power
-                policy_choices.remove(chosen_policy)
-                self.phase_actions.append( ( self.state.player, Game.A_EMPOWER_POLICY,
-                                             self.state.policies[chosen_policy]['policy'], chosen_power ) )
-                # policy effects, etc are left for the end
 
 ###
 ###  	DOING RESEARCH
@@ -831,7 +581,7 @@ class Game:
                     sorted(list(map(lambda x:x.name, boundary))) + [ None ],
                     rand, self.state.players[self.state.player], self.phase_start_state)
                 self.log.append( { 'phase' : phase,
-                                   'step' : Game.STEPS_PER_PHASE[phase][2],
+                                   'step' : Game.STEPS_PER_PHASE[phase][1],
                                    'target' : chosen_tech,
                                    'memo' : Game.L_START_RESEARCH,
                                    'state' : self.state.to_json() } )
@@ -881,7 +631,7 @@ class Game:
                     cards_for_tech,
                     rand, self.state.players[self.state.player], self.phase_start_state)
                 self.log.append( { 'phase' : phase,
-                                   'step' : Game.STEPS_PER_PHASE[phase][0],
+                                   'step' : Game.STEPS_PER_PHASE[phase][1],
                                    'target' : chosen_card_for_tech,
                                    'memo' : Game.L_SKILL_FOR_RESEARCH,
                                    'state' : self.state.to_json() } )
@@ -931,7 +681,7 @@ class Game:
                     list(map(lambda x:None if x is None else x.name, to_fund)),
                     rand, self.state.players[self.state.player], self.phase_start_state)
                 self.log.append( { 'phase' : phase,
-                                   'step' : Game.STEPS_PER_PHASE[phase][0],
+                                   'step' : Game.STEPS_PER_PHASE[phase][1],
                                    'target' : chosen_to_fund,
                                    'memo' : Game.L_FUNDS_FOR_RESEARCH,
                                    'state' : self.state.to_json() } )
@@ -944,70 +694,6 @@ class Game:
                     if tech is not None and tech.name == chosen_to_fund:
                         break
                 del to_fund[idx]
-
-        elif self.state.phase == 2: # reflect
-
-###            
-###            
-###    REFLECT
-###
-###  	For the reflect phase, all the blind actions of the activate phase are revealed. In order, each player can openly do the reflect actions (only empathizing in the basic version of the game).          
-            
-###  	EMPATHIZING
-###
-###         	For a given player, look if any SUCCESS_SKILL in the player's activate phase actions can be used to transform a FAILED_SKILL for another player. That happens when both players did a roll against the same suit and the roll for the current player (that succeeded) was low enough to make the other player succeed, while the value of the current player was high enough that would have succeeded with the other players' roll. For example, if the current player did a roll of 5 against a value of 8 (which succeeded) for Diamonds, and another player did a roll of 7 against a 5 (which failed), trading their rolls will mean both players succeeded (because 5<=5 and 7<=8).
-###
-###         	If there are any empathetic such pairings, the player is then presented with the choice:
-###
-###         	Decide EMPATHIZE: Choose one empathetic change or nothing to stop making changes
-###
-###         	A player can make as many empathetic changes as the player wishes but they are executed strictly in player order and decided exclusively based on the SUCCESS_SKILL player wishes.
-            
-            succeeded = [ (p[2], p[3], idx, p[4], p[5])       for idx, p in enumerate(self.phase_actions)
-                          if p[0] == self.state.player and p[1] == Game.A_SUCCESS_SKILL ]
-            failed    = [ (p[0], p[2], p[3], idx, p[4], p[5]) for idx, p in enumerate(self.phase_actions)
-                          if p[0] != self.state.player and p[1] == Game.A_FAILED_SKILL ]
-            empath_pairs = list()
-            for sproject, scard, sidx, sroll, svalue in succeeded:
-                if sroll < 0: # joker
-                    continue
-                for player, fproject, fcard, fidx, froll, fvalue in failed:
-                    if scard[0] == fcard[0] and sroll <= fvalue and froll <= svalue: # potential empath
-                        empath_pairs.append( ( sproject.name, fproject.name, player,
-                                               self.players[player].name, scard, fcard, sidx, fidx, sroll, froll ) )
-            empath_pairs = sorted(empath_pairs)
-            while True:
-                if None not in empath_pairs:
-                    empath_pairs.append( None )
-                if len(empath_pairs) <= 1:
-                    break
-                empathize = self.players[self.state.player].pick(
-                    Player.EMPATHIZE,
-                    empath_pairs,
-                    rand, self.state.players[self.state.player], self.phase_start_state)
-                self.log.append( { 'phase' : phase,
-                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                   'target' : empathize,
-                                   'memo' : Game.L_EMPATHIZE,
-                                   'state' : self.state.to_json() } )
-                if empathize is None:
-                    break
-                l = list(self.phase_actions[empathize[6]])
-                l[4] = empathize[9]
-                self.phase_actions[empathize[6]] = tuple(l)
-                l = list(self.phase_actions[empathize[7]])
-                l[1] = Game.A_SUCCESS_SKILL
-                l[4] = empathize[8]
-                self.phase_actions[empathize[7]] = tuple(l)
-                
-                idx = 0
-                while idx < len(empath_pairs):
-                    if empath_pairs[idx] is None:
-                        idx += 1
-                    elif empath_pairs[idx][6] == empathize[6] or empath_pairs[idx][7] == empathize[7]:
-                        del empath_pairs[idx]
-                    else:
-                        idx += 1
 
         else: # the end
             if self.state.player != self.state.leader:
@@ -1242,106 +928,6 @@ class Game:
                                                        'state' : self.state.to_json() } )
 
 
-###         	Policy
-###
-###         	See if many players started the same policy. Keep the one from the lower player (the resources are aggregated).
-###
-###         	See if any of the policies had no power passed to them this turn and discard them. These policies are considered abandoned and the policy slot from the player carrying the policy is freed.
-###
-###         	Check whether any of the policies got over-powered and report.
-###
-###         	See if any of the policies has obtained its necessary amount of power. If so, it is marked as "passed" and needs a number of turns (depending on the policy type) to be in action. The number of turns for application starts when the policy has passed.
-###
-###         	See if any of the passed policies has gone through all the turns needed and apply its actions:
-###
-###                 	To apply the actions, the problem fixed by the policy is fixed. If the tech associated with auto-protecting that problem has been researched (even in this turn), it gets protected.
-###
-###                 	If the policy protects other problems and the problems are not in crisis, they get protected.
-###
-###                 	The policy slot associated with the policy for the corresponding player is freed.
-###
-                            
-                ## TODO see if two identical policies got created and remove one
-                
-                ## see if any of the policies had no action and should be discarded
-                for policy in self.state.policies.policies_for_status(PolicyState.IN_PROGRESS) + \
-                    self.state.policies.policies_for_status(PolicyState.PASSED):
-                    # got power this turn?
-
-                    empowered = False
-                    for act in self.phase_actions:
-                        if act[1] == Game.A_EMPOWER_POLICY:
-                            empowered = True
-                            break
-                    if not empowered:
-                        pol_player = self.state.policies[policy.name]['player']
-                        self.state.policies.abandon(policy.name)
-                        del self.state.players[pol_player].policies[self.state.players[pol_player].policies.index(policy.name)]
-                
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][0],
-                                           'target' : policy.name,
-                                           'memo' : Game.L_POLICY_ABANDONED,
-                                           'state' : self.state.to_json() } )
-                        
-                ## see if any of the policies was passed
-                for policy in self.state.policies.policies_for_status(PolicyState.IN_PROGRESS):
-                    if self.state.policies[policy.name]['missing_power'] <= 0:
-
-                        if self.state.policies[policy.name]['missing_power'] < 0:
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                               'target' : policy.name,
-                                               'memo' : Game.L_POLICY_OVERPOWERED, 'args' : [ abs(self.state.policies[policy.name]['missing_power']) ],
-                                               'state' : self.state.to_json() } )
-
-                        self.state.policies.has_passed(policy.name)
-                       
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][0],
-                                           'target' : policy.name,
-                                           'memo' : Game.L_POLICY_PASSED,
-                                           'state' : self.state.to_json() } )
-                
-                ## see if any of the passed policies started and apply its actions
-                for policy in self.state.policies.policies_for_status(PolicyState.PASSED):
-                    self.state.policies[policy.name]['missing_turns'] -= 1
-                    if self.state.policies[policy.name]['missing_turns'] == 0:
-                        self.state.policies.finish(policy.name)
-                        pol_player = self.state.policies[policy.name]['player']
-                        del self.state.players[pol_player].policies[self.state.players[pol_player].policies.index(policy.name)]
-                       
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][0],
-                                           'target' : policy.name,
-                                           'memo' : Game.L_POLICY_IN_ACTION,
-                                           'state' : self.state.to_json() } )
-
-                        for fix in policy.fixes:
-                            fixn = self.game_def.graph.node_names[fix]
-                            if self.state.graph[fixn]['status'] == GraphState.IN_CRISIS:
-                                if self.state.graph[fixn]['auto-protected']:
-                                    self.state.graph[fixn]['status'] = GraphState.PROTECTED
-                                else:
-                                    self.state.graph[fixn]['status'] = GraphState.STABLE
-                                    
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : fixn,
-                                                   'memo' : Game.L_CRISIS_FIX_POLICY, 'args' : [ policy.name ],
-                                                   'state' : self.state.to_json() } )
-                                                                        
-                        for protect in policy.protects:
-                            protectn = self.game_def.graph.node_names[protect]
-                            if self.state.graph[protectn]['status'] == GraphState.STABLE:
-                                self.state.graph[protectn]['status'] = GraphState.PROTECTED
-                                    
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : protectn,
-                                                   'memo' : Game.L_POLICY_PROTECT, 'args' : [ policy.name ],
-                                                   'state' : self.state.to_json() } )
-
 ###  	CRISIS ROLLING
 ###
 ###             	All through the crisis rolling the players can talk with each other, strategize and discuss what to do depending on the different problems that will get in crisis.
@@ -1436,7 +1022,7 @@ class Game:
                                            'memo' : Game.L_CRISIS_ROLL, 'args' : [ noden ],
                                            'state' : self.state.to_json() } )
                         self.state.crisis_chips -= 1
-                        if crisis_roll > 6:
+                        if crisis_roll < 8:
                             crisis_averted = False
                             break
 
@@ -1496,10 +1082,6 @@ class Game:
     A_SUCCESS_SKILL  = 'SUCCESS_SKILL'
 ###  	FAILED_SKILL   = The player failed a skill check for a given project, with a specific roll value against a specific card value.
     A_FAILED_SKILL   = 'FAILED_SKILL'
-###  	START_POLICY   = The player started a specific policy.
-    A_START_POLICY   = 'START_POLICY'
-###  	EMPOWER_POLICY = The player added a specific number of power units to empower a policy.
-    A_EMPOWER_POLICY = 'EMPOWER_POLICY'
 ###  	START_RESEARCH = The player started researching a specific technology.
     A_START_RESEARCH = 'START_RESEARCH'
 ###  	SKILL_RESEARCH = The player contributed a skill card to a specific technology being researched.

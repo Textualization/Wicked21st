@@ -51,12 +51,10 @@ class Projects:
 ### | ECONOMIC         | ENVIRONMENTAL     | S, D |
 ### | INDUSTRIAL       | ECONOMIC          | S, C |
 ###
-### Improved projects also require an additional H, D.
+### Improved projects double its base requirements.
 ###
 ### Note that the problems (fix and, if needed, tradeoff) are decided when the project is created. Over time that problem might no longer be relevant and thus the project might be abandoned.
 
-##TODO this changed    
-    
     BASE_TABLE =  [ 
         ( Graph.ENVIRONMENTAL,          Graph.LIVING_STANDARDS,	'C', 'D' ),
         ( Graph.LIVING_STANDARDS,	Graph.CLASS,	        'H', 'C' ),
@@ -67,12 +65,6 @@ class Projects:
     ]
 
 
-
-## Improved projects also require an additional H, D.
-
-
-Note that the problems (fix and, if needed, tradeoff) are decided when the project is created. Over time that problem might no longer be relevant and thus the project might be abandoned.
-    
     
     def __init__(self, graph: Graph):
 
@@ -93,42 +85,8 @@ Note that the problems (fix and, if needed, tradeoff) are decided when the proje
                     # improv-A, no trade-off
                     improvA = Project("Improved fix '{}' ({})".format(nn1, c1[0]),
                                       Project.A, set([n1]), set(), set(),
-                                      cost + [ 'H', 'D' ], base)
+                                      cost + cost, base)
                     self.projects.append(improvA)
-                    # improv-B
-                    # for other in graph.node_classes[c1[1]]:
-                    #     if other != n1:
-                    #         othern = graph.node_names[other]
-                    #         self.projects.append(Project("Improv-B fix '{}'+'{}' ({})".format(nn1, othern, c1[0]), Project.B,
-                    #                                      set([n1, other]), set(), set(),
-                    #                                      cost + [ 'H', 'D', 'C', 'H' ], improvA))
-                    # for other, othern in graph.node_names.items():
-                    #     self.projects.append(Project("Improv-B fix '{}' ({}) protect '{}'".format(nn1, c1[0], othern), Project.B,
-                    #                                  set([n1]), set(), set([other]),
-                    #                                  cost + [ 'H', 'D', 'D', 'S' ], improvA))
-                                
-                    # improv-A, protect
-                    # for other in graph.node_classes[c1[1]]:
-                    #     othern = graph.node_names[other]
-                    #     improvA = Project("Improv-A2 fix '{}' protect '{}' ({}) triggers '{}' ({})".format(nn1, othern, c1[0], nn2, c2[0]),
-                    #                       Project.A2, set([n1]), set([n2]), set([other]),
-                    #                       cost + [ 'S', 'C' ], base)
-                    #     self.projects.append(improvA)
-
-                        # # improv-B
-                        # for other2 in graph.node_classes[c1[1]]:
-                        #     if other2 != n1:
-                        #         other2n = graph.node_names[other2]
-                        #         self.projects.append(
-                        #             Project("Improv-B fix '{}'+'{}' protect '{}' ({}) triggers '{}' ({})".format(nn1, other2n, othern, c1[0], nn2, c2[0]), Project.B,
-                        #                     set([n1, other2]), set([n2]), set([other]),
-                        #                     cost + [ 'S', 'C', 'C', 'H' ], improvA))
-                        # for other2, other2n in graph.node_names.items():
-                        #     if other2 != other:
-                        #         self.projects.append(
-                        #             Project("Improv-B fix '{}' protect '{}' ({}) + protect '{}' triggers '{}' ({})".format(nn1, othern, c1[0], other2n, nn2, c2[0]), Project.B,
-                        #                     set([n1]), set([n2]), set([other, other2]),
-                        #                     cost + [ 'S', 'C', 'D', 'S' ], improvA))
         
         self.project_for_name = { project.name: project for project in self.projects }
         self.names = sorted(list(self.project_for_name.keys()))

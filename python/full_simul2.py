@@ -12,7 +12,6 @@ from wicked21st.graph import load_graph
 from wicked21st.board import Board
 from wicked21st.classes import Classes
 from wicked21st.project import Projects
-from wicked21st.policy import Policies
 from wicked21st.techtree import TechTree
 from wicked21st.definitions import GameInit, GameDef
 from wicked21st.player import Player
@@ -25,17 +24,16 @@ NUM_PLAYERS = 3
 rand = random.Random(SEED)
 
 # definitions
-graph_def = load_graph("map20210812.mm")
+graph_def = load_graph("map20211015.mm")
 board_def = Board()
 classes_def = Classes()
 project_def = Projects(graph_def)
-policy_def = Policies(graph_def)
 tree_def = TechTree(graph_def)
 
 initial_graph = GraphState(graph_def)
 initial_graph.in_crisis('Social Inequity')
 initial_graph.in_crisis('Affordable Housing')
-initial_graph.in_crisis('Community Networks Breakdown')
+initial_graph.in_crisis('Community Networks')
 initial_graph.in_crisis('Systemic Corruption')
 initial_graph.in_crisis('Monopoly')
 initial_graph.in_crisis('Unsustainable Harvesting')
@@ -43,7 +41,7 @@ initial_graph.in_crisis('Polluting Industry')
 initial_graph.in_crisis('Fossil Fuel Dependency')
 
 game_init = GameInit(initial_graph)
-game_def = GameDef(game_init, NUM_PLAYERS, classes_def, graph_def, board_def, tree_def, policy_def, project_def)
+game_def = GameDef(game_init, NUM_PLAYERS, classes_def, graph_def, board_def, tree_def, project_def)
 
 # assemble random players
 

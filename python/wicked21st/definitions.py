@@ -13,7 +13,6 @@ from .classes import Classes
 from .graph import Graph
 from .board import Board
 from .techtree import TechTree
-from .policy import Policies
 from .project import Projects
 
 class GameInit:
@@ -30,7 +29,6 @@ class GameDef:
                  graph_def: Graph,
                  board_def: Board,
                  techtree_def: TechTree,
-                 policy_def: Policies,
                  project_def: Projects):
         self.game_init = game_init
         self.num_players = num_players
@@ -38,7 +36,6 @@ class GameDef:
         self.graph = graph_def
         self.board = board_def
         self.projects = project_def
-        self.policies = policy_def
         self.tech = techtree_def
         self.tojson_memo = None
         
@@ -51,7 +48,6 @@ class GameDef:
                 'graph' : self.graph.to_json(),
                 'tech' : self.tech.to_json(),
                 'projects' : self.projects.to_json(),
-                'policies' : self.policies.to_json(),
                 'board': self.board.to_json() }
         return self.tojson_memo
 
