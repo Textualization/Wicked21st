@@ -39,6 +39,7 @@ initial_graph.in_crisis('Monopoly')
 initial_graph.in_crisis('Unsustainable Harvesting')
 initial_graph.in_crisis('Polluting Industry')
 initial_graph.in_crisis('Fossil Fuel Dependency')
+initial_graph.in_crisis('Market Externalities')
 
 game_init = GameInit(initial_graph)
 game_def = GameDef(game_init, NUM_PLAYERS, classes_def, graph_def, board_def, tree_def, project_def)
