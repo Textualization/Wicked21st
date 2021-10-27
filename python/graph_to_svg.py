@@ -6,6 +6,10 @@ from wicked21st.graph import load_graph, Graph
 import svgwrite
 import cairo
 
+CARTOUCHE_SIZE = 72
+NODE_EDGE_LEN = 500
+CAT_EDGE_LEN = 250
+
 
 def textwidth(text, font='Arial', fontsize=14):
     surface = cairo.SVGSurface('undefined.svg', 1080, 1080)
@@ -24,13 +28,27 @@ rad_per_node = 2 * math.pi * 1.0 / total_nodes
 
 current_rad = 0
 
-node_edge_len = 400
-cat_edge_len = 250
+
+
+# draw cartouches
+for catn, catid in enumerate(g.node_classes):
+    node_count = len(g.node_classes[catid])
+
+    carts = dwg.add(dwg.g(id='cartouches' + str(catn), fill=catid))
+    for node in range(node_count):
+        x = math.cos(current_rad) * NODE_EDGE_LEN * 0.97 + 540 - CARTOUCHE_SIZE / 2
+        y = math.sin(current_rad) * NODE_EDGE_LEN * 0.97 + 540 - CARTOUCHE_SIZE / 2
+        current_rad += rad_per_node
+        r = dwg.rect(insert=(x,y), size=(CARTOUCHE_SIZE, CARTOUCHE_SIZE), rx=5, ry=5)
+        r.rotate( (current_rad + math.pi) * 180 / math.pi, center = (x,y) )
+        carts.add(r)
+
 
 node_to_xy_rad = dict()
 
 #print(g.node_classes)
 
+current_rad = 0
 for catid in g.node_classes:
     nodes = g.node_classes[catid]
 
@@ -38,15 +56,15 @@ for catid in g.node_classes:
     for node in sorted(nodes, key=lambda x:g.node_names[x]):
         text = g.node_names[node]
         text = text.replace(' ', '\n')
-        xt = math.cos(current_rad) * node_edge_len + 540
-        yt = math.sin(current_rad) * node_edge_len + 540
-        x = math.cos(current_rad) * node_edge_len * 0.97 + 540
-        y = math.sin(current_rad) * node_edge_len * 0.97 + 540
-        w = textwidth(g.node_names[node], 'Arial', 12)
+        xt = math.cos(current_rad) * NODE_EDGE_LEN + 540
+        yt = math.sin(current_rad) * NODE_EDGE_LEN + 540
+        x = math.cos(current_rad) * NODE_EDGE_LEN * 0.97 + 540
+        y = math.sin(current_rad) * NODE_EDGE_LEN * 0.97 + 540
+        w = textwidth(g.node_names[node], 'Arial', 9)
         print(text, w)
         xt = xt - w
         node_to_xy_rad[node] = (x,y, current_rad)
-        dwg.add(dwg.text(text, insert=(xt, yt), fill=catid))
+        dwg.add(dwg.text(text, insert=(xt, yt), fill='black', style='font-family:Arial;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:9px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal'))
         #dwg.add(dwg.text(g.node_names[node], insert=(x, y), fill=catid)) # , rotate=[ current_rad / math.pi * 180 ]))
         
         current_rad += rad_per_node
@@ -74,8 +92,8 @@ arrow = create_arrow_marker(dwg)
 
 for node in g.node_names.keys():
     _, _, rad = node_to_xy_rad[node]
-    x = math.cos(rad) * node_edge_len * 0.9 + 540
-    y = math.sin(rad) * node_edge_len * 0.9 + 540
+    x = math.cos(rad) * NODE_EDGE_LEN * 0.9 + 540
+    y = math.sin(rad) * NODE_EDGE_LEN * 0.9 + 540
 
     #p = Path('m0,0')
     #p.push_arc(target=(7,7), rotation=30, r=(2,4), large_arc=False, angle_dir='-', absolute=True)
