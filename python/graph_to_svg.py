@@ -9,6 +9,7 @@ import cairo
 CARTOUCHE_SIZE = 100
 NODE_EDGE_LEN = 500
 CAT_EDGE_LEN = 250
+BRAND_EDGE_LEN = 120
 
 def textwidth(text, font='Arial', fontsize=14):
     surface = cairo.SVGSurface('undefined.svg', 1080, 1080)
@@ -20,13 +21,12 @@ def textwidth(text, font='Arial', fontsize=14):
 
 g = load_graph(sys.argv[1])
 dwg = svgwrite.Drawing(sys.argv[2], size=(1080,1080))
-dwg.add(dwg.rect(insert=(0, 0), size=('100%', '100%'), rx=None, ry=None, fill='white'))
+dwg.add(dwg.rect(insert=(-100, -100), size=(1280, 1280), rx=None, ry=None, fill='white'))
 
 total_nodes = len(g.node_names)
 rad_per_node = 2 * math.pi * 1.0 / total_nodes
 
 ## RADS
-
 current_rad = 0
 node_to_rad = dict()
 node_to_code = dict()
@@ -34,9 +34,12 @@ for catid in g.node_classes:
     nodes = g.node_classes[catid]
     
     for node in sorted(nodes, key=lambda x:g.ordering[x]):
-        code = g.node_names[node].upper()[:3]
+        name = g.node_names[node].upper()
+        if name[0] == '*':
+            name
+        code = name[:3]
         if code in node_to_code:
-            g.node_names[node].upper().split(" ")[1][:3]
+            code = name.split(" ")[1][:3]
             if code in node_to_code:
                 raise Error(g.node_names[node]+ " " + str(node_to_code))
         node_to_code[node] = code
@@ -61,6 +64,37 @@ for node in g.node_names.keys():
             if g.class_for_node[other] == g.class_for_node[node]:
                 cat_in += 1
     node_to_stats[node] = { 'out' : (total_out, cat_out), 'in' : (total_in, cat_in) }
+
+## CATS
+for name, catid in Graph.CATEGORIES:
+    nodes = g.node_classes[catid]
+    rads = [ node_to_rad[node] for node in nodes ]
+    radm = min(rads)
+    radM = max(rads)
+    rad = radm + (radM - radm) / 2
+    cx = math.cos(rad) * CAT_EDGE_LEN + 540
+    cy = math.sin(rad) * CAT_EDGE_LEN + 540
+
+    cat = dwg.add(dwg.g(id='cat' + catid[2:], fill=catid))
+    e = dwg.ellipse(center=(cx,cy), r=(CARTOUCHE_SIZE / 2, CARTOUCHE_SIZE))
+    cat.add(e)
+    w = textwidth(name, 'Arial', 18)
+    t = dwg.text(name, insert=(cx - w / 2, cy + 9), fill='white', style='font-family:Arial;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:18px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal')
+    t.rotate( 90, center=(cx,cy) )
+    cat.add(t)
+    cat.rotate( (rad + math.pi) * 180 / math.pi, center = (cx,cy) )
+
+## BRAND
+name="wicked21st".upper()
+letters = list(reversed(list(name)))
+rad_per_letter = 2 * math.pi * 1.0 / len(letters)
+for idx, let in enumerate(letters):
+    rad = rad_per_letter * idx
+    x = math.cos(rad) * BRAND_EDGE_LEN + 540
+    y = math.sin(rad) * BRAND_EDGE_LEN + 540
+
+    t = dwg.text(let, insert=(x,y), fill='black', style='font-family:Arial;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:48px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal',rotate=[ (rad + math.pi) * 180 / math.pi ])
+    dwg.add(t)
 
 ## ARROWS
 marker = dwg.marker(insert=(5,5), size=(10,10))
@@ -94,8 +128,8 @@ for node in g.node_names.keys():
     for other in g.outlinks[node]:
         rado = node_to_rad[other]
         if g.class_for_node[node] != g.class_for_node[other]:
-            xo = math.cos(rado) * (NODE_EDGE_LEN - (CARTOUCHE_SIZE / 2) * 1.1) + 540
-            yo = math.sin(rado) * (NODE_EDGE_LEN - (CARTOUCHE_SIZE / 2) * 1.1) + 540
+            xo = math.cos(rado) * (NODE_EDGE_LEN - (CARTOUCHE_SIZE / 2) * 1.2) + 540
+            yo = math.sin(rado) * (NODE_EDGE_LEN - (CARTOUCHE_SIZE / 2) * 1.2) + 540
             
             line = dwg.add(dwg.line((cx,cy), (xo, yo), stroke=g.class_for_node[node], style="stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"))
             line.set_markers((None, False, arrow))
@@ -128,6 +162,8 @@ for node in g.node_names.keys():
     words = text.split(" ")
     lines = [ "" ]
     for word in words:
+        if word[0] == "*":
+            word = word[1:]
         w = textwidth(lines[-1] + " " + word, 'Arial', 9)
         if w > CARTOUCHE_SIZE * 0.8:
             lines.append(word)
@@ -188,6 +224,14 @@ for node in g.node_names.keys():
     stats.add(t)
     #print(g.node_names[node], s)   
     cart.add(stats)
+    
+    o = g.ordering[node]
+    if o > 99:
+        o = "*"
+    else:
+        o = str(o)
+    t = dwg.text(o, insert=(x+CARTOUCHE_SIZE+20, y+CARTOUCHE_SIZE / 2 - 12), fill="black", style='font-family:Arial;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:24px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal', rotate=[ 90 ])
+    cart.add(t)
     
     cart.rotate( (rad + math.pi) * 180 / math.pi, center = (cx,cy) )
 
