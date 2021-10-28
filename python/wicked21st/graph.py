@@ -27,6 +27,7 @@ class Graph:
   
   # nodes: dict( id -> name ), class_for_node: dict( id -> clazz ), outlinks: dict( id -> set(id) )
   def __init__(self, nodes, class_for_node, outlinks, categories):
+    class_for_node = { n: clazz.lower() for n, clazz in class_for_node.items() }
     self.node_names = { i :  n if '.' not in n else n[n.index(' ')+1:]    for i,n in nodes.items() }
     self.ordering =   { i : -1 if '.' not in n else int(n[:n.index('.')]) for i,n in nodes.items() }
     self.name_to_id = { n: i for i, n in self.node_names.items() }
