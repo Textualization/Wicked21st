@@ -21,21 +21,19 @@ class Project:
 
     TYPES = [ 'Base', 'Remove-Tradeoff' ]
 
-    def __init__(self, name, type_, fixes: set, triggers: set, protects: set, cost: list, parent):
+    def __init__(self, name, type_, fixes: str, triggers: int, cost: list, parent):
         self.name = name
         self.type_ = type_
         self.fixes = fixes
         self.triggers = triggers
-        self.protects = protects
         self.cost = cost
         self.parent = parent
 
     def to_json(self):
         result = { 'name':     self.name,
                    'type':     Project.TYPES[ self.type_ ],
-                   'fixes':    list(self.fixes),
-                   'triggers': list(self.triggers),
-                   'protects': list(self.protects),
+                   'fixes':    self.fixes,
+                   'triggers': self.triggers,
                    'cost':     self.cost
                   }
         if self.parent is not None:
@@ -43,50 +41,44 @@ class Project:
    
 class Projects:
 
-### | fixed problem    | trade-off         | suits needed |
-### | ENVIRONMENTAL    | LIVING_STANDARDS  | C, D |
-### | LIVING_STANDARDS | CLASS             | H, C |
-### | SOCIAL           | INDUSTRIAL        | H, D |
-### | CLASS            | SOCIAL            | H, S |
-### | ECONOMIC         | ENVIRONMENTAL     | S, D |
-### | INDUSTRIAL       | ECONOMIC          | S, C |
+### | fixed problem     | suits needed |
+### | ENVIRONMENTAL     | C, D |
+### | LIVING_STANDARDS  | H, C |
+### | SOCIAL            | H, D |
+### | CLASS             | H, S |
+### | ECONOMIC          | S, D |
+### | INDUSTRIAL        | S, C |
 ###
 ### Improved projects double its base requirements.
 ###
-### Note that the problems (fix and, if needed, tradeoff) are decided when the project is created. Over time that problem might no longer be relevant and thus the project might be abandoned.
+### Base projects add a crisis chip when completed.
 
     BASE_TABLE =  [ 
-        ( Graph.ENVIRONMENTAL,          Graph.LIVING_STANDARDS,	'C', 'D' ),
-        ( Graph.LIVING_STANDARDS,	Graph.CLASS,	        'H', 'C' ),
-        ( Graph.SOCIAL,	                Graph.INDUSTRIAL,	'H', 'D' ),
-        ( Graph.CLASS,	                Graph.SOCIAL,	        'H', 'S' ),
-        ( Graph.ECONOMIC,	        Graph.ENVIRONMENTAL,	'S', 'D' ),
-        ( Graph.INDUSTRIAL,	        Graph.ECONOMIC,	        'S', 'C' ),
+        ( Graph.ENVIRONMENTAL,	   'C', 'D' ),
+        ( Graph.LIVING_STANDARDS,  'H', 'C' ),
+        ( Graph.SOCIAL,	           'H', 'D' ),
+        ( Graph.CLASS,	           'H', 'S' ),
+        ( Graph.ECONOMIC,	   'S', 'D' ),
+        ( Graph.INDUSTRIAL,	   'S', 'C' ),
     ]
 
-
-    
     def __init__(self, graph: Graph):
 
         self.projects = list()
-        for c1, c2, s1, s2 in Projects.BASE_TABLE:
+        for c1, s1, s2 in Projects.BASE_TABLE:
             
             for n1 in sorted(graph.node_classes[c1[1]], key=lambda x:graph.node_names[x]):
                 nn1 = graph.node_names[n1]
-                for n2 in sorted(graph.node_classes[c2[1]], key=lambda x:graph.node_names[x]):
-                    nn2 = graph.node_names[n2]
-                    cost = [s1,s2]
-                    # base
-                    base = Project("Base fix '{}' ({}) triggers '{}' ({})".format(nn1, c1[0], nn2, c2[0]), Project.BASE,
-                                                 set([n1]), set([n2]), set([]),
-                                                 cost, None)
-                    self.projects.append(base)
+                cost = [s1,s2]
+                # base
+                base = Project("Base fix '{}' ({}) triggers crisis".format(nn1, c1[0]), Project.BASE,
+                               n1, 1, cost, None)
+                self.projects.append(base)
                     
-                    # improv-A, no trade-off
-                    improvA = Project("Improved fix '{}' ({})".format(nn1, c1[0]),
-                                      Project.A, set([n1]), set(), set(),
-                                      cost + cost, base)
-                    self.projects.append(improvA)
+                # improv-A, no trade-off
+                improvA = Project("Improved fix '{}' ({})".format(nn1, c1[0]),
+                                      Project.A, n1, 0, cost + cost, base)
+                self.projects.append(improvA)
         
         self.project_for_name = { project.name: project for project in self.projects }
         self.names = sorted(list(self.project_for_name.keys()))

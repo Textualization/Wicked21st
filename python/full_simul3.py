@@ -12,7 +12,6 @@ import multiprocessing
 import numpy as np
 
 from wicked21st.graph import load_graph
-from wicked21st.board import Board
 from wicked21st.classes import Classes
 from wicked21st.project import Projects
 from wicked21st.techtree import TechTree
@@ -20,6 +19,7 @@ from wicked21st.definitions import GameInit, GameDef
 from wicked21st.player import Player
 from wicked21st.state import GraphState
 from wicked21st.game import Game
+from wicked21st.exceptions import EmptyDrawPile
 
 import config
 
@@ -36,7 +36,6 @@ for _ in range(config.NUM_RUNS):
 
 # definitions
 graph_def = load_graph(config.GRAPH)
-board_def = Board()
 classes_def = Classes()
 project_def = Projects(graph_def)
 tree_def = TechTree(graph_def)
@@ -49,7 +48,7 @@ def simulate_one(seed):
     rand = random.Random(seed)
     
     game_init = GameInit(initial_graph)
-    game_def = GameDef(game_init, num_players, classes_def, graph_def, board_def, tree_def, project_def)
+    game_def = GameDef(game_init, num_players, config.CRISIS_CHECK, classes_def, graph_def, tree_def, project_def)
 
     # assemble random players
     classes = list(classes_def.classes)
@@ -59,24 +58,30 @@ def simulate_one(seed):
     game = Game(game_def, players)
 
     game.start(rand)
-    while not game.finished and game.state.turn < config.GAME_LENGTH:
-        log0 = len(game.log)
-        game.step(rand)
-        if config.VERBOSE:
-            for e in game.log[log0:]:
-                line = "{}\t{}\t{}\t{}".format(run, game.state.turn, e['phase'], e['step'])
-                if 'target' in e:
-                    line = "{}\t{}".format(line, e['target'])
-                    if 'memo' in e:
-                        memo = e['memo']
-                        if 'args' in e:
-                            args = e['args']
-                            memo = memo.format(*args)
-                    line = "{}\t{}".format(line, memo)
-                print(line)
-    return not game.finished
+    exc = False
+    try:
+        while not game.finished and game.state.turn < config.GAME_LENGTH:
+            log0 = len(game.log)
+            game.step(rand)
+            if config.VERBOSE:
+                for e in game.log[log0:]:
+                    line = "{}\t{}\t{}\t{}".format(run, game.state.turn, e['phase'], e['step'])
+                    if 'target' in e:
+                        line = "{}\t{}".format(line, e['target'])
+                        if 'memo' in e:
+                            memo = e['memo']
+                            if 'args' in e:
+                                args = e['args']
+                                memo = memo.format(*args)
+                        line = "{}\t{}".format(line, memo)
+                    print(line)
+    except EmptyDrawPile as e:
+        return -1, True
+    return not game.finished, False
 
 pool = multiprocessing.Pool(20)
-won = sum(pool.map(simulate_one, seeds))
+results = pool.map(simulate_one, seeds)
+won = sum(map(lambda x: 0 if x[1] else x[0], results))
+errors = sum(map(lambda x: x[1], results))
 
-print(num_players, config.NUM_RUNS, won, int(won * 1.0 / config.NUM_RUNS * 1000) / 10 )
+print(num_players, config.NUM_RUNS, won, int(won * 1.0 / config.NUM_RUNS * 1000) / 10, errors )

@@ -4,3 +4,5 @@ GRAPH = "map20211018.mm"
 VERBOSE = False
 IN_CRISIS = [ 'Social Inequity', 'Affordable Housing', 'Community Networks', 'Systemic Corruption', 'Monopoly', 'Unsustainable Harvesting', 'Polluting Industry', 'Fossil Fuel Dependency', 'Market Externalities' ]
 GAME_LENGTH = 12
+CRISIS_CHECK = 7
+

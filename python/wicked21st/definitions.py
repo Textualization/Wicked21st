@@ -11,7 +11,6 @@ import numpy as np
 from .state import GraphState
 from .classes import Classes
 from .graph import Graph
-from .board import Board
 from .techtree import TechTree
 from .project import Projects
 
@@ -25,16 +24,16 @@ class GameInit:
 class GameDef:
     def __init__(self, game_init: GameInit,
                  num_players: int,
+                 crisis_check: int,
                  classes_def: Classes,
                  graph_def: Graph,
-                 board_def: Board,
                  techtree_def: TechTree,
                  project_def: Projects):
         self.game_init = game_init
         self.num_players = num_players
+        self.crisis_check = crisis_check
         self.classes = classes_def
         self.graph = graph_def
-        self.board = board_def
         self.projects = project_def
         self.tech = techtree_def
         self.tojson_memo = None
@@ -43,11 +42,12 @@ class GameDef:
         if self.tojson_memo is None:
             self.tojson_memo = {
                 'num_players' : self.num_players,
+                'crisis_check' : self.crisis_check,
                 'game_init' : self.game_init.to_json(),
                 'classes' : self.classes_def.to_json(),
                 'graph' : self.graph.to_json(),
                 'tech' : self.tech.to_json(),
-                'projects' : self.projects.to_json(),
-                'board': self.board.to_json() }
+                'projects' : self.projects.to_json()
+            }
         return self.tojson_memo
 

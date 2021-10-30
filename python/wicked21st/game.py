@@ -9,7 +9,7 @@ from .graph import Graph
 from .player import Player, PlayerState
 from .drawpiles import DrawPiles
 from .definitions import GameDef
-from .state import GraphState, ProjectState, TechTreeState, BoardState
+from .state import GraphState, ProjectState, TechTreeState
 from .project import Projects, Project
 from .techtree import Tech, TechTree
 from .tojson import to_json
@@ -24,7 +24,6 @@ class GameState:
                  players_state: list,
                  crisis_chips: int,
                  graph_state: GraphState,
-                 board_state: BoardState,
                  techtree_state: TechTreeState,
                  project_state: ProjectState,
                  drawpiles_state: DrawPiles):
@@ -36,7 +35,6 @@ class GameState:
         self.players = players_state
         self.crisis_chips = crisis_chips
         self.graph = graph_state
-        self.board = board_state
         self.projects = project_state
         self.tech = techtree_state
         self.drawpiles = drawpiles_state
@@ -51,7 +49,6 @@ class GameState:
                  'phase' : self.phase,
                  'leader': self.leader,
                  'crisis_chips' : self.crisis_chips,
-                 'board' : self.board.to_json(),
                  'graph' : self.graph.to_json(),
                  'tech' : self.tech.to_json(),
                  'projects' : self.projects.to_json(),
@@ -60,15 +57,14 @@ class GameState:
     def copy(self):
         return GameState(self.turn, self.phase, self.player, self.leader,
                          self.game, list(map(lambda x:x.copy(), self.players)),  self.crisis_chips,
-                         self.graph.copy(), self.board.copy(),
+                         self.graph.copy(), 
                          self.tech.copy(), self.projects.copy(), 
                          self.drawpiles.copy())
 
 class Game:
 
     PHASES = [ 'ENGAGE', 'ACTIVATE', 'END' ]
-    STEPS_PER_PHASE = { 'ENGAGE' : [ 'MOVING',
-                                     'DRAWING MONEY',
+    STEPS_PER_PHASE = { 'ENGAGE' : [ 'DRAWING MONEY',
                                      'DRAWING CARDS',
                                      'CRISIS RISING' ],
                         'ACTIVATE' : [ 'ATTEMPTING PROJECTS',
@@ -78,48 +74,45 @@ class Game:
                                  'CRISIS ROLLING' ]
                        }
 
-    L_DICE_ROLL           = 'Dice roll {}D6: {}'
-    L_MOVED               = 'Moved'
-    L_MONEY_DRAWN         = 'Money drawn'
-    L_CARD_DRAWN          = 'Card drawn: {}'
-    L_PROJECT_TYPE        = 'Start project: type'
-    L_PROJECT_CAT         = 'Start project: fix category'
-    L_PROJECT_NODE        = 'Start project: fix problem'
-    L_PROJECT_TRIGGER     = 'Start project: trade-off problem'
-    L_PROJECT_STARTED     = 'Project started'
-    L_SKILL_PROJECT       = 'Skill for project'
-    L_USING_TECH          = 'Using tech "{}"'
-    L_CONSULTANT_FEES     = 'Consultant fees'
-    L_CHIP_ADDED          = 'Added a crisis chip'
-    L_START_RESEARCH      = 'Start researching'
-    L_SKILL_FOR_RESEARCH  = 'Skill for research'
-    L_FUNDS_FOR_RESEARCH  = 'Funds for research'
-    L_ABANDON_RESEARCH    = 'Removing repeated tech started by {}'
-    L_OVERSKILLED         = 'Tech project overskilled by {}'
-    L_OVERFUNDED          = 'Tech project overfunded by {}'
-    L_RESEARCH_CYCLE      = 'Research cycle finished, remain: {}'
-    L_RESEARCHED          = 'Tech researched'
-    L_AUTO_PROTECTED      = 'Problem auto-protected'
-    L_PROTECTED           = 'Problem protected'
-    L_FUNDED_NOT_SKILLED  = 'Tech funded but not skilled, ignoring'
-    L_SKILLED_NOT_FUNDED  = 'Tech skilled but not funded, ignoring'
-    L_PROJECT_ABANDONED   = 'Project abandoned'
-    L_PROJECT_OVERSKILLED = 'Project overskilled for "{}"'
-    L_PROJECT_FINISHED    = 'Project finished'
-    L_CRISIS_FIX_PROJECT  = 'Crisis resolved (project: {})'
-    L_CRISIS_TRIGGERED    = 'Now in crisis (trade-off from project: {})'
-    L_PROT_LOSS_PROJECT   = 'Lost protection (trade-off from project: {})'
-    L_CHIP_PROJECT        = 'Crisis chip (trade-off from project: {})'
-    L_CHIP_FULL_CAT       = 'Crisis chip: full category'
-    L_CRISIS_CAT          = 'Category for crisis'
-    L_CHIP_SATURATED      = 'Crisis chip: overwhelmed problem'
-    L_CRISIS_NODE         = 'Problem for crisis'
-    L_CRISIS_ROLL         = 'Crisis roll for node "{}"'
-    L_CRISIS_AVERTED      = 'Crisis averted'
-    L_IN_CRISIS           = 'Now in crisis'
-    L_PROT_LOSS           = 'Lost protection'
-    L_IN_CRISIS_CASCADE   = 'Now in crisis (cascaded from: {})'
-    L_PROT_LOSS_CASCADE   = 'Lost protection (cascaded from: {})'
+    L_DICE_ROLL             = 'Dice roll {}D6: {}'
+    L_MONEY_DRAWN           = 'Money drawn'
+    L_CARD_DRAWN            = 'Card drawn: {}'
+    L_PROJECT_TYPE          = 'Start project: type'
+    L_PROJECT_CAT           = 'Start project: fix category'
+    L_PROJECT_NODE          = 'Start project: fix problem'
+    L_PROJECT_STARTED       = 'Project started'
+    L_SKILL_PROJECT         = 'Skill for project'
+    L_USING_TECH            = 'Using tech "{}"'
+    L_CONSULTANT_FEES       = 'Consultant fees'
+    L_CHIP_ADDED            = 'Added a crisis chip'
+    L_START_RESEARCH        = 'Start researching'
+    L_SKILL_FOR_RESEARCH    = 'Skill for research'
+    L_FUNDS_FOR_RESEARCH    = 'Funds for research'
+    L_ABANDON_RESEARCH      = 'Removing repeated tech started by {}'
+    L_OVERSKILLED           = 'Tech project overskilled by {}'
+    L_OVERFUNDED            = 'Tech project overfunded by {}'
+    L_RESEARCH_CYCLE        = 'Research cycle finished, remain: {}'
+    L_RESEARCHED            = 'Tech researched'
+    L_AUTO_PROTECTED        = 'Problem auto-protected'
+    L_PROTECTED             = 'Problem protected'
+    L_RESEARCH_SAVES_ROLL   = 'New project finished boosts roll for project "{}"'
+    L_FUNDED_NOT_SKILLED    = 'Tech funded but not skilled, ignoring'
+    L_SKILLED_NOT_FUNDED    = 'Tech skilled but not funded, ignoring'
+    L_PROJECT_ABANDONED     = 'Project abandoned'
+    L_PROJECT_OVERSKILLED   = 'Project overskilled for "{}"'
+    L_PROJECT_FINISHED      = 'Project finished'
+    L_CRISIS_FIX_PROJECT    = 'Crisis resolved (project: {})'
+    L_CRISIS_CHIP_TRIGGERED = 'Crisis chip added (trade-off from project: {})'
+    L_CHIP_FULL_CAT         = 'Crisis chip: full category'
+    L_CRISIS_CAT            = 'Category for crisis'
+    L_CHIP_SATURATED        = 'Crisis chip: overwhelmed problem'
+    L_CRISIS_NODE           = 'Problem for crisis'
+    L_CRISIS_ROLL           = 'Crisis roll for node "{}"'
+    L_CRISIS_AVERTED        = 'Crisis averted'
+    L_IN_CRISIS             = 'Now in crisis'
+    L_PROT_LOSS             = 'Lost protection'
+    L_IN_CRISIS_CASCADE     = 'Now in crisis (cascaded from: {})'
+    L_PROT_LOSS_CASCADE     = 'Lost protection (cascaded from: {})'
     
     
     def __init__(self, game_def: GameDef, players: list):
@@ -143,10 +136,9 @@ class Game:
 
 ### GAME INIT
 ###
-### Each player chooses a class (see table at the end) and an initial location (see table at the end).
+### Each player chooses a class (see table at the end).
 ###
 ###      Decision CLASS
-###      Decision INIT_LOC
 ###
 ### All players have 1 research slot and 1 project slot.
 ###
@@ -155,16 +147,12 @@ class Game:
     def start(self, rand):
         self.finished = False
         drawpiles = DrawPiles(rand)
-        player_state = [ PlayerState(p, { '!': 0, '$': 0 }, list(),
-                                     p.pick(Player.INIT_LOC, self.game_def.board.locations, rand)) for p in self.players ]
+        player_state = [ PlayerState(p, { '!': 0, '$': 0 }, list()) for p in self.players ]
         graph_state = self.game_def.game_init.graph.copy()
-        board_state = BoardState(self.game_def.board)
-        for idx, p in enumerate(player_state):
-            board_state[p.location] = board_state.get(p.location, set()).union(set([ self.players[idx].ordering ]))
-            
+
         self.state = GameState(0, 0, 0, 0,
                                self.game_def,
-                               player_state, 0, graph_state, board_state,
+                               player_state, 0, graph_state,
                                TechTreeState(self.game_def.tech),
                                ProjectState(self.game_def.projects),
                                drawpiles)
@@ -224,50 +212,40 @@ class Game:
 ###
 
 ###
-###   	MOVING
-###         	if turn is not the first
-###
-###             	Decision NEW_LOC: Player chooses a new location from all the locations in the board
-
-            new_loc = self.players[self.state.player].pick(
-                Player.NEW_LOC,
-                self.game_def.board.locations,
-                rand, self.state.players[self.state.player], self.phase_start_state)
-            self.state.board[self.state.players[self.state.player].location] -= set([self.state.player])
-            self.state.players[self.state.player].location = new_loc
-            self.state.board[new_loc] = self.state.board.get(new_loc, set()).union(set([self.state.player]))
-            
-            self.log.append( { 'phase' : phase,
-                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                               'target' : new_loc,
-                               'memo' : Game.L_MOVED,
-                               'state' : self.state.to_json() } )
-###
 ###   	DRAWING MONEY
 ###         	The player draws a number of money units equals to
 ###             	5 - number of crisis in category 'ECONOMIC'
             drawn = max(0, 5 - len(self.state.graph.are_in_crisis('ECONOMIC')))
             self.state.players[self.state.player].resources['$'] += drawn
             self.log.append( { 'phase' : phase,
-                               'step' : Game.STEPS_PER_PHASE[phase][1],
+                               'step' : Game.STEPS_PER_PHASE[phase][0],
                                'target' : drawn,
                                'memo' : Game.L_MONEY_DRAWN,
                                'state' : self.state.to_json() } )
 ###
 ###   	DRAWING CARDS
-###         	The player has access to potentially three piles to draw from: two piles from the card suits associated with the player's class plus a card suit associated with the player's current location. We call these piles the 'accessible piles'
+###         	The player draws two cards. The first card can be from any pile. The second has to be from the two suits associated with the player's class:
 ### 
-###         	If the number of accessible piles is 2, then the player draws one card from each.
-###
-###         	If the number of accessible piles is 3, then the player makes two decisions:
-###
-###             	Decision PILE_DRAW: decide from which of the 3 piles to draw a card
-###             	Decision PILE_DRAW: decide from which of the remaining 2 piles to draw a card
+###             	Decision PILE_DRAW: decide from which of the 4 piles to draw a card
+###             	Decision PILE_DRAW: decide from which of the 2 piles to draw a card
 ### 
 ###            If a suit pile is consumed, shuffle the discard pile and set it as the new pile for the suit.
 
-            accessible_piles = set([self.players[self.state.player].player_class.suit_a, self.players[self.state.player].player_class.suit_b ])
-            accessible_piles.add(self.game_def.board.suits[new_loc])
+            accessible_piles = sorted(list(DrawPiles.SUITS))
+            
+            draw_pile = self.players[self.state.player].pick(
+                Player.PILE_DRAW,
+                accessible_piles,
+                rand, self.state.players[self.state.player], self.phase_start_state)
+            drawn = self.state.drawpiles.draw(draw_pile, rand)
+            self.state.players[self.state.player].cards.append(drawn)
+            self.log.append( { 'phase' : phase,
+                               'step' : Game.STEPS_PER_PHASE[phase][1],
+                               'target' : drawn,
+                               'memo' : Game.L_CARD_DRAWN, 'args' : [ 1 ],
+                               'state' : self.state.to_json() } )
+            accessible_piles = set([self.players[self.state.player].player_class.suit_a,
+                                    self.players[self.state.player].player_class.suit_b ])
             accessible_piles = sorted(list(accessible_piles))
             
             draw_pile = self.players[self.state.player].pick(
@@ -277,19 +255,7 @@ class Game:
             drawn = self.state.drawpiles.draw(draw_pile, rand)
             self.state.players[self.state.player].cards.append(drawn)
             self.log.append( { 'phase' : phase,
-                               'step' : Game.STEPS_PER_PHASE[phase][2],
-                               'target' : drawn,
-                               'memo' : Game.L_CARD_DRAWN, 'args' : [ 1 ],
-                               'state' : self.state.to_json() } )
-            accessible_piles = sorted(list(set(accessible_piles) - set([draw_pile])))
-            draw_pile = self.players[self.state.player].pick(
-                Player.PILE_DRAW,
-                accessible_piles,
-                rand, self.state.players[self.state.player], self.phase_start_state)
-            drawn = self.state.drawpiles.draw(draw_pile, rand)
-            self.state.players[self.state.player].cards.append(drawn)
-            self.log.append( { 'phase' : phase,
-                               'step' : Game.STEPS_PER_PHASE[phase][2],
+                               'step' : Game.STEPS_PER_PHASE[phase][1],
                                'target' : drawn,
                                'memo' : Game.L_CARD_DRAWN, 'args' : [ 2 ],
                                'state' : self.state.to_json() } )
@@ -298,7 +264,7 @@ class Game:
 ###         	A crisis chip to the turn is added for each player      
             self.state.crisis_chips += 1
             self.log.append( { 'phase' : phase,
-                               'step' : Game.STEPS_PER_PHASE[phase][3],
+                               'step' : Game.STEPS_PER_PHASE[phase][2],
                                'state' : self.state.to_json() } )
         elif self.state.phase == 1: # activate
             if self.state.player == 0:
@@ -307,7 +273,7 @@ class Game:
 ###
 ###   ACTIVATE PHASE
 ###
-###  	Once the engage phase is completed by all players, the players see where in the board the other players are.
+###  	Once the engage phase is completed by all players, the players can see what suits the players picked.
 ###
 ###  	Then the activate phase starts, again, parallel blind.
 ###
@@ -323,7 +289,7 @@ class Game:
 
 ###         	If the player has project slots available, the player has to decide whether to start a project of a given type or not start any project:
 ###
-###         	Decision START_PROJECT: Choose between the two types of projects (base or remove-tradeoff) or nothing to not start a project this turn.
+###         	Decision START_PROJECT: Choose between the two types of projects (base or remove-tradeoff) or nothing to not start a project this turn. Base projects add an extra crisis chip.
 ###
 ###         	If the player picked a project type to start, then the player decides which category of problem they want to fix with their project:
 ###
@@ -332,10 +298,6 @@ class Game:
 ###             	With the chosen category, the player can choose which problem to fix:
 ###
 ###             	Decision START_PROJECT_FIX_NODE: choose among all the problems in that category
-###
-###             	If the player has chosen to start a base project, the player needs to choose also a trade-off problem in the trade-off category for the chosen category (based on the table at the end of the document):
-###
-###                   	Decision START_PROJECT_TRIGGER_NODE: Choose from all the problems in the trade-off category
 ###
 ###             	With the above decisions, the new project is created, added to the player project slot.
 ###
@@ -377,26 +339,7 @@ class Game:
 
                     project_type_ = Project.TYPES.index(project_type)
 
-                    if project_type_ == Project.BASE:
-                        # trigger cat
-                        for f, t, _, _ in Projects.BASE_TABLE:
-                            if f[1] == fix_cat_id:
-                                trigger_cat, trigger_cat_id = t
-                                break
-                        trigger_node =  self.players[self.state.player].pick(
-                            Player.START_PROJECT_TRIGGER_NODE,
-                            sorted(list(map(lambda x:self.game_def.graph.node_names[x], self.game_def.graph.node_classes[trigger_cat_id]))),
-                            rand, self.state.players[self.state.player], self.phase_start_state)
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][0],
-                                           'target' : trigger_node,
-                                           'memo' : Game.L_PROJECT_TRIGGER,
-                                           'state' : self.state.to_json() } )
-                        trigger_node_id = self.game_def.graph.name_to_id[trigger_node]
-
-                        project = self.state.projects.find_project(Project.BASE, fix_node_id, trigger_node_id)
-                    else:
-                        project = self.state.projects.find_project(Project.A, fix_node_id)
+                    project = self.state.projects.find_project(project_type_, fix_node_id)
                         
                     self.log.append( { 'phase' : phase,
                                        'step' : Game.STEPS_PER_PHASE[phase][0],
@@ -541,10 +484,10 @@ class Game:
 
                 if succeeded:
                     self.phase_actions.append( ( self.state.player, Game.A_SUCCESS_SKILL,
-                                                 self.state.projects[play_card[3]]['project'], play_card[0], roll, value ) )
+                                                 self.state.projects[play_card[3]]['project'], play_card, roll, value ) )
                 else:
                     self.phase_actions.append( ( self.state.player, Game.A_FAILED_SKILL,
-                                                 self.state.projects[play_card[3]]['project'], play_card[0], roll, value ) )
+                                                 self.state.projects[play_card[3]]['project'], play_card, roll, value ) )
                     
                 # closing the project is left to the end phase
                 self.state.drawpiles.return_card(play_card[0], play_card[1])
@@ -775,7 +718,19 @@ class Game:
                                                'memo' : Game.L_RESEARCHED,
                                                'state' : self.state.to_json() } )
 
-                            if tech.type_ == Tech.B:
+                            if tech.type_ == Tech.BASE or tech.type_ == Tech.A:
+                                #TODO see if any failed roll would have succeeded with the extra boost
+                                boost = 1 if tech.type == Tech.BASE else 2
+                                for idx, act in enumerate(self.phase_actions):
+                                    if act[1] == Game.A_FAILED_SKILL and act[3][1] == tech.suit and act[-2] <= act[-1] + boost:
+                                        self.log.append( { 'phase' : phase,
+                                                           'step' : Game.STEPS_PER_PHASE[phase][0],
+                                                           'target' : act[2],
+                                                           'memo' : Game.L_RESEARCH_SAVES_ROLL, 'args': [ act[2] ],
+                                                           'state' : self.state.to_json() } )
+                                        self.phase_actions[idx] = (act[0], Game.A_SUCCESS_SKILL,
+                                                                   act[2], act[3], act[4], act[5] + boost)
+                            elif tech.type_ == Tech.B:
                                 # auto-protect, apply protection
                                 node = self.game_def.graph.node_names[tech.node]
                                 self.state.graph[node]['auto-protected'] = True
@@ -870,75 +825,39 @@ class Game:
                                            'state' : self.state.to_json() } )
                         
                         # apply effects
-                        for fix in project.fixes:
-                            fixn = self.game_def.graph.node_names[fix]
-                            if self.state.graph[fixn]['status'] == GraphState.IN_CRISIS:
-                                if self.state.graph[fixn]['auto-protected']:
-                                    self.state.graph[fixn]['status'] = GraphState.PROTECTED
-                                else:
-                                    self.state.graph[fixn]['status'] = GraphState.STABLE
+                        fixn = self.game_def.graph.node_names[project.fixes]
+                        if self.state.graph[fixn]['status'] == GraphState.IN_CRISIS:
+                            if self.state.graph[fixn]['auto-protected']:
+                                self.state.graph[fixn]['status'] = GraphState.PROTECTED
+                            else:
+                                self.state.graph[fixn]['status'] = GraphState.STABLE
                                     
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : fixn,
-                                                   'memo' : Game.L_CRISIS_FIX_PROJECT, 'args' : [ project.name ],
-                                                   'state' : self.state.to_json() } )
+                            self.log.append( { 'phase' : phase,
+                                               'step' : Game.STEPS_PER_PHASE[phase][0],
+                                               'target' : fixn,
+                                               'memo' : Game.L_CRISIS_FIX_PROJECT, 'args' : [ project.name ],
+                                               'state' : self.state.to_json() } )
                                     
-                        for trigger in project.triggers:
-                            triggern = self.game_def.graph.node_names[trigger]
-                            if self.state.graph[triggern]['status'] == GraphState.STABLE:
-                                self.state.graph[triggern]['status'] = GraphState.IN_CRISIS
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : triggern,
-                                                   'memo' : Game.L_CRISIS_TRIGGERED, 'args' : [ project.name ],
-                                                   'state' : self.state.to_json() } )
-                            elif self.state.graph[triggern]['status'] == GraphState.PROTECTED:
-                                self.state.graph[triggern]['status'] = GraphState.STABLE
-                                self.log.append( { 'phase' : phase,
-                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                   'target' : triggern,
-                                                   'memo' : Game.L_PROT_LOSS_PROJECT, 'args' : [ project.name ],
-                                                   'state' : self.state.to_json() } )
-                            else: # in crisis, cascade
-                                cascaded = self.cascade(trigger)
-                                if cascaded:
-                                    for trigger2 in sorted(cascaded, key=lambda x:self.game_def.graph.node_names[x]):
-                                        trigger2n = self.game_def.graph.node_names[trigger2]
-                                        if self.state.graph[trigger2n]['status'] == GraphState.STABLE:
-                                            self.state.graph[trigger2n]['status'] = GraphState.IN_CRISIS
-                                            self.log.append( { 'phase' : phase,
-                                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                               'target' : trigger2n,
-                                                               'memo' : Game.L_CRISIS_TRIGGERED, 'args' : [ project.name ],
-                                                               'state' : self.state.to_json() } )
-                                        elif self.state.graph[trigger2n]['status'] == GraphState.PROTECTED:
-                                            self.state.graph[trigger2n]['status'] = GraphState.STABLE
-                                            self.log.append( { 'phase' : phase,
-                                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                               'target' : trigger2n,
-                                                               'memo' : Game.L_PROT_LOSS_PROJECT, 'args' : [ project.name ],
-                                                               'state' : self.state.to_json() } )
-                                else:
-                                    self.state.crisis_chips += 1
-                                    self.log.append( { 'phase' : phase,
-                                                       'step' : Game.STEPS_PER_PHASE[phase][0],
-                                                       'target' : triggern,
-                                                       'memo' : Game.L_CHIP_PROJECT, 'args' : [ project.name ],
-                                                       'state' : self.state.to_json() } )
+                        if project.triggers:
+                            self.state.crisis_chips += 1
+                            self.log.append( { 'phase' : phase,
+                                               'step' : Game.STEPS_PER_PHASE[phase][0],
+                                               'target' : 1,
+                                               'memo' : L_CRISIS_CHIP_TRIGGERED, 'args' : [ project.name ],
+                                               'state' : self.state.to_json() } )
 
 
 ###  	CRISIS ROLLING
 ###
-###             	All through the crisis rolling the players can talk with each other, strategize and discuss what to do depending on the different problems that will get in crisis.
+###             	Before the crisis rolling the players can talk with each other, strategize and discuss what to do depending on the different problems that will get in crisis. The crisis rolling is silent.
 ###
-###             	Add crisis chip for each category fully in crisis
+###             	Add crisis chip for each category fully in crisis.
 ###
 ###             	While the whole graph is not in crisis and there are still crisis chips:
 ###
 ###                 	Roll Category (1D6), if the category is fully in crisis, add a crisis chip and roll again
 ###
-###                 	Roll Problem-in-category (1 or 2D6 depending on size of category), if the roll is bigger than the number of problems in the category, subtract the number of problems in the category to obtain the actual problem.
+###                 	Roll Problem-in-category (1D6 using the numbers in the graph).
 ###
 ###                 	If the problem is saturated (it is in crisis and all its reachable problems are also in crisis), add a crisis chip and start again.
 ###
@@ -946,7 +865,7 @@ class Game:
 ###
 ###                 	While there are crisis chips or the problem is in crisis:
 ###
-###                        	Roll Crisis (2D6), if crisis roll > 6, the node is in crisis
+###                        	Roll Crisis (2D6), if crisis roll < 6, the node is in crisis
 ###
 ###                        	remove one crisis chip per roll (successful or otherwise)
 ###
@@ -991,11 +910,16 @@ class Game:
                         continue
 
                     ## roll a node in category, if in crisis and all its descendants are in crisis, add a crisis chip and roll again
-                    nodes = sorted(list(self.game_def.graph.node_classes[catid]))
-                    dice = 1
-                    if len(nodes) > 6:
-                        dice += 1
-                    nodenum = (self.roll_dice(dice, self.state.player, 'node in ' + cat, rand, 1) - 1) % len(nodes)
+                    nodes = []
+                    for nid in self.game_def.graph.node_classes[catid]:
+                        ordering = self.game_def.graph.ordering[nid]
+                        if ordering < 99:
+                            nodes.append(nid)
+                    nodes = sorted(nodes, key=lambda nid:self.game_def.graph.ordering[nid])
+                    nodenum = 7
+                    print(catid, len(nodes))
+                    while nodenum >= len(nodes):
+                        nodenum = self.roll_dice(1, self.state.player, 'node in ' + cat, rand, 1)
                     node = nodes[nodenum]
                     noden = self.game_def.graph.node_names[node]
                     if self.state.graph.is_saturated(noden):
@@ -1022,7 +946,7 @@ class Game:
                                            'memo' : Game.L_CRISIS_ROLL, 'args' : [ noden ],
                                            'state' : self.state.to_json() } )
                         self.state.crisis_chips -= 1
-                        if crisis_roll < 8:
+                        if crisis_roll < self.game_def.crisis_check:
                             crisis_averted = False
                             break
 

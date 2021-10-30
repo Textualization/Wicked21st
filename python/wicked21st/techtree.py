@@ -22,7 +22,7 @@ class Tech:
 
     TYPES = [ 'Base', 'Expanded', 'Auto-Protect' ]
 
-    def __init__(self, name, type_, suit, node=None, parents: set=None, turns=3):
+    def __init__(self, name, type_, suit, node=None, parents: set=None, turns=2):
         self.name = name
         self.type_ = type_
         self.suit = suit

@@ -40,6 +40,19 @@ class Graph:
     self.categories = categories
     self.category_for_name = { c: i for i, c in categories.items() }
 
+    # check orderings
+    for catid, nodes_in_cat in self.node_classes.items():
+      ordered = list()
+      for nid in nodes_in_cat:
+        if self.ordering[nid] < 99:
+          ordered.append(nid)
+      if not ordered:
+        print('Category "{}" missing order, using alphabetic'.format(catid))
+        nodes = sorted(nodes_in_cat, key=lambda nid:self.ordering[nid])
+        nodes = nodes[:6]
+        for idx, nid in enumerate(nodes):
+          self.ordering[nid] = idx
+
   def __len__(self):
       return len(self.node_names)
 

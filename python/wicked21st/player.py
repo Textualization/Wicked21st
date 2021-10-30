@@ -11,28 +11,22 @@ class Player:
 
     # decisions
     INIT_ROLE                  =  0
-    INIT_LOC                   =  1 #
-    NEW_LOC                    =  2
-    PILE_DRAW                  =  3
-    START_PROJECT              =  4
-    START_PROJECT_FIX_CAT      =  5
-    START_PROJECT_FIX_NODE     =  6
-    START_PROJECT_TRIGGER_NODE =  7
-    PLAY_CARD                  =  8
-    CONSULTANT                 =  9
-    START_RESEARCH             = 10
-    CARD_FOR_RESEARCH          = 11
-    FUND_RESEARCH              = 12
+    PILE_DRAW                  =  1
+    START_PROJECT              =  2
+    START_PROJECT_FIX_CAT      =  3
+    START_PROJECT_FIX_NODE     =  4
+    PLAY_CARD                  =  5
+    CONSULTANT                 =  6
+    START_RESEARCH             =  7
+    CARD_FOR_RESEARCH          =  8
+    FUND_RESEARCH              =  9
     
 
     decision_names = [ 'Initial role',
-                       'Initial location',
-                       'New location',
                        'Pile to draw from',
                        'Project type to start',
                        'New project, fix category',
                        'New project, fix problem',
-                       'New project, trade-off problem',
                        'Play a card',
                        'Add consultant fees',
                        'Teach to start researching',
@@ -66,11 +60,10 @@ class Player:
         return rand.randint(1, num)
 
 class PlayerState:
-    def __init__(self, player: Player, resources: dict, cards: list, location: str):
+    def __init__(self, player: Player, resources: dict, cards: list):
         self.player    = player
         self.resources = resources
         self.cards     = cards
-        self.location  = location
         self.projects  = list()
         self.tech = list()
 
@@ -84,13 +77,12 @@ class PlayerState:
         return { 'player'       : self.player.to_json(),
                  'resources'    : self.resources,
                  'cards'        : self.cards,
-                 'location'     : self.location,
                  'projects'     : self.projects,
                  'technologies' : self.tech,
                 }
     
     def copy(self):
-        copy = PlayerState(self.player, dict(self.resources), list(self.cards), self.location)
+        copy = PlayerState(self.player, dict(self.resources), list(self.cards))
         copy.projects = list(self.projects)
         copy.tech = list(self.tech)
         return copy

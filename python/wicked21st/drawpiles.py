@@ -5,6 +5,8 @@
 
 import random
 
+from .exceptions import EmptyDrawPile
+
 class DrawPiles:
     SUITS = [ 'C', 'D', 'H', 'S' ]
 
@@ -28,13 +30,14 @@ class DrawPiles:
         if pile:
             self.draw_piles[suit] = pile[1:]
             return ( suit, pile[0] )
-        else: # reshuffle
-            pile = self.return_piles[suit]
-            assert pile
+        # reshuffle
+        pile = self.return_piles[suit]
+        if pile:
             rand.shuffle(pile)
             self.return_piles[suit] = list()
             self.draw_piles[suit] = pile
             return self.draw(suit, rand)
+        raise EmptyDrawPile(suit)
 
     def return_card(self, card, suit=None):
         if card[1] == 14:

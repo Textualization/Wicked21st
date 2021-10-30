@@ -111,17 +111,6 @@ class GraphState(ValidKeysDict):
         return digraph
     
 
-class BoardState(ValidKeysDict):
-    def __init__(self, board):
-        super().__init__(board.locations)
-        self.board = board
-
-    def copy(self):
-        copy = BoardState(self.board)
-        for k, v in self.items():
-            copy[k] = set(v)
-        return copy
-
 # keys: object 'state' : 
 class ProjectState(ValidKeysDict):
 
@@ -166,20 +155,12 @@ class ProjectState(ValidKeysDict):
                     result.append(obj['project'])
         return result
 
-    def find_project(self, type_, fix, trigger=None, protect=None):
+    def find_project(self, type_, fix):
         for project in self.projects.projects:
-            if project.type_ == type_ and fix in project.fixes:
-                if trigger is None:
-                    if not project.triggers:
-                        return project
-                    # else, continue
-                elif trigger in project.triggers:
-                    if protect is None:
-                        return project
-                    if protect in project.protects:
-                        return project
-                # else, continue
-        raise Exception("Not found: find_project({}, {}, {}, {})".format(type_, fix, trigger, protect))
+            if project.type_ == type_ and fix == project.fixes:
+                return project
+            # else, continue
+        raise Exception("Not found: find_project({}, {})".format(type_, fix))
 
     def copy(self):
         copy = ProjectState(self.projects)
