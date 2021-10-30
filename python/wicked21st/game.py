@@ -162,7 +162,7 @@ class Game:
 
     def advance(self):
         "Returns True is the game has ended"
-        if len(self.state.graph.are_in_crisis()) == len(self.game_def.graph):
+        if self.finished or len(self.state.graph.are_in_crisis()) == len(self.game_def.graph):
             self.finished = True
         else:
             self.state.player += 1
@@ -859,7 +859,7 @@ class Game:
 ###
 ###                 	Roll Problem-in-category (1D6 using the numbers in the graph).
 ###
-###                 	If the problem is saturated (it is in crisis and all its reachable problems are also in crisis), add a crisis chip and start again.
+###                 	If the problem is saturated (it is in crisis and all its reachable problems are also in crisis), add a crisis chip and start again. If this happens ten times in a row, then the game is lost.
 ###
 ###                 	With the problem in hand, roll crisis chips until either the roll is successful or all the crisis chips are exhausted
 ###
@@ -891,7 +891,8 @@ class Game:
                                            'memo' : Game.L_CHIP_FULL_CAT,
                                            'state' : self.state.to_json() } )
 
-                while self.state.crisis_chips and len(self.state.graph.are_in_crisis()) < len(self.game_def.graph):
+                roll_over_counter = 0
+                while self.state.crisis_chips and len(self.state.graph.are_in_crisis()) < len(self.game_def.graph) and roll_over_counter < 10:
                     ## roll a category, if the category is fully in crisis, add a crisis chip and roll again
                     catnum = self.roll_dice(1, self.state.player, 'crisis cat', rand, 1)
                     cat, catid = Graph.CATEGORIES[catnum - 1]
@@ -917,7 +918,6 @@ class Game:
                             nodes.append(nid)
                     nodes = sorted(nodes, key=lambda nid:self.game_def.graph.ordering[nid])
                     nodenum = 7
-                    print(catid, len(nodes))
                     while nodenum >= len(nodes):
                         nodenum = self.roll_dice(1, self.state.player, 'node in ' + cat, rand, 1)
                     node = nodes[nodenum]
@@ -928,6 +928,7 @@ class Game:
                                            'target' : noden,
                                            'memo' : Game.L_CHIP_SATURATED,
                                            'state' : self.state.to_json() } )
+                        roll_over_counter += 1
                         continue
                     
                     self.log.append( { 'phase' : phase,
@@ -996,6 +997,8 @@ class Game:
                         
 
                     ## if there are more crisis chips, continue by selecting a new category
+                if roll_over_counter >= 10:
+                    self.finished = True
         return self.advance()
 
 ### ACTIVATION PHASE ACTIONS RECORDED:
