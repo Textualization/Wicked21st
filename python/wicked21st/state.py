@@ -7,10 +7,10 @@ import random
 
 import graphviz
 
-from .tojson import to_json
-from .project import Project
+from .tojson   import to_json
+from .project  import Project
 from .techtree import Tech
-from .graph import Graph
+from .graph    import Graph
 
 
 class ValidKeysDict(dict):
