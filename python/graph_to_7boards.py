@@ -70,8 +70,10 @@ for catname, catid in Graph.CATEGORIES:
     node_id_to_num = dict()
     cloud_nodes = set()
     for n in g.node_classes[catid]:
-        digraph.node("N{}".format(len(node_id_to_num)), "{}\n{}".format(g.node_names[n],
-                                                                        node_to_code[n]),
+        l = "{}\n{}".format(g.node_names[n], node_to_code[n])
+        if g.ordering[n] < 99:
+            l = l + " ("+str(g.ordering[n])+")"
+        digraph.node("N{}".format(len(node_id_to_num)), l,
                      shape="oval", fillcolor=catid, style='filled', fontsize="20")
         node_id_to_num[n] = len(node_id_to_num)
 
@@ -79,7 +81,7 @@ for catname, catid in Graph.CATEGORIES:
             cloud_nodes.add(out)
 
     for n in g.node_names:
-        if g.class_for_node[out] == catid:
+        if g.class_for_node[n] == catid:
             continue
         for out in g.outlinks[n]:
             if g.class_for_node[out] == catid:
@@ -102,7 +104,7 @@ for catname, catid in Graph.CATEGORIES:
             digraph.edge("N{}".format(node_id_to_num[n]), "N{}".format(node_id_to_num[out]), color=color, style=style)
             
     for n in g.node_names:
-        if g.class_for_node[out] == catid:
+        if g.class_for_node[n] == catid:
             continue
         color = g.class_for_node[n]
         for out in g.outlinks[n]:
