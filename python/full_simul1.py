@@ -38,6 +38,8 @@ tree_def = TechTree(graph_def)
 
 initial_graph = GraphState(graph_def)
 for topic in config.IN_CRISIS:
+    if topic not in set(graph_def.node_names.values()):
+        print(topic)
     initial_graph.in_crisis(topic)
 
 game_init = GameInit(initial_graph)

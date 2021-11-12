@@ -19,10 +19,12 @@ for catid in g.node_classes:
         name = g.node_names[node].upper()
         if name[0] == '*':
             name
+        if name.startswith("LACK OF"):
+            name = name[len("LACK OF "):]
         code = name[:3]
-        if code in node_to_code:
+        if code in node_to_code.values():
             code = name.split(" ")[1][:3]
-            if code in node_to_code:
+            if code in node_to_code.values():
                 raise Error(g.node_names[node]+ " " + str(node_to_code))
         node_to_code[node] = code
 
@@ -62,22 +64,36 @@ with open("board_categories.dot", "w") as b:
     b.write(digraph.source)
 
 for catname, catid in Graph.CATEGORIES:
-    digraph = graphviz.Digraph(graph_attr={"size": "20,20", "nodesep":"2.0", "landscape":"portrait"})
+    digraph = graphviz.Digraph(graph_attr={"size": "20,20", "nodesep":"2.0", "mindist":"2.0",
+                                           "label": catname, "fontsize":"34",
+                                           "landscape":"portrait"})
     fname = catname.lower()
     if ' ' in catname:
         fname = "_".join(fname.split(" "))
 
     node_id_to_num = dict()
+    inlinks = { n: set() for n in g.node_classes[catid] }
+    for n in g.node_names:
+        for out in g.outlinks[n]:
+            if g.class_for_node[out] == catid:
+                inlinks[out].add(n)
+    
     cloud_nodes = set()
     for n in g.node_classes[catid]:
         l = "{}\n{}".format(g.node_names[n], node_to_code[n])
         if g.ordering[n] < 99:
             l = l + " ("+str(g.ordering[n])+")"
+        if g.outlinks[n]:
+            l = l + " &uarr;" + str(len(g.outlinks[n]))
+        if inlinks[n]:
+            l = l + " &darr;" + str(len(inlinks[n]))
         digraph.node("N{}".format(len(node_id_to_num)), l,
                      shape="oval", fillcolor=catid, style='filled', fontsize="20")
         node_id_to_num[n] = len(node_id_to_num)
 
         for out in g.outlinks[n]:
+            if g.class_for_node[out] == catid:
+                inlinks[out].add(n)
             cloud_nodes.add(out)
 
     for n in g.node_names:
@@ -85,6 +101,7 @@ for catname, catid in Graph.CATEGORIES:
             continue
         for out in g.outlinks[n]:
             if g.class_for_node[out] == catid:
+                inlinks[out].add(n)
                 cloud_nodes.add(n)
 
     for n in cloud_nodes:
