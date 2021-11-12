@@ -4,7 +4,13 @@ from wicked21st.graph import load_graph, Graph
 
 import graphviz
 
-graph_def = load_graph(sys.argv[1])
+if len(sys.argv) > 1:
+    graph_file = sys.argv[1]
+else:
+    import config
+    graph_file = config.GRAPH
+
+graph_def = load_graph(graph_file)
 
 if len(sys.argv) > 2:
     print(graph_def.show().source)
