@@ -8,7 +8,6 @@ import copy
 import sys
 import multiprocessing
 
-
 import numpy as np
 
 from wicked21st.graph import load_graph
