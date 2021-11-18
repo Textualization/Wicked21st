@@ -10,8 +10,8 @@ IN_CRISIS = [ 'Social Inequity',
               'Unsustainable Harvesting',
               'Polluting Industry',
               'Fossil Fuel Dependency',
-              'Market Externalities'
+              'Market Externalities',
              ]
 GAME_LENGTH = 12
-CRISIS_CHECK = 7
+CRISIS_CHECK = 9
 

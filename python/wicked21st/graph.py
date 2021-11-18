@@ -183,3 +183,16 @@ def load_graph(graph_file, verbose=False):
     return Graph({ _id : node.attrib['TEXT'] for _id, node in nodes.items()}, class_for_node, links,
                  { p[1] : p[0] for p in Graph.CATEGORIES })
 
+class Cascades:
+
+  def __init__(self, graph, tsv):
+    self.cascade = dict() # node -> list of node
+    with open(tsv) as t:
+      for line in t:
+        line = line[:-1]
+        if line[-1] == "\t":
+          line = line[:-1]
+        nodes = line.split("\t")
+        for n in nodes:
+          assert n in graph.node_names
+        self.cascade[nodes[0]] = nodes[1:]

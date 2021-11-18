@@ -205,9 +205,9 @@ class TechTreeState(ValidKeysDict):
 
     def techs_for_status(self, status: str):
         result = list()
-        for obj in self.values():
-            if obj['status'] == status:
-                result.append(obj['tech'])
+        for tech in self.tree.technologies:
+            if self[tech.name] == status:
+                result.append(tech)
         return result
 
     def find_tech(self, type_, suit: str, node: str=None):
@@ -222,7 +222,7 @@ class TechTreeState(ValidKeysDict):
                         return tech
                 # else, continue
             # else, continue
-        raise Exception("Not found: find_tech({} [{}], {}, {}, {})".format(Tech.TYPES[type_], type_, fix, trigger, protect))
+        raise Exception("Not found: find_tech({} [{}], {}, {})".format(Tech.TYPES[type_], type_, suit, node))
 
     def research_boundary(self):
         result = list()

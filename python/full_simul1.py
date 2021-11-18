@@ -9,7 +9,7 @@ import sys
 
 import numpy as np
 
-from wicked21st.graph import load_graph
+from wicked21st.graph import load_graph, Cascades
 from wicked21st.classes import Classes
 from wicked21st.project import Projects
 from wicked21st.techtree import TechTree
@@ -32,6 +32,7 @@ rand = random.Random(seed)
 
 # definitions
 graph_def = load_graph(config.GRAPH)
+cascade_def  = Cascades(graph_def, "cascading.tsv")
 classes_def = Classes()
 project_def = Projects(graph_def)
 tree_def = TechTree(graph_def)
@@ -43,7 +44,7 @@ for topic in config.IN_CRISIS:
     initial_graph.in_crisis(topic)
 
 game_init = GameInit(initial_graph)
-game_def = GameDef(game_init, NUM_PLAYERS, config.CRISIS_CHECK, classes_def, graph_def, tree_def, project_def)
+game_def = GameDef(game_init, NUM_PLAYERS, config.CRISIS_CHECK, classes_def, graph_def, cascade_def, tree_def, project_def)
 
 # assemble random players
 

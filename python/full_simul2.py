@@ -8,7 +8,7 @@ import copy
 
 import numpy as np
 
-from wicked21st.graph import load_graph
+from wicked21st.graph import load_graph, Cascades
 from wicked21st.board import Board
 from wicked21st.classes import Classes
 from wicked21st.project import Projects
@@ -18,13 +18,13 @@ from wicked21st.player import Player
 from wicked21st.state import GraphState
 from wicked21st.game import Game
 
-SEED = 42
-NUM_PLAYERS = 3
+import config
 
-rand = random.Random(SEED)
+rand = random.Random(config.SEED)
 
 # definitions
-graph_def = load_graph("map20211015.mm")
+graph_def = load_graph(config.GRAPH)
+cascade_def  = Cascades(graph_def, "cascading.tsv")
 board_def = Board()
 classes_def = Classes()
 project_def = Projects(graph_def)
@@ -42,23 +42,22 @@ initial_graph.in_crisis('Fossil Fuel Dependency')
 initial_graph.in_crisis('Market Externalities')
 
 game_init = GameInit(initial_graph)
-game_def = GameDef(game_init, NUM_PLAYERS, classes_def, graph_def, board_def, tree_def, project_def)
+game_def = GameDef(game_init, NUM_PLAYERS, classes_def, graph_def, cascade_def, board_def, tree_def, project_def)
 
 # assemble random players
 
-players = [ Player("Player{}".format(p+1), p, classes_def.pick(rand)) for p in range(NUM_PLAYERS) ]
+players = [ Player("Player{}".format(p+1), p, classes_def.pick(rand)) for p in range(config.NUM_PLAYERS) ]
 
 game = Game(game_def, players)
 
 count = 0
 won = 0
-VERBOSE = True
 for run in range(100):
     game.start(rand)
     while not game.finished and game.state.turn < 12:
         log0 = len(game.log)
         game.step(rand)
-        if VERBOSE:
+        if config.VERBOSE:
             for e in game.log[log0:]:
                 line = "{}\t{}\t{}\t{}".format(run, game.state.turn, e['phase'], e['step'])
                 if 'target' in e:

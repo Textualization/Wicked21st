@@ -10,7 +10,7 @@ import numpy as np
 
 from .state import GraphState
 from .classes import Classes
-from .graph import Graph
+from .graph import Graph, Cascades
 from .techtree import TechTree
 from .project import Projects
 
@@ -27,6 +27,7 @@ class GameDef:
                  crisis_check: int,
                  classes_def: Classes,
                  graph_def: Graph,
+                 cascade_def: Cascades,
                  techtree_def: TechTree,
                  project_def: Projects):
         self.game_init = game_init
@@ -34,6 +35,7 @@ class GameDef:
         self.crisis_check = crisis_check
         self.classes = classes_def
         self.graph = graph_def
+        self.cascades = cascade_def
         self.projects = project_def
         self.tech = techtree_def
         self.tojson_memo = None

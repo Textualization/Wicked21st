@@ -12,7 +12,7 @@ from .drawpiles import DrawPiles
 ###
 ### Technologies take a discard of a given suit plus a unit of money to make a research cycle in a turn. It takes 3 research cycles to research a technology.
 ###
-### The tech tree is as follows: Base-<suit> can be researched right away and needs <suit> as the discard card. Expanded-<suit> can be researched once Base-<suit> has been researched. It also needs a <suit> discard. Finally, once Expanded-<suit 1> and Base-<suit 2> have been researched, Auto-Protect-<problem-in-CAT> can be researched. It takes card of suit 3 for discard:
+### The tech tree is as follows: Base-<suit> can be researched right away and needs <suit> as the discard card. Expanded-<suit> can be researched once Base-<suit> has been researched. It also needs a <suit> discard. Finally, once Expanded-<suit 1> and Base-<suit 2> have been researched, Auto-Protect-<problem-in-CAT> can be researched. It takes card of suit 2 for discard:
 
 class Tech:
 
@@ -42,21 +42,21 @@ class Tech:
 
 class TechTree:
 ###
-### |    CAT          |	suit 1| suit 2| suit 3|
-### |ENVIRONMENTAL    |	C     | D     | H |
-### |LIVING_STANDARDS | H     | C     | S |
-### |SOCIAL           |	D     | H     | S |
-### |CLASS            |	H     | S     | D |
-### |ECONOMIC         | S     | D     | C |
-### |INDUSTRIAL       | S     | C     | D |
+### |    CAT          |	suits |
+### |ENVIRONMENTAL    |	C, D  |
+### |LIVING_STANDARDS | H, C  |
+### |SOCIAL           |	D, H  |
+### |CLASS            |	H, S  |
+### |ECONOMIC         | S, D  |
+### |INDUSTRIAL       | S, C  |
 
     BASE_TABLE =  [ 
-        ( Graph.ENVIRONMENTAL,    'C', 'D', 'H' ),
-        ( Graph.LIVING_STANDARDS, 'H', 'C', 'S' ),
-        ( Graph.SOCIAL,	          'D', 'H', 'S' ),
-        ( Graph.CLASS,	          'H', 'S', 'D' ),
-        ( Graph.ECONOMIC,	  'S', 'D', 'C' ),
-        ( Graph.INDUSTRIAL,	  'S', 'C', 'D' ),
+        ( Graph.ENVIRONMENTAL,    'C', 'D' ),
+        ( Graph.LIVING_STANDARDS, 'H', 'C' ),
+        ( Graph.SOCIAL,	          'D', 'H' ),
+        ( Graph.CLASS,	          'H', 'S' ),
+        ( Graph.ECONOMIC,	  'S', 'D' ),
+        ( Graph.INDUSTRIAL,	  'S', 'C' ),
     ]
 ###
 ###   At any given time, the "research boundary" (or "state of the art") are the techs that can be researched at a given point.
@@ -86,18 +86,23 @@ class TechTree:
             self.technologies.append(expanded)
             suit_to_expanded[suit] = expanded
 
-        for cat, suit_a, suit_b, suit_c in TechTree.BASE_TABLE:
-            expanded = suit_to_expanded[suit_a]
-            base = suit_to_base[suit_b]
-
+        for cat, suit_a, suit_b in TechTree.BASE_TABLE:
             for n in graph.node_classes[cat[1]]:
                 nn = graph.node_names[n]
 
-                protected = Tech('Protect "{}"'.format(nn), Tech.B, suit_c, n, parents=set([expanded.name, base.name]))
+                expanded = suit_to_expanded[suit_a]
+                base = suit_to_base[suit_b]
+                
+                protected = Tech('Protect "{}"'.format(nn), Tech.B, suit_b, n, parents=set([expanded.name, base.name]))
                 self.technologies.append(protected)
 
-        self.tech_for_name = { tech.name: tech for tech in self.technologies }
-        self.names = list(self.tech_for_name.keys())
+                expanded = suit_to_expanded[suit_b]
+                base = suit_to_base[suit_a]
+
+                protected = Tech('Protect "{}"'.format(nn), Tech.B, suit_b, n, parents=set([expanded.name, base.name]))
+                self.technologies.append(protected)
+                
+        self.names = sorted(list({ tech.name for tech in self.technologies }))
         
     def to_json(self):
         return [ tech.to_json() for tech in self.technologies ]

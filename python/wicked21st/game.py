@@ -175,13 +175,8 @@ class Game:
                     self.state.leader = (self.state.leader + 1) % self.game_def.num_players
         return self.finished
 
-    def cascade(self, node, visited=None):
+    def cascade(self, node):
         "A node in crisis has been selected, deal with it. Returns the activated nodes."
-        if visited is None:
-            visited = list()
-        if node in visited:
-            return list()
-        visited.append(node)
         result = list()
         outlinks = list(self.game_def.graph.outlinks[node])
         for outlink in outlinks:
@@ -190,11 +185,12 @@ class Game:
                 result.append(outlink)
         if result:
             return result
-        # recurse
-        for outlink in outlinks:
-            result = result + self.cascade(outlink, list(visited))
-            
-        return result
+        # use list
+        for other in self.game_def.cascades.cascade[node]:
+            othern = self.game_def.graph.node_names[other]
+            if self.state.graph[othern]['status'] != GraphState.IN_CRISIS:
+                return [ other ]
+        raise Error("Cascading on saturated node: {}".format(node))
 ###
 ###
 ### TURN
@@ -261,11 +257,12 @@ class Game:
                                'state' : self.state.to_json() } )
 ###            
 ###   	CRISIS RISING
-###         	A crisis chip to the turn is added for each player      
-            self.state.crisis_chips += 1
-            self.log.append( { 'phase' : phase,
-                               'step' : Game.STEPS_PER_PHASE[phase][2],
-                               'state' : self.state.to_json() } )
+###         	Two crisis chip are added per turn
+            if self.state.player == 0 or self.state.player == 2:
+                self.state.crisis_chips += 1
+                self.log.append( { 'phase' : phase,
+                                   'step' : Game.STEPS_PER_PHASE[phase][2],
+                                   'state' : self.state.to_json() } )
         elif self.state.phase == 1: # activate
             if self.state.player == 0:
                 self.phase_start_state = self.state.copy()
@@ -773,7 +770,7 @@ class Game:
 ###
 ###                 	To apply the actions, the problem fixed by the project is fixed. If the tech associated with auto-protecting that problem has been researched (even in this turn), it gets protected.
 ###
-###                 	If the project has a trade-off problem associated, it is set as in-crisis (or loses its protection if it was protected). If the problem is already in crisis, it cascades (see explanation of cascading in crisis rolling). If the problem cascades but all the problems reachable are already in crisis, the problem is said to be "saturated" and a crisis chip is added to the turn. Otherwise all the cascading problems are either mark as in-crisis or lost their protection if they were protected.
+###                 	If the project has a trade-off associated, add the crisis chip.
 ###
 ###                 	The project slot associated with the project for the corresponding player is freed.
 
@@ -865,7 +862,7 @@ class Game:
 ###
 ###                 	While there are crisis chips or the problem is in crisis:
 ###
-###                        	Roll Crisis (2D6), if crisis roll < 6, the node is in crisis
+###                        	Roll Crisis (2D6), if crisis roll < 7, the node is in crisis
 ###
 ###                        	remove one crisis chip per roll (successful or otherwise)
 ###
@@ -877,9 +874,7 @@ class Game:
 ### 
 ###                        	If the problem was already in crisis, it cascades as follows:
 ###
-###                             	For each of the problems reachable from the problem in crisis, check whether if any them are not in crisis, if so, all of them will be used as cascading result. If all the problems reachable are also in crisis, then cascade again on each and every one of them.
-### 
-###                             	For all the problems identified in the cascading, mark them in crisis or remove the protection if they were protected.
+###                             	All outflows from the node in crisis are marked as in crisis. If all of them were already marked in crisis, mark in crisis the first node in the list attached at the end of this document (one list per node). (Mark in crisis or remove the protection if they were protected.)
 
 
                 ## add crisis chip for each category fully in crisis
@@ -976,7 +971,7 @@ class Game:
                                                'memo' : Game.L_PROT_LOSS,
                                                'state' : self.state.to_json() } )
                         ## if the node was in crisis, activate all the nodes reachable from it and further cascade as needed
-                        else: 
+                        else:
                             cascaded = self.cascade(node)
                             for node2 in sorted(cascaded, key=lambda x:self.game_def.graph.node_names[x]):
                                 node2n = self.game_def.graph.node_names[node2]

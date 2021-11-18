@@ -1,0 +1,4 @@
+players= 3 crisis< 9 runs= 1000 won= 236 23.6 % errors= 2
+players= 4 crisis< 9 runs= 1000 won= 205 20.5 % errors= 3
+players= 5 crisis< 9 runs= 1000 won= 171 17.1 % errors= 16
+players= 6 crisis< 9 runs= 1000 won= 132 13.2 % errors= 30
