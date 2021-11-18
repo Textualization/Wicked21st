@@ -1,0 +1,672 @@
+*** Energy Shortage [ENE]: 13 ***
+    record (9): AFF, INE, LAN, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: SOC ^ EDU ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: EDU ^ AFF
+Low Education [EDU]: 
+Lack of Healthcare [HEA]: SOC ^ EDU ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Lack of Affordable Housing [AFF]: 
+Lack of Political Voice [VOI]: EDU ^ AFF
+Unrest & Injustice [UNR]: EDU ^ AFF
+Inefficiency [INE]: SOC ^ EDU ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Sprawl [SPR]: EDU ^ AFF
+Food Shortage [FOO]: SOC ^ EDU ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Lack of Community Networks [COM]: EDU ^ AFF
+Land Conversion [LAN]: SOC ^ EDU ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+
+*** Lack of Healthcare [HEA]: 12 ***
+    record (9): AFF, INE, LAN, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: SOC ^ EDU ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: 
+Low Education [EDU]: 
+Lack of Affordable Housing [AFF]: 
+Lack of Political Voice [VOI]: SOC ^ EDU ^ AFF
+Unrest & Injustice [UNR]: SOC ^ EDU ^ AFF
+Inefficiency [INE]: SOC ^ EDU ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Sprawl [SPR]: SOC ^ EDU ^ AFF
+Food Shortage [FOO]: SOC ^ EDU ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Lack of Community Networks [COM]: SOC ^ EDU ^ AFF
+Land Conversion [LAN]: SOC ^ EDU ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+
+*** Lack of Affordable Housing [AFF]: 12 ***
+    record (7): INE, LAN, SPR, SOC, VOI, UNR, COM
+Biodiversity Loss [BIO]: SOC ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: 
+Low Education [EDU]: SOC ^ VOI ^ UNR ^ SPR ^ COM
+Lack of Healthcare [HEA]: SOC ^ VOI ^ UNR ^ SPR ^ COM
+Lack of Political Voice [VOI]: 
+Unrest & Injustice [UNR]: 
+Inefficiency [INE]: SOC ^ VOI ^ UNR ^ SPR ^ COM
+Sprawl [SPR]: 
+Food Shortage [FOO]: SOC ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Lack of Community Networks [COM]: 
+Land Conversion [LAN]: SOC ^ VOI ^ UNR ^ SPR ^ COM
+
+*** Clean Water Shortage [CLE]: 13 ***
+    record (10): HEA, AFF, INE, LAN, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: HEA
+Low Education [EDU]: HEA
+Lack of Healthcare [HEA]: 
+Lack of Affordable Housing [AFF]: HEA
+Lack of Political Voice [VOI]: SOC ^ EDU ^ HEA ^ AFF
+Unrest & Injustice [UNR]: SOC ^ EDU ^ HEA ^ AFF
+Inefficiency [INE]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Sprawl [SPR]: SOC ^ EDU ^ HEA ^ AFF
+Food Shortage [FOO]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Lack of Community Networks [COM]: SOC ^ EDU ^ HEA ^ AFF
+Land Conversion [LAN]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+
+*** Food Shortage [FOO]: 12 ***
+    record (10): HEA, AFF, INE, LAN, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: 
+Low Education [EDU]: SOC ^ HEA ^ COM
+Lack of Healthcare [HEA]: 
+Lack of Affordable Housing [AFF]: SOC ^ HEA ^ COM
+Lack of Political Voice [VOI]: SOC ^ HEA ^ COM
+Unrest & Injustice [UNR]: SOC ^ HEA ^ COM
+Inefficiency [INE]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Sprawl [SPR]: SOC ^ EDU ^ HEA ^ AFF ^ COM
+Lack of Community Networks [COM]: 
+Land Conversion [LAN]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+
+*** Inflation [INF]: 14 ***
+    record (10): AFF, INE, LAN, SPR, ECO, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: SOC ^ ECO ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: ECO
+Economic Inequality [ECO]: 
+Low Education [EDU]: SOC ^ ECO ^ AFF
+Lack of Healthcare [HEA]:
+  SOC ^ ECO ^ EDU ^ AFF ^ VOI ^ UNR ^ COM
+  SOC ^ ECO ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Lack of Affordable Housing [AFF]: ECO
+Lack of Political Voice [VOI]: SOC ^ ECO ^ AFF
+Unrest & Injustice [UNR]: SOC ^ ECO ^ AFF
+Inefficiency [INE]: SOC ^ ECO ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Sprawl [SPR]: SOC ^ ECO ^ AFF
+Lack of Community Networks [COM]: SOC ^ ECO ^ AFF
+Food Shortage [FOO]: SOC ^ ECO ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Land Conversion [LAN]: SOC ^ ECO ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+
+*** Monopoly [MON]: 24 ***
+    record (23): ENE, HEA, AFF, CLE, FOO, INF, MAR, INE, BIO, CHE, FRE, AIR, LAN, NIT, UNS, POL, SPR, ECO, SOC, EDU, VOI, UNR, COM
+Energy Shortage [ENE]:
+  BIO ^ HEA ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ AIR
+  UNS ^ ECO ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ LAN ^ NIT
+Biodiversity Loss [BIO]:
+  CHE ^ POL ^ MAR ^ INE ^ AIR
+  UNS ^ ECO ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ LAN ^ NIT
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ MAR ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Unsustainable Harvesting [UNS]: POL ^ MAR ^ INE
+Social Inequity [SOC]:
+  UNS ^ ECO ^ POL ^ MAR ^ INE
+  HEA ^ CHE ^ POL ^ MAR ^ INE ^ AIR
+Inflation [INF]: UNS ^ ECO ^ POL ^ MAR ^ INE
+Economic Inequality [ECO]: POL ^ MAR ^ INE
+Low Education [EDU]:
+  HEA ^ CHE ^ POL ^ MAR ^ INE ^ AIR
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ MAR ^ INE
+  BIO ^ UNS ^ ECO ^ HEA ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ LAN ^ NIT
+  ENE ^ UNS ^ ECO ^ CHE ^ POL ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+Lack of Healthcare [HEA]:
+  CHE ^ POL ^ MAR ^ INE ^ AIR
+  UNS ^ ECO ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ LAN ^ NIT
+  UNS ^ SOC ^ INF ^ ECO ^ EDU ^ POL ^ AFF ^ MAR ^ VOI ^ UNR ^ INE ^ COM
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ MAR ^ VOI ^ UNR ^ INE ^ SPR ^ COM
+Chemical Pollution [CHE]: POL ^ MAR ^ INE
+Polluting Industry [POL]: 
+Lack of Affordable Housing [AFF]:
+  UNS ^ ECO ^ POL ^ MAR ^ INE
+  HEA ^ CHE ^ POL ^ MAR ^ INE ^ AIR
+Market Externalities [MAR]: 
+Lack of Political Voice [VOI]:
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ MAR ^ INE
+  SOC ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ INE ^ AIR
+  ENE ^ BIO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ AIR
+  ENE ^ BIO ^ SOC ^ HEA ^ CHE ^ POL ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ COM ^ AIR
+  BIO ^ UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ INE ^ FRE ^ LAN ^ NIT
+  ENE ^ UNS ^ ECO ^ EDU ^ CHE ^ POL ^ AFF ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+  BIO ^ UNS ^ SOC ^ ECO ^ HEA ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ FOO ^ COM ^ LAN ^ NIT
+  ENE ^ UNS ^ SOC ^ ECO ^ HEA ^ CHE ^ POL ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ COM ^ LAN ^ NIT
+Unrest & Injustice [UNR]:
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ MAR ^ INE
+  SOC ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ INE ^ AIR
+  ENE ^ BIO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ AIR
+  ENE ^ BIO ^ SOC ^ HEA ^ CHE ^ POL ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ COM ^ AIR
+  BIO ^ UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ INE ^ FRE ^ LAN ^ NIT
+  ENE ^ UNS ^ ECO ^ EDU ^ CHE ^ POL ^ AFF ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+  BIO ^ UNS ^ SOC ^ ECO ^ HEA ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ FOO ^ COM ^ LAN ^ NIT
+  ENE ^ UNS ^ SOC ^ ECO ^ HEA ^ CHE ^ POL ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ COM ^ LAN ^ NIT
+Clean Water Shortage [CLE]:
+  BIO ^ HEA ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ AIR
+  UNS ^ ECO ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ LAN ^ NIT
+Inefficiency [INE]: 
+Freshwater Depletion [FRE]:
+  UNS ^ ECO ^ POL ^ MAR ^ INE
+  CHE ^ POL ^ MAR ^ INE ^ AIR
+Sprawl [SPR]:
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ MAR ^ INE
+  SOC ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ INE ^ AIR
+  ENE ^ BIO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ AIR
+  BIO ^ UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ INE ^ FRE ^ LAN ^ NIT
+  ENE ^ UNS ^ ECO ^ EDU ^ CHE ^ POL ^ AFF ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+Food Shortage [FOO]:
+  BIO ^ HEA ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ AIR
+  UNS ^ ECO ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ LAN ^ NIT
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ MAR ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+  SOC ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ AIR ^ LAN
+Lack of Community Networks [COM]:
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ MAR ^ INE
+  SOC ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ INE ^ AIR
+  ENE ^ BIO ^ HEA ^ CHE ^ POL ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ AIR
+  BIO ^ UNS ^ ECO ^ CHE ^ POL ^ MAR ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+  ENE ^ UNS ^ ECO ^ CHE ^ POL ^ MAR ^ CLE ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+  BIO ^ UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ INE ^ FRE ^ LAN ^ NIT
+Air & Ozone Degradation [AIR]: POL ^ MAR ^ INE
+Land Conversion [LAN]:
+  UNS ^ ECO ^ POL ^ MAR ^ INE
+  SOC ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ MAR ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ AIR
+Nitrogen & Phosphorous Loading [NIT]: UNS ^ ECO ^ POL ^ MAR ^ INE
+
+*** Market Externalities [MAR]: 23 ***
+    record (22): ENE, HEA, AFF, CLE, FOO, INF, INE, BIO, CHE, FRE, AIR, LAN, NIT, UNS, POL, SPR, ECO, SOC, EDU, VOI, UNR, COM
+Energy Shortage [ENE]:
+  UNS ^ ECO ^ CHE ^ POL ^ INE ^ FRE ^ LAN ^ NIT
+  BIO ^ UNS ^ ECO ^ HEA ^ CHE ^ POL ^ INE ^ FRE ^ AIR
+Biodiversity Loss [BIO]:
+  UNS ^ ECO ^ CHE ^ POL ^ INE ^ AIR
+  UNS ^ ECO ^ CHE ^ POL ^ INE ^ FRE ^ LAN ^ NIT
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Unsustainable Harvesting [UNS]: 
+Social Inequity [SOC]: UNS ^ ECO ^ POL ^ INE
+Inflation [INF]: UNS ^ ECO ^ POL ^ INE
+Economic Inequality [ECO]: 
+Low Education [EDU]:
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ INE
+  UNS ^ ECO ^ HEA ^ CHE ^ POL ^ INE ^ AIR
+  BIO ^ UNS ^ ECO ^ HEA ^ CHE ^ POL ^ INE ^ FRE ^ LAN ^ NIT
+  ENE ^ UNS ^ ECO ^ CHE ^ POL ^ CLE ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+Lack of Healthcare [HEA]:
+  UNS ^ ECO ^ CHE ^ POL ^ INE ^ AIR
+  UNS ^ ECO ^ CHE ^ POL ^ INE ^ FRE ^ LAN ^ NIT
+  UNS ^ SOC ^ INF ^ ECO ^ EDU ^ POL ^ AFF ^ VOI ^ UNR ^ INE ^ COM
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM
+Chemical Pollution [CHE]: UNS ^ ECO ^ POL ^ INE
+Polluting Industry [POL]: 
+Lack of Affordable Housing [AFF]: UNS ^ ECO ^ POL ^ INE
+Lack of Political Voice [VOI]:
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ INE
+  UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ INE ^ AIR
+  BIO ^ UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ INE ^ FRE ^ LAN ^ NIT
+  ENE ^ UNS ^ ECO ^ EDU ^ CHE ^ POL ^ AFF ^ CLE ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+  BIO ^ UNS ^ SOC ^ ECO ^ HEA ^ CHE ^ POL ^ INE ^ FRE ^ FOO ^ COM ^ LAN ^ NIT
+  ENE ^ BIO ^ UNS ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ CLE ^ INE ^ FRE ^ FOO ^ AIR
+  ENE ^ BIO ^ UNS ^ SOC ^ ECO ^ HEA ^ CHE ^ POL ^ CLE ^ INE ^ FRE ^ FOO ^ COM ^ AIR
+  ENE ^ UNS ^ SOC ^ ECO ^ HEA ^ CHE ^ POL ^ CLE ^ INE ^ FRE ^ FOO ^ COM ^ LAN ^ NIT
+Unrest & Injustice [UNR]:
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ INE
+  UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ INE ^ AIR
+  BIO ^ UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ INE ^ FRE ^ LAN ^ NIT
+  ENE ^ UNS ^ ECO ^ EDU ^ CHE ^ POL ^ AFF ^ CLE ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+  BIO ^ UNS ^ SOC ^ ECO ^ HEA ^ CHE ^ POL ^ INE ^ FRE ^ FOO ^ COM ^ LAN ^ NIT
+  ENE ^ BIO ^ UNS ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ CLE ^ INE ^ FRE ^ FOO ^ AIR
+  ENE ^ BIO ^ UNS ^ SOC ^ ECO ^ HEA ^ CHE ^ POL ^ CLE ^ INE ^ FRE ^ FOO ^ COM ^ AIR
+  ENE ^ UNS ^ SOC ^ ECO ^ HEA ^ CHE ^ POL ^ CLE ^ INE ^ FRE ^ FOO ^ COM ^ LAN ^ NIT
+Clean Water Shortage [CLE]:
+  UNS ^ ECO ^ CHE ^ POL ^ INE ^ FRE ^ LAN ^ NIT
+  BIO ^ UNS ^ ECO ^ HEA ^ CHE ^ POL ^ INE ^ FRE ^ AIR
+Inefficiency [INE]: 
+Freshwater Depletion [FRE]: UNS ^ ECO ^ POL ^ INE
+Sprawl [SPR]:
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ INE
+  UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ INE ^ AIR
+  BIO ^ UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ INE ^ FRE ^ LAN ^ NIT
+  ENE ^ UNS ^ ECO ^ EDU ^ CHE ^ POL ^ AFF ^ CLE ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+  ENE ^ BIO ^ UNS ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ CLE ^ INE ^ FRE ^ FOO ^ AIR
+Food Shortage [FOO]:
+  UNS ^ ECO ^ CHE ^ POL ^ INE ^ FRE ^ LAN ^ NIT
+  BIO ^ UNS ^ ECO ^ HEA ^ CHE ^ POL ^ INE ^ FRE ^ AIR
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+  UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ AIR ^ LAN
+Lack of Community Networks [COM]:
+  UNS ^ SOC ^ INF ^ ECO ^ POL ^ AFF ^ INE
+  UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ INE ^ AIR
+  BIO ^ UNS ^ ECO ^ CHE ^ POL ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+  ENE ^ UNS ^ ECO ^ CHE ^ POL ^ CLE ^ INE ^ FRE ^ FOO ^ LAN ^ NIT
+  ENE ^ BIO ^ UNS ^ ECO ^ HEA ^ CHE ^ POL ^ CLE ^ INE ^ FRE ^ FOO ^ AIR
+  BIO ^ UNS ^ SOC ^ ECO ^ EDU ^ HEA ^ CHE ^ POL ^ AFF ^ INE ^ FRE ^ LAN ^ NIT
+Air & Ozone Degradation [AIR]: UNS ^ ECO ^ POL ^ INE
+Land Conversion [LAN]: UNS ^ ECO ^ POL ^ INE
+Nitrogen & Phosphorous Loading [NIT]: UNS ^ ECO ^ POL ^ INE
+
+*** Inefficiency [INE]: 1 ***
+    record (0): 
+
+*** Biodiversity Loss [BIO]: 1 ***
+    record (0): 
+
+*** Chemical Pollution [CHE]: 16 ***
+    record (13): ENE, HEA, AFF, CLE, FOO, BIO, FRE, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: 
+Social Inequity [SOC]: BIO ^ HEA ^ FRE
+Energy Shortage [ENE]: BIO ^ HEA ^ FRE
+Low Education [EDU]: BIO ^ HEA ^ FRE
+Lack of Healthcare [HEA]: 
+Lack of Affordable Housing [AFF]: BIO ^ HEA ^ FRE
+Lack of Political Voice [VOI]:
+  BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ FRE
+  BIO ^ ENE ^ EDU ^ HEA ^ AFF ^ FRE ^ CLE ^ FOO
+  BIO ^ SOC ^ ENE ^ HEA ^ FRE ^ CLE ^ FOO ^ COM
+Freshwater Depletion [FRE]: 
+Unrest & Injustice [UNR]:
+  BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ FRE
+  BIO ^ ENE ^ EDU ^ HEA ^ AFF ^ FRE ^ CLE ^ FOO
+  BIO ^ SOC ^ ENE ^ HEA ^ FRE ^ CLE ^ FOO ^ COM
+Clean Water Shortage [CLE]: BIO ^ HEA ^ FRE
+Inefficiency [INE]: BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ FRE ^ UNR ^ SPR ^ COM
+Sprawl [SPR]:
+  BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ FRE
+  BIO ^ ENE ^ EDU ^ HEA ^ AFF ^ FRE ^ CLE ^ FOO
+Food Shortage [FOO]: BIO ^ HEA ^ FRE
+Lack of Community Networks [COM]:
+  BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ FRE
+  BIO ^ ENE ^ HEA ^ FRE ^ CLE ^ FOO
+Land Conversion [LAN]: BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ FRE ^ UNR ^ SPR ^ COM
+
+*** Climate Change [CLI]: 16 ***
+    record (13): ENE, HEA, AFF, FOO, BIO, FRE, LAN, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: 
+Social Inequity [SOC]: 
+Energy Shortage [ENE]: 
+Low Education [EDU]: BIO ^ SOC ^ ENE ^ HEA ^ FRE ^ FOO ^ LAN
+Lack of Healthcare [HEA]: 
+Lack of Affordable Housing [AFF]: BIO ^ SOC ^ ENE ^ HEA ^ FRE ^ FOO ^ LAN
+Lack of Political Voice [VOI]: BIO ^ SOC ^ ENE ^ HEA ^ FRE ^ FOO ^ LAN
+Freshwater Depletion [FRE]: 
+Unrest & Injustice [UNR]: BIO ^ SOC ^ ENE ^ HEA ^ FRE ^ FOO ^ LAN
+Clean Water Shortage [CLE]: BIO ^ SOC ^ ENE ^ HEA ^ FRE ^ FOO ^ LAN
+Inefficiency [INE]: BIO ^ SOC ^ ENE ^ EDU ^ HEA ^ AFF ^ VOI ^ FRE ^ UNR ^ SPR ^ FOO ^ COM ^ LAN
+Sprawl [SPR]: BIO ^ SOC ^ ENE ^ EDU ^ HEA ^ AFF ^ FRE ^ FOO ^ LAN
+Food Shortage [FOO]: 
+Lack of Community Networks [COM]: BIO ^ SOC ^ ENE ^ HEA ^ FRE ^ FOO ^ LAN
+Land Conversion [LAN]: 
+
+*** Freshwater Depletion [FRE]: 15 ***
+    record (13): ENE, HEA, AFF, CLE, FOO, INE, LAN, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: SOC ^ ENE ^ EDU ^ AFF ^ VOI ^ UNR ^ CLE ^ INE ^ SPR ^ FOO ^ COM ^ LAN
+Social Inequity [SOC]: ENE ^ CLE ^ FOO
+Energy Shortage [ENE]: 
+Low Education [EDU]: ENE ^ CLE ^ FOO
+Lack of Healthcare [HEA]: ENE ^ CLE ^ FOO
+Lack of Affordable Housing [AFF]: ENE ^ CLE ^ FOO
+Lack of Political Voice [VOI]:
+  ENE ^ EDU ^ AFF ^ CLE ^ FOO
+  SOC ^ ENE ^ HEA ^ CLE ^ FOO ^ COM
+Unrest & Injustice [UNR]:
+  ENE ^ EDU ^ AFF ^ CLE ^ FOO
+  SOC ^ ENE ^ HEA ^ CLE ^ FOO ^ COM
+Clean Water Shortage [CLE]: 
+Inefficiency [INE]: SOC ^ ENE ^ EDU ^ AFF ^ VOI ^ UNR ^ CLE ^ SPR ^ FOO ^ COM
+Sprawl [SPR]: ENE ^ EDU ^ AFF ^ CLE ^ FOO
+Food Shortage [FOO]: 
+Lack of Community Networks [COM]: ENE ^ CLE ^ FOO
+Land Conversion [LAN]: SOC ^ ENE ^ EDU ^ AFF ^ VOI ^ UNR ^ CLE ^ SPR ^ FOO ^ COM
+
+*** Air & Ozone Degradation [AIR]: 13 ***
+    record (10): HEA, AFF, INE, LAN, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: HEA
+Low Education [EDU]: HEA
+Lack of Healthcare [HEA]: 
+Lack of Affordable Housing [AFF]: HEA
+Lack of Political Voice [VOI]: SOC ^ EDU ^ HEA ^ AFF
+Unrest & Injustice [UNR]: SOC ^ EDU ^ HEA ^ AFF
+Inefficiency [INE]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Sprawl [SPR]: SOC ^ EDU ^ HEA ^ AFF
+Food Shortage [FOO]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Lack of Community Networks [COM]: SOC ^ EDU ^ HEA ^ AFF
+Land Conversion [LAN]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+
+*** Ocean Degradation [OCE]: 13 ***
+    record (10): HEA, AFF, FOO, BIO, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: 
+Social Inequity [SOC]: BIO ^ FOO
+Low Education [EDU]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Lack of Healthcare [HEA]: BIO ^ FOO
+Lack of Affordable Housing [AFF]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Lack of Political Voice [VOI]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Unrest & Injustice [UNR]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Inefficiency [INE]: BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ FOO ^ COM
+Sprawl [SPR]: BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ FOO ^ COM
+Food Shortage [FOO]: 
+Lack of Community Networks [COM]: BIO ^ FOO
+Land Conversion [LAN]: BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ FOO ^ COM
+
+*** Land Conversion [LAN]: 12 ***
+    record (10): HEA, AFF, FOO, BIO, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: 
+Social Inequity [SOC]: BIO ^ FOO
+Low Education [EDU]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Lack of Healthcare [HEA]: BIO ^ FOO
+Lack of Affordable Housing [AFF]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Lack of Political Voice [VOI]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Unrest & Injustice [UNR]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Inefficiency [INE]: BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ FOO ^ COM
+Sprawl [SPR]: BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ FOO ^ COM
+Food Shortage [FOO]: 
+Lack of Community Networks [COM]: BIO ^ FOO
+
+*** Nitrogen & Phosphorous Loading [NIT]: 13 ***
+    record (10): HEA, AFF, FOO, BIO, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: 
+Social Inequity [SOC]: BIO ^ FOO
+Low Education [EDU]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Lack of Healthcare [HEA]: BIO ^ FOO
+Lack of Affordable Housing [AFF]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Lack of Political Voice [VOI]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Unrest & Injustice [UNR]: BIO ^ SOC ^ HEA ^ FOO ^ COM
+Inefficiency [INE]: BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ FOO ^ COM
+Sprawl [SPR]: BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ FOO ^ COM
+Food Shortage [FOO]: 
+Lack of Community Networks [COM]: BIO ^ FOO
+Land Conversion [LAN]: BIO ^ SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ FOO ^ COM
+
+*** Unsustainable Harvesting [UNS]: 18 ***
+    record (14): ENE, HEA, AFF, CLE, FOO, INE, BIO, CHE, FRE, LAN, NIT, SOC, EDU, COM
+Biodiversity Loss [BIO]: CHE ^ FRE ^ INE ^ LAN ^ NIT
+Social Inequity [SOC]:
+  BIO ^ CHE ^ HEA ^ FRE ^ INE ^ LAN ^ NIT
+  BIO ^ CHE ^ FRE ^ INE ^ FOO ^ LAN ^ NIT
+  ENE ^ CHE ^ FRE ^ CLE ^ INE ^ FOO ^ LAN ^ NIT
+Energy Shortage [ENE]: CHE ^ FRE ^ INE ^ LAN ^ NIT
+Chemical Pollution [CHE]: 
+Low Education [EDU]:
+  BIO ^ CHE ^ HEA ^ FRE ^ INE ^ LAN ^ NIT
+  ENE ^ CHE ^ FRE ^ CLE ^ INE ^ FOO ^ LAN ^ NIT
+Lack of Healthcare [HEA]: CHE ^ FRE ^ INE ^ LAN ^ NIT
+Lack of Affordable Housing [AFF]:
+  BIO ^ CHE ^ HEA ^ FRE ^ INE ^ LAN ^ NIT
+  ENE ^ CHE ^ FRE ^ CLE ^ INE ^ FOO ^ LAN ^ NIT
+Lack of Political Voice [VOI]:
+  BIO ^ SOC ^ CHE ^ EDU ^ HEA ^ AFF ^ FRE ^ INE ^ LAN ^ NIT
+  ENE ^ CHE ^ EDU ^ AFF ^ FRE ^ CLE ^ INE ^ FOO ^ LAN ^ NIT
+  BIO ^ SOC ^ CHE ^ HEA ^ FRE ^ INE ^ FOO ^ COM ^ LAN ^ NIT
+  SOC ^ ENE ^ CHE ^ HEA ^ FRE ^ CLE ^ INE ^ FOO ^ COM ^ LAN ^ NIT
+Freshwater Depletion [FRE]: 
+Unrest & Injustice [UNR]:
+  BIO ^ SOC ^ CHE ^ EDU ^ HEA ^ AFF ^ FRE ^ INE ^ LAN ^ NIT
+  ENE ^ CHE ^ EDU ^ AFF ^ FRE ^ CLE ^ INE ^ FOO ^ LAN ^ NIT
+  BIO ^ SOC ^ CHE ^ HEA ^ FRE ^ INE ^ FOO ^ COM ^ LAN ^ NIT
+  SOC ^ ENE ^ CHE ^ HEA ^ FRE ^ CLE ^ INE ^ FOO ^ COM ^ LAN ^ NIT
+Clean Water Shortage [CLE]: CHE ^ FRE ^ INE ^ LAN ^ NIT
+Inefficiency [INE]: 
+Sprawl [SPR]:
+  BIO ^ SOC ^ CHE ^ EDU ^ HEA ^ AFF ^ FRE ^ INE ^ LAN ^ NIT
+  ENE ^ CHE ^ EDU ^ AFF ^ FRE ^ CLE ^ INE ^ FOO ^ LAN ^ NIT
+Food Shortage [FOO]: CHE ^ FRE ^ INE ^ LAN ^ NIT
+Lack of Community Networks [COM]:
+  BIO ^ CHE ^ FRE ^ INE ^ FOO ^ LAN ^ NIT
+  ENE ^ CHE ^ FRE ^ CLE ^ INE ^ FOO ^ LAN ^ NIT
+  BIO ^ SOC ^ CHE ^ EDU ^ HEA ^ AFF ^ FRE ^ INE ^ LAN ^ NIT
+Land Conversion [LAN]: 
+Nitrogen & Phosphorous Loading [NIT]: 
+
+*** Polluting Industry [POL]: 18 ***
+    record (17): ENE, HEA, AFF, CLE, FOO, INE, BIO, CHE, FRE, AIR, LAN, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: CHE ^ INE ^ AIR
+Social Inequity [SOC]: CHE ^ HEA ^ INE ^ AIR
+Energy Shortage [ENE]: BIO ^ CHE ^ HEA ^ FRE ^ INE ^ AIR
+Chemical Pollution [CHE]: 
+Low Education [EDU]: CHE ^ HEA ^ INE ^ AIR
+Lack of Healthcare [HEA]: CHE ^ INE ^ AIR
+Lack of Affordable Housing [AFF]: CHE ^ HEA ^ INE ^ AIR
+Lack of Political Voice [VOI]:
+  SOC ^ CHE ^ EDU ^ HEA ^ AFF ^ INE ^ AIR
+  BIO ^ ENE ^ CHE ^ EDU ^ HEA ^ AFF ^ FRE ^ INE ^ CLE ^ AIR ^ FOO
+  BIO ^ SOC ^ ENE ^ CHE ^ HEA ^ FRE ^ INE ^ CLE ^ AIR ^ COM ^ FOO
+Freshwater Depletion [FRE]: CHE ^ INE ^ AIR
+Unrest & Injustice [UNR]:
+  SOC ^ CHE ^ EDU ^ HEA ^ AFF ^ INE ^ AIR
+  BIO ^ ENE ^ CHE ^ EDU ^ HEA ^ AFF ^ FRE ^ INE ^ CLE ^ AIR ^ FOO
+  BIO ^ SOC ^ ENE ^ CHE ^ HEA ^ FRE ^ INE ^ CLE ^ AIR ^ COM ^ FOO
+Inefficiency [INE]: 
+Clean Water Shortage [CLE]: BIO ^ CHE ^ HEA ^ FRE ^ INE ^ AIR
+Sprawl [SPR]:
+  SOC ^ CHE ^ EDU ^ HEA ^ AFF ^ INE ^ AIR
+  BIO ^ ENE ^ CHE ^ EDU ^ HEA ^ AFF ^ FRE ^ INE ^ CLE ^ AIR ^ FOO
+Air & Ozone Degradation [AIR]: 
+Lack of Community Networks [COM]:
+  SOC ^ CHE ^ EDU ^ HEA ^ AFF ^ INE ^ AIR
+  BIO ^ ENE ^ CHE ^ HEA ^ FRE ^ INE ^ CLE ^ AIR ^ FOO
+Food Shortage [FOO]:
+  BIO ^ CHE ^ HEA ^ FRE ^ INE ^ AIR
+  SOC ^ CHE ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ AIR ^ COM ^ LAN
+Land Conversion [LAN]: SOC ^ CHE ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ AIR ^ COM
+
+*** Fossil Fuel Dependency [FOS]: 20 ***
+    record (18): ENE, HEA, AFF, CLE, FOO, BIO, CHE, CLI, FRE, OCE, LAN, NIT, SPR, SOC, EDU, VOI, UNR, COM
+Energy Shortage [ENE]: CHE ^ CLI ^ OCE ^ NIT
+Biodiversity Loss [BIO]: CHE ^ CLI ^ OCE ^ NIT
+Social Inequity [SOC]: CHE ^ CLI ^ OCE ^ NIT
+Low Education [EDU]:
+  BIO ^ HEA ^ CHE ^ CLI ^ FRE ^ OCE ^ NIT
+  BIO ^ SOC ^ HEA ^ CHE ^ CLI ^ FOO ^ COM ^ OCE ^ NIT
+Lack of Healthcare [HEA]: CHE ^ CLI ^ OCE ^ NIT
+Chemical Pollution [CHE]: 
+Lack of Affordable Housing [AFF]:
+  BIO ^ HEA ^ CHE ^ CLI ^ FRE ^ OCE ^ NIT
+  BIO ^ SOC ^ HEA ^ CHE ^ CLI ^ FOO ^ COM ^ OCE ^ NIT
+Lack of Political Voice [VOI]:
+  BIO ^ SOC ^ HEA ^ CHE ^ CLI ^ FOO ^ COM ^ OCE ^ NIT
+  BIO ^ SOC ^ EDU ^ HEA ^ CHE ^ AFF ^ CLI ^ FRE ^ OCE ^ NIT
+  ENE ^ BIO ^ SOC ^ HEA ^ CHE ^ CLI ^ FRE ^ FOO ^ OCE ^ LAN ^ NIT
+  ENE ^ BIO ^ EDU ^ HEA ^ CHE ^ AFF ^ CLI ^ CLE ^ FRE ^ FOO ^ OCE ^ NIT
+Climate Change [CLI]: 
+Unrest & Injustice [UNR]:
+  BIO ^ SOC ^ HEA ^ CHE ^ CLI ^ FOO ^ COM ^ OCE ^ NIT
+  BIO ^ SOC ^ EDU ^ HEA ^ CHE ^ AFF ^ CLI ^ FRE ^ OCE ^ NIT
+  ENE ^ BIO ^ SOC ^ HEA ^ CHE ^ CLI ^ FRE ^ FOO ^ OCE ^ LAN ^ NIT
+  ENE ^ BIO ^ EDU ^ HEA ^ CHE ^ AFF ^ CLI ^ CLE ^ FRE ^ FOO ^ OCE ^ NIT
+Clean Water Shortage [CLE]: BIO ^ HEA ^ CHE ^ CLI ^ FRE ^ OCE ^ NIT
+Inefficiency [INE]:
+  BIO ^ SOC ^ EDU ^ HEA ^ CHE ^ AFF ^ VOI ^ CLI ^ UNR ^ FRE ^ SPR ^ COM ^ OCE ^ NIT
+  BIO ^ SOC ^ EDU ^ HEA ^ CHE ^ AFF ^ VOI ^ CLI ^ UNR ^ SPR ^ FOO ^ COM ^ OCE ^ NIT
+Freshwater Depletion [FRE]: CHE ^ CLI ^ OCE ^ NIT
+Sprawl [SPR]:
+  BIO ^ SOC ^ EDU ^ HEA ^ CHE ^ AFF ^ CLI ^ FRE ^ OCE ^ NIT
+  BIO ^ SOC ^ EDU ^ HEA ^ CHE ^ AFF ^ CLI ^ FOO ^ COM ^ OCE ^ NIT
+  ENE ^ BIO ^ EDU ^ HEA ^ CHE ^ AFF ^ CLI ^ CLE ^ FRE ^ FOO ^ OCE ^ NIT
+Food Shortage [FOO]: CHE ^ CLI ^ OCE ^ NIT
+Lack of Community Networks [COM]:
+  BIO ^ CHE ^ CLI ^ FOO ^ OCE ^ NIT
+  BIO ^ SOC ^ EDU ^ HEA ^ CHE ^ AFF ^ CLI ^ FRE ^ OCE ^ NIT
+Ocean Degradation [OCE]: 
+Land Conversion [LAN]: CHE ^ CLI ^ OCE ^ NIT
+Nitrogen & Phosphorous Loading [NIT]: 
+
+*** Sprawl [SPR]: 12 ***
+    record (10): HEA, AFF, FOO, INE, BIO, LAN, SOC, VOI, UNR, COM
+Biodiversity Loss [BIO]: AFF ^ INE ^ LAN
+Social Inequity [SOC]: AFF ^ INE ^ LAN
+Low Education [EDU]:
+  SOC ^ AFF ^ VOI ^ UNR ^ INE ^ COM ^ LAN
+  BIO ^ SOC ^ HEA ^ AFF ^ INE ^ FOO ^ COM ^ LAN
+Lack of Healthcare [HEA]:
+  BIO ^ AFF ^ INE ^ FOO ^ LAN
+  SOC ^ AFF ^ VOI ^ UNR ^ INE ^ COM ^ LAN
+Lack of Affordable Housing [AFF]: 
+Lack of Political Voice [VOI]: AFF ^ INE ^ LAN
+Unrest & Injustice [UNR]: AFF ^ INE ^ LAN
+Inefficiency [INE]: 
+Food Shortage [FOO]: AFF ^ INE ^ LAN
+Lack of Community Networks [COM]: AFF ^ INE ^ LAN
+Land Conversion [LAN]: 
+
+*** Economic Inequality [ECO]: 14 ***
+    record (10): AFF, INF, INE, LAN, SPR, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: SOC ^ INF ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: 
+Inflation [INF]: 
+Low Education [EDU]: SOC ^ INF ^ AFF
+Lack of Healthcare [HEA]:
+  SOC ^ INF ^ EDU ^ AFF ^ VOI ^ UNR ^ COM
+  SOC ^ INF ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Lack of Affordable Housing [AFF]: 
+Lack of Political Voice [VOI]: SOC ^ INF ^ AFF
+Unrest & Injustice [UNR]: SOC ^ INF ^ AFF
+Inefficiency [INE]: SOC ^ INF ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Sprawl [SPR]: SOC ^ INF ^ AFF
+Lack of Community Networks [COM]: SOC ^ INF ^ AFF
+Food Shortage [FOO]: SOC ^ INF ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Land Conversion [LAN]: SOC ^ INF ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+
+*** Discrimination [DIS]: 15 ***
+    record (12): HEA, AFF, INF, INE, LAN, SPR, ECO, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]:
+  SOC ^ ECO ^ INF ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+  SOC ^ ECO ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: 
+Economic Inequality [ECO]: 
+Inflation [INF]: SOC ^ ECO
+Low Education [EDU]: SOC ^ ECO
+Lack of Healthcare [HEA]:
+  SOC ^ ECO ^ EDU ^ VOI ^ UNR ^ COM
+  SOC ^ ECO ^ INF ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Lack of Affordable Housing [AFF]: SOC ^ ECO
+Lack of Political Voice [VOI]: SOC ^ ECO
+Unrest & Injustice [UNR]: SOC ^ ECO
+Inefficiency [INE]:
+  SOC ^ ECO ^ INF ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+  SOC ^ ECO ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Sprawl [SPR]:
+  SOC ^ ECO ^ INF ^ AFF
+  SOC ^ ECO ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ COM
+Lack of Community Networks [COM]: SOC ^ ECO
+Food Shortage [FOO]:
+  SOC ^ ECO ^ INF ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+  SOC ^ ECO ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Land Conversion [LAN]:
+  SOC ^ ECO ^ INF ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+  SOC ^ ECO ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+
+*** Low Labour Standards [LOW]: 16 ***
+    record (12): HEA, AFF, INE, LAN, SPR, ECO, DIS, SOC, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: SOC ^ ECO ^ EDU ^ HEA ^ DIS ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: ECO ^ EDU ^ HEA ^ DIS ^ VOI
+Economic Inequality [ECO]: 
+Inflation [INF]: ECO ^ EDU ^ HEA ^ DIS ^ VOI
+Low Education [EDU]: 
+Lack of Healthcare [HEA]: 
+Discrimination [DIS]: 
+Lack of Affordable Housing [AFF]: ECO ^ EDU ^ HEA ^ DIS ^ VOI
+Lack of Political Voice [VOI]: 
+Unrest & Injustice [UNR]: SOC ^ ECO ^ EDU ^ HEA ^ DIS ^ VOI
+Inefficiency [INE]: SOC ^ ECO ^ EDU ^ HEA ^ DIS ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Sprawl [SPR]: SOC ^ ECO ^ EDU ^ HEA ^ DIS ^ AFF ^ VOI
+Lack of Community Networks [COM]: ECO ^ EDU ^ HEA ^ DIS ^ VOI
+Food Shortage [FOO]: SOC ^ ECO ^ EDU ^ HEA ^ DIS ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Land Conversion [LAN]: SOC ^ ECO ^ EDU ^ HEA ^ DIS ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+
+*** Systemic Corruption [SYS]: 25 ***
+    record (20): HEA, AFF, INF, MON, MAR, INE, BIO, CHE, FRE, AIR, LAN, NIT, UNS, POL, SPR, ECO, SOC, VOI, UNR, COM
+Energy Shortage [ENE]:
+  BIO ^ SOC ^ INF ^ ECO ^ MON ^ HEA ^ CHE ^ POL ^ MAR ^ UNR ^ INE ^ FRE ^ AIR
+  UNS ^ SOC ^ INF ^ ECO ^ MON ^ CHE ^ POL ^ MAR ^ UNR ^ INE ^ FRE ^ LAN ^ NIT
+Biodiversity Loss [BIO]:
+  SOC ^ INF ^ ECO ^ MON ^ CHE ^ POL ^ MAR ^ UNR ^ INE ^ AIR
+  SOC ^ INF ^ ECO ^ MON ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+  UNS ^ SOC ^ INF ^ ECO ^ MON ^ CHE ^ POL ^ MAR ^ UNR ^ INE ^ FRE ^ LAN ^ NIT
+Unsustainable Harvesting [UNS]: SOC ^ INF ^ ECO ^ MON ^ POL ^ MAR ^ UNR ^ INE
+Social Inequity [SOC]: 
+Inflation [INF]: 
+Economic Inequality [ECO]: 
+Low Education [EDU]: SOC ^ INF ^ ECO ^ MON ^ UNR ^ INE
+Monopoly [MON]: 
+Lack of Healthcare [HEA]:
+  SOC ^ INF ^ ECO ^ MON ^ UNR ^ INE ^ COM
+  SOC ^ INF ^ ECO ^ MON ^ CHE ^ POL ^ MAR ^ UNR ^ INE ^ AIR
+  UNS ^ SOC ^ INF ^ ECO ^ MON ^ CHE ^ POL ^ MAR ^ UNR ^ INE ^ FRE ^ LAN ^ NIT
+Chemical Pollution [CHE]: SOC ^ INF ^ ECO ^ MON ^ POL ^ MAR ^ UNR ^ INE
+Polluting Industry [POL]: SOC ^ INF ^ ECO ^ MON ^ UNR ^ INE
+Lack of Affordable Housing [AFF]: SOC ^ INF ^ ECO ^ MON ^ UNR ^ INE
+Market Externalities [MAR]: SOC ^ INF ^ ECO ^ MON ^ UNR ^ INE
+Lack of Political Voice [VOI]: SOC ^ INF ^ ECO ^ MON ^ UNR ^ INE
+Unrest & Injustice [UNR]: 
+Clean Water Shortage [CLE]:
+  BIO ^ SOC ^ INF ^ ECO ^ MON ^ HEA ^ CHE ^ POL ^ MAR ^ UNR ^ INE ^ FRE ^ AIR
+  UNS ^ SOC ^ INF ^ ECO ^ MON ^ CHE ^ POL ^ MAR ^ UNR ^ INE ^ FRE ^ LAN ^ NIT
+Inefficiency [INE]: 
+Freshwater Depletion [FRE]:
+  UNS ^ SOC ^ INF ^ ECO ^ MON ^ POL ^ MAR ^ UNR ^ INE
+  SOC ^ INF ^ ECO ^ MON ^ CHE ^ POL ^ MAR ^ UNR ^ INE ^ AIR
+Sprawl [SPR]: SOC ^ INF ^ ECO ^ MON ^ AFF ^ UNR ^ INE
+Food Shortage [FOO]:
+  SOC ^ INF ^ ECO ^ MON ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+  BIO ^ SOC ^ INF ^ ECO ^ MON ^ HEA ^ CHE ^ POL ^ MAR ^ UNR ^ INE ^ FRE ^ AIR
+  UNS ^ SOC ^ INF ^ ECO ^ MON ^ CHE ^ POL ^ MAR ^ UNR ^ INE ^ FRE ^ LAN ^ NIT
+Lack of Community Networks [COM]: SOC ^ INF ^ ECO ^ MON ^ UNR ^ INE
+Air & Ozone Degradation [AIR]: SOC ^ INF ^ ECO ^ MON ^ POL ^ MAR ^ UNR ^ INE
+Land Conversion [LAN]:
+  UNS ^ SOC ^ INF ^ ECO ^ MON ^ POL ^ MAR ^ UNR ^ INE
+  SOC ^ INF ^ ECO ^ MON ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM
+Nitrogen & Phosphorous Loading [NIT]: UNS ^ SOC ^ INF ^ ECO ^ MON ^ POL ^ MAR ^ UNR ^ INE
+
+*** Social Inequity [SOC]: 12 ***
+    record (9): HEA, AFF, INE, LAN, SPR, EDU, VOI, UNR, COM
+Biodiversity Loss [BIO]: EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Low Education [EDU]: 
+Lack of Healthcare [HEA]: EDU ^ VOI ^ UNR ^ COM
+Lack of Affordable Housing [AFF]: EDU ^ HEA ^ VOI ^ UNR ^ COM
+Lack of Political Voice [VOI]: 
+Unrest & Injustice [UNR]: 
+Inefficiency [INE]: EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+Sprawl [SPR]: EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ COM
+Food Shortage [FOO]: EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Lack of Community Networks [COM]: 
+Land Conversion [LAN]: EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR ^ COM
+
+*** Low Education [EDU]: 1 ***
+    record (0): 
+
+*** Lack of Political Voice [VOI]: 12 ***
+    record (9): HEA, AFF, INE, LAN, SPR, SOC, EDU, UNR, COM
+Biodiversity Loss [BIO]: SOC ^ EDU ^ HEA ^ AFF ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: 
+Low Education [EDU]: SOC ^ COM
+Lack of Healthcare [HEA]: SOC ^ COM
+Lack of Affordable Housing [AFF]: SOC ^ HEA ^ COM
+Unrest & Injustice [UNR]: SOC ^ COM
+Inefficiency [INE]: SOC ^ EDU ^ HEA ^ AFF ^ UNR ^ SPR ^ COM
+Sprawl [SPR]: SOC ^ EDU ^ HEA ^ AFF ^ COM
+Food Shortage [FOO]: SOC ^ EDU ^ HEA ^ AFF ^ UNR ^ INE ^ SPR ^ COM ^ LAN
+Lack of Community Networks [COM]: 
+Land Conversion [LAN]: SOC ^ EDU ^ HEA ^ AFF ^ UNR ^ SPR ^ COM
+
+*** Unrest & Injustice [UNR]: 12 ***
+    record (9): HEA, AFF, INE, LAN, SPR, SOC, EDU, VOI, COM
+Biodiversity Loss [BIO]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ INE ^ SPR ^ COM ^ LAN
+Social Inequity [SOC]: 
+Low Education [EDU]: SOC ^ COM
+Lack of Healthcare [HEA]: SOC ^ COM
+Lack of Affordable Housing [AFF]: SOC ^ HEA ^ COM
+Lack of Political Voice [VOI]: SOC ^ COM
+Inefficiency [INE]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ SPR ^ COM
+Sprawl [SPR]: SOC ^ EDU ^ HEA ^ AFF ^ COM
+Food Shortage [FOO]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ INE ^ SPR ^ COM ^ LAN
+Lack of Community Networks [COM]: 
+Land Conversion [LAN]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ SPR ^ COM
+
+*** Lack of Community Networks [COM]: 12 ***
+    record (9): HEA, AFF, INE, LAN, SPR, SOC, EDU, VOI, UNR
+Biodiversity Loss [BIO]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ LAN
+Social Inequity [SOC]: 
+Low Education [EDU]: SOC ^ HEA
+Lack of Healthcare [HEA]: 
+Lack of Affordable Housing [AFF]: SOC ^ HEA
+Lack of Political Voice [VOI]: SOC ^ HEA
+Unrest & Injustice [UNR]: SOC ^ HEA
+Inefficiency [INE]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR
+Sprawl [SPR]: SOC ^ EDU ^ HEA ^ AFF
+Food Shortage [FOO]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ INE ^ SPR ^ LAN
+Land Conversion [LAN]: SOC ^ EDU ^ HEA ^ AFF ^ VOI ^ UNR ^ SPR
+
