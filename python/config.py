@@ -1,5 +1,5 @@
 SEED = 42
-NUM_RUNS = 1000
+NUM_RUNS = 100
 GRAPH = "map20211028.mm"
 VERBOSE = False
 IN_CRISIS = [ 'Social Inequity',
@@ -13,5 +13,5 @@ IN_CRISIS = [ 'Social Inequity',
               'Market Externalities',
              ]
 GAME_LENGTH = 12
-CRISIS_CHECK = 9
+CRISIS_CHECK = 6
 

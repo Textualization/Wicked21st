@@ -258,8 +258,8 @@ class Game:
 ###            
 ###   	CRISIS RISING
 ###         	Two crisis chip are added per turn
-            if self.state.player == 0 or self.state.player == 2:
-                self.state.crisis_chips += 1
+            if self.state.player == 0:
+                self.state.crisis_chips += 5 #+ len(self.state.players) - 3
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][2],
                                    'state' : self.state.to_json() } )
@@ -858,7 +858,7 @@ class Game:
 ###
 ###                 	If the problem is saturated (it is in crisis and all its reachable problems are also in crisis), add a crisis chip and start again. If this happens ten times in a row, then the game is lost.
 ###
-###                 	With the problem in hand, roll crisis chips until either the roll is successful or all the crisis chips are exhausted
+###                 	With the problem in hand, check whether the problem is already in crisis and all its direct outflows are already in crisis. If that is the case, use the list attached at the end of this document (one list per node) and mark in crisis or remove the protection if they were protected for as many nodes in the list as crisis chips remain. If there are more crisis chips than nodes that can be changed, keep the remaining crisis chips and continue (select another category, node, etc.). Otherwise (if the node is not in crisis or not all its outflows are in crisis), roll crisis chips until either the roll is successful or all the crisis chips are exhausted
 ###
 ###                 	While there are crisis chips or the problem is in crisis:
 ###
@@ -874,7 +874,7 @@ class Game:
 ### 
 ###                        	If the problem was already in crisis, it cascades as follows:
 ###
-###                             	All outflows from the node in crisis are marked as in crisis. If all of them were already marked in crisis, mark in crisis the first node in the list attached at the end of this document (one list per node). (Mark in crisis or remove the protection if they were protected.)
+###                             	All outflows from the node in crisis are marked as in crisis.
 
 
                 ## add crisis chip for each category fully in crisis
@@ -931,64 +931,91 @@ class Game:
                                        'target' : noden,
                                        'memo' : Game.L_CRISIS_NODE,
                                        'state' : self.state.to_json() } )
-                        
-                    ## with a node in hand, roll crisis chips until either the roll is successful or all the crisis chips are exhausted
-                    crisis_averted = True
-                    while self.state.crisis_chips:
-                        crisis_roll = self.roll_dice(2, self.state.player, 'crisis roll for ' + noden, rand, 1)
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][1],
-                                           'target' : crisis_roll,
-                                           'memo' : Game.L_CRISIS_ROLL, 'args' : [ noden ],
-                                           'state' : self.state.to_json() } )
-                        self.state.crisis_chips -= 1
-                        if crisis_roll < self.game_def.crisis_check:
-                            crisis_averted = False
-                            break
 
-                    if crisis_averted:
-                        self.log.append( { 'phase' : phase,
-                                           'step' : Game.STEPS_PER_PHASE[phase][1],
-                                           'target' : noden,
-                                           'memo' : Game.L_CRISIS_AVERTED,
-                                           'state' : self.state.to_json() } )
+                    if self.state.graph.is_one_level_saturated(noden):
+                        ## consume crisis_chips going through the cascade table
+                        idx = 0
+                        while idx < len(self.game_def.cascades.cascade[node]) and self.state.crisis_chips:
+                            other=self.game_def.cascades.cascade[node][idx]
+                            othern = self.game_def.graph.node_names[other]
+                            if self.state.graph[othern]['status'] != GraphState.IN_CRISIS:
+                                ## if node was stable, set in crisis
+                                if self.state.graph[othern]['status'] == GraphState.STABLE:
+                                    self.state.graph[othern]['status'] = GraphState.IN_CRISIS
+                                    self.log.append( { 'phase' : phase,
+                                                       'step' : Game.STEPS_PER_PHASE[phase][1],
+                                                       'target' : othern,
+                                                       'memo' : Game.L_IN_CRISIS,
+                                                       'state' : self.state.to_json() } )
+                                    
+                                    ## if the node was protected, remove the protection
+                                elif self.state.graph[othern]['status'] == GraphState.PROTECTED:
+                                    self.state.graph[othern]['status'] = GraphState.STABLE
+                                    self.log.append( { 'phase' : phase,
+                                                       'step' : Game.STEPS_PER_PHASE[phase][0],
+                                                       'target' : othern,
+                                                       'memo' : Game.L_PROT_LOSS,
+                                                       'state' : self.state.to_json() } )
+                                self.state.crisis_chips -= 1
+                            idx += 1
                     else:
-                        ## if node was stable, set in crisis
-                        if self.state.graph[noden]['status'] == GraphState.STABLE:
-                            self.state.graph[noden]['status'] = GraphState.IN_CRISIS
+                        ## with a node in hand, roll crisis chips until either the roll is successful or all the crisis chips are exhausted
+                        crisis_averted = True
+                        while self.state.crisis_chips:
+                            crisis_roll = self.roll_dice(2, self.state.player, 'crisis roll for ' + noden, rand, 1)
+                            self.log.append( { 'phase' : phase,
+                                               'step' : Game.STEPS_PER_PHASE[phase][1],
+                                               'target' : crisis_roll,
+                                               'memo' : Game.L_CRISIS_ROLL, 'args' : [ noden ],
+                                               'state' : self.state.to_json() } )
+                            self.state.crisis_chips -= 1
+                            if crisis_roll < self.game_def.crisis_check:
+                                crisis_averted = False
+                                break
+
+                        if crisis_averted:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][1],
                                                'target' : noden,
-                                               'memo' : Game.L_IN_CRISIS,
+                                               'memo' : Game.L_CRISIS_AVERTED,
                                                'state' : self.state.to_json() } )
-                            
-                        ## if the node was protected, remove the protection
-                        elif self.state.graph[noden]['status'] == GraphState.PROTECTED:
-                            self.state.graph[noden]['status'] = GraphState.STABLE
-                            self.log.append( { 'phase' : phase,
-                                               'step' : Game.STEPS_PER_PHASE[phase][0],
-                                               'target' : noden,
-                                               'memo' : Game.L_PROT_LOSS,
-                                               'state' : self.state.to_json() } )
-                        ## if the node was in crisis, activate all the nodes reachable from it and further cascade as needed
                         else:
-                            cascaded = self.cascade(node)
-                            for node2 in sorted(cascaded, key=lambda x:self.game_def.graph.node_names[x]):
-                                node2n = self.game_def.graph.node_names[node2]
-                                if self.state.graph[node2n]['status'] == GraphState.STABLE:
-                                    self.state.graph[node2n]['status'] = GraphState.IN_CRISIS
-                                    self.log.append( { 'phase' : phase,
-                                                       'step' : Game.STEPS_PER_PHASE[phase][1],
-                                                       'target' : node2n,
-                                                       'memo' : Game.L_IN_CRISIS_CASCADE, 'args': [ noden ],
-                                                       'state' : self.state.to_json() } )
-                                elif self.state.graph[node2n]['status'] == GraphState.PROTECTED:
-                                    self.state.graph[node2n]['status'] = GraphState.STABLE
-                                    self.log.append( { 'phase' : phase,
-                                                       'step' : Game.STEPS_PER_PHASE[phase][1],
-                                                       'target' : node2n,
-                                                       'memo' : Game.L_PROT_LOSS_CASCADE, 'args': [ noden ],
-                                                       'state' : self.state.to_json() } )
+                            ## if node was stable, set in crisis
+                            if self.state.graph[noden]['status'] == GraphState.STABLE:
+                                self.state.graph[noden]['status'] = GraphState.IN_CRISIS
+                                self.log.append( { 'phase' : phase,
+                                                   'step' : Game.STEPS_PER_PHASE[phase][1],
+                                                   'target' : noden,
+                                                   'memo' : Game.L_IN_CRISIS,
+                                                   'state' : self.state.to_json() } )
+
+                            ## if the node was protected, remove the protection
+                            elif self.state.graph[noden]['status'] == GraphState.PROTECTED:
+                                self.state.graph[noden]['status'] = GraphState.STABLE
+                                self.log.append( { 'phase' : phase,
+                                                   'step' : Game.STEPS_PER_PHASE[phase][0],
+                                                   'target' : noden,
+                                                   'memo' : Game.L_PROT_LOSS,
+                                                   'state' : self.state.to_json() } )
+                            ## if the node was in crisis, activate all the nodes reachable from it and further cascade as needed
+                            else:
+                                cascaded = self.cascade(node)
+                                for node2 in sorted(cascaded, key=lambda x:self.game_def.graph.node_names[x]):
+                                    node2n = self.game_def.graph.node_names[node2]
+                                    if self.state.graph[node2n]['status'] == GraphState.STABLE:
+                                        self.state.graph[node2n]['status'] = GraphState.IN_CRISIS
+                                        self.log.append( { 'phase' : phase,
+                                                           'step' : Game.STEPS_PER_PHASE[phase][1],
+                                                           'target' : node2n,
+                                                           'memo' : Game.L_IN_CRISIS_CASCADE, 'args': [ noden ],
+                                                           'state' : self.state.to_json() } )
+                                    elif self.state.graph[node2n]['status'] == GraphState.PROTECTED:
+                                        self.state.graph[node2n]['status'] = GraphState.STABLE
+                                        self.log.append( { 'phase' : phase,
+                                                           'step' : Game.STEPS_PER_PHASE[phase][1],
+                                                           'target' : node2n,
+                                                           'memo' : Game.L_PROT_LOSS_CASCADE, 'args': [ noden ],
+                                                           'state' : self.state.to_json() } )
                         
 
                     ## if there are more crisis chips, continue by selecting a new category

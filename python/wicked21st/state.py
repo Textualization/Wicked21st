@@ -81,6 +81,18 @@ class GraphState(ValidKeysDict):
             
         return True
         
+    def is_one_level_saturated(self, node_name):
+        if self[node_name]['status'] != GraphState.IN_CRISIS:
+            return False
+
+        node = self[node_name]['id']
+        for outlink in self.graph.outlinks[node]:
+            outlinkn = self.graph.node_names[outlink]
+            if not self[outlinkn]['status'] != GraphState.IN_CRISIS:
+                return False
+            
+        return True
+        
     def copy(self):
         copy = GraphState(self.graph)
         for n, obj in self.items():
