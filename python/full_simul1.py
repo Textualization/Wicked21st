@@ -49,14 +49,6 @@ game_def = GameDef(game_init, NUM_PLAYERS, config.CRISIS_CHECK, classes_def, gra
 # assemble random players
 
 players = [ Player("Player{}".format(p+1), p) for p in range(NUM_PLAYERS) ]
-picked = set([])
-for player in players:
-    while True:
-        picked_class = classes_def.class_for_name(player.pick(Player.INIT_ROLE, classes_def.names(), rand))
-        if picked_class not in picked:
-            break
-                                                  
-    player.set_class(picked_class)
 
 game = Game(game_def, players)
 game.start(rand)

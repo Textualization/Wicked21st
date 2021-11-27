@@ -160,6 +160,16 @@ class Game:
         self.phase_start_state = None
         self.phase_actions = None
 
+        # ask players to pick roles
+        classes_to_pick = self.game_def.classes.names()
+        for idx in range(self.game_def.num_players):
+            class_for_player = self.players[idx].pick(
+                Player.INIT_ROLE,
+                classes_to_pick,
+                rand, self.state.players[idx], self.state)
+            self.players[idx].set_class(self.game_def.classes.class_for_name(class_for_player))
+            del classes_to_pick[classes_to_pick.index(class_for_player)]
+
     def advance(self):
         "Returns True is the game has ended"
         if self.finished or len(self.state.graph.are_in_crisis()) == len(self.game_def.graph):

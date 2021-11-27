@@ -46,7 +46,7 @@ game_def = GameDef(game_init, NUM_PLAYERS, classes_def, graph_def, cascade_def, 
 
 # assemble random players
 
-players = [ Player("Player{}".format(p+1), p, classes_def.pick(rand)) for p in range(config.NUM_PLAYERS) ]
+players = [ Player("Player{}".format(p+1), p) for p in range(config.NUM_PLAYERS) ]
 
 game = Game(game_def, players)
 

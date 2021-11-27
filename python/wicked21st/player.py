@@ -34,10 +34,10 @@ class Player:
                        'Fund research',
                       ]
     
-    def __init__(self, name: str, ordering: int, pclass=None):
+    def __init__(self, name: str, ordering: int):
         self.name = name
         self.ordering = ordering
-        self.player_class = pclass
+        self.player_class = None
 
     def set_class(self, pclass: BaseClass):
         self.player_class = pclass
@@ -65,7 +65,8 @@ class PlayerState:
         self.resources = resources
         self.cards     = cards
         self.projects  = list()
-        self.tech = list()
+        self.tech      = list()
+        self.extra     = None
 
     def available_project_slots(self):
         return self.player.player_class.project_slots - len(self.projects)
@@ -74,15 +75,20 @@ class PlayerState:
         return self.player.player_class.research_slots - len(self.tech)
 
     def to_json(self):
-        return { 'player'       : self.player.to_json(),
-                 'resources'    : self.resources,
-                 'cards'        : self.cards,
-                 'projects'     : self.projects,
-                 'technologies' : self.tech,
-                }
+        result = { 'player'       : self.player.to_json(),
+                   'resources'    : self.resources,
+                   'cards'        : self.cards,
+                   'projects'     : self.projects,
+                   'technologies' : self.tech,
+                  }
+        if self.extra:
+            result['extra'] = extra.to_json()
+        return result
     
     def copy(self):
         copy = PlayerState(self.player, dict(self.resources), list(self.cards))
         copy.projects = list(self.projects)
         copy.tech = list(self.tech)
+        if self.extra:
+            copy.extra = extra.copy()
         return copy

@@ -51,9 +51,7 @@ def simulate_one(seed):
     game_def = GameDef(game_init, num_players, config.CRISIS_CHECK, classes_def, graph_def, cascade_def, tree_def, project_def)
 
     # assemble random players
-    classes = list(classes_def.classes)
-    rand.shuffle(classes)
-    players = [ Player("Player{}".format(p+1), p, classes[p]) for p in range(num_players) ]
+    players = [ Player("Player{}".format(p+1), p) for p in range(num_players) ]
 
     game = Game(game_def, players)
 
