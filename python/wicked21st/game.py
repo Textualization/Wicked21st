@@ -161,12 +161,12 @@ class Game:
         self.phase_actions = None
 
         # ask players to pick roles
-        classes_to_pick = self.game_def.classes.names()
+        classes_to_pick = sorted(self.game_def.classes.names())
         for idx in range(self.game_def.num_players):
             class_for_player = self.players[idx].pick(
                 Player.INIT_ROLE,
                 classes_to_pick,
-                rand, self.state.players[idx], self.state)
+                rand, self.state.players[idx], self.state, { 'game_def' : self.game_def })
             self.players[idx].set_class(self.game_def.classes.class_for_name(class_for_player))
             del classes_to_pick[classes_to_pick.index(class_for_player)]
 
