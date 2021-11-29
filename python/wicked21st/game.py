@@ -726,7 +726,7 @@ class Game:
                                                'state' : self.state.to_json() } )
 
                             if tech.type_ == Tech.BASE or tech.type_ == Tech.A:
-                                #TODO see if any failed roll would have succeeded with the extra boost
+                                # see if any failed roll would have succeeded with the extra boost
                                 boost = 1 if tech.type == Tech.BASE else 2
                                 for idx, act in enumerate(self.phase_actions):
                                     if act[1] == Game.A_FAILED_SKILL and act[3][1] == tech.suit and act[-2] <= act[-1] + boost:
