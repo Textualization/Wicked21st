@@ -19,6 +19,8 @@ class GreedyPlayer(Player):
 
     RESEARCH_TIER = TOP_TIER
 
+    DEBUG = False
+
     def __init__(self, name: str, ordering: int):
         super().__init__(name, ordering)
         self.rnd = random.Random(ordering * 7)
@@ -85,7 +87,8 @@ class GreedyPlayer(Player):
 
         if 'card_analysis' not in state.extra.phase_mem:
             actions = self.analyze_cards(self.rnd, state, game, actions)
-            print("cards analyzed:", actions)
+            if GreedyPlayer.DEBUG:
+                print("cards analyzed:", actions)
             state.extra.phase_mem['actions'] = actions
             state.extra.phase_mem['card_analysis'] = True
         
@@ -193,7 +196,8 @@ class GreedyPlayer(Player):
                 if target_tech:
                     break
 
-        print("target_tech: ", target_tech.name if target_tech else None)
+        if GreedyPlayer.DEBUG:
+            print("target_tech: ", target_tech.name if target_tech else None)
             
         # else: do not do any research
         
@@ -214,13 +218,15 @@ class GreedyPlayer(Player):
                 elif idx < len(order) * 0.666:
                     crisis_top_66perc.append(node)
 
-        print("crisis_top_16perc={}, crisis_top_33perc={}, crisis_top_66perc={}".format(len(crisis_top_16perc), len(crisis_top_33perc), len(crisis_top_66perc)))
+        if GreedyPlayer.DEBUG:
+            print("crisis_top_16perc={}, crisis_top_33perc={}, crisis_top_66perc={}".format(len(crisis_top_16perc), len(crisis_top_33perc), len(crisis_top_66perc)))
 
         # choose project
         ongoing = game.projects.projects_for_status(ProjectState.IN_PROGRESS)
         
         if crisis_top_16perc:
-            print("crisis_top_16perc")
+            if GreedyPlayer.DEBUG:
+                print("crisis_top_16perc")
 
             # there are projects for them?
             projects = list()
@@ -356,7 +362,8 @@ class GreedyPlayer(Player):
                         }
                     }
         elif crisis_top_33perc:
-            print("crisis_top_33perc")
+            if GreedyPlayer.DEBUG:
+                print("crisis_top_33perc")
             if state.projects: # do I have a project?
                 # finish it
                 needed = list(game.projects[state.projects[0]]['missing'] if state.projects[0] in game.projects else game.projects.project_for_name(state.projects[0]).cost)
@@ -425,7 +432,8 @@ class GreedyPlayer(Player):
                     }
                 }
         elif crisis_top_66perc:
-            print("crisis_top_66perc")
+            if GreedyPlayer.DEBUG:
+                print("crisis_top_66perc")
             # same as before, but focus on research for top 16%
             draw = [ None, None ]
             if target_tech.suit in [ self.player_class.suit_a, self.player_class.suit_b ]:
@@ -498,7 +506,8 @@ class GreedyPlayer(Player):
                     }
                 }
         else:
-            print("crisis: other")
+            if GreedyPlayer.DEBUG:
+                print("crisis: other")
             # research and hoard cards for top 16%
             draw = [ None, None ]
             if target_tech and target_tech.suit in [ self.player_class.suit_a, self.player_class.suit_b ]:
@@ -629,11 +638,12 @@ class GreedyPlayerState:
 
             self.phase_mem = {}
 
-            print("My top tier:")
-            for idx, node in enumerate(self.order):
-                if idx >= len(self.order) * GreedyPlayer.TOP_TIER:
-                    break
-                print("\t" + game_def.graph.node_names[node])
+            if GreedyPlayer.DEBUG:
+                print("My top tier:")
+                for idx, node in enumerate(self.order):
+                    if idx >= len(self.order) * GreedyPlayer.TOP_TIER:
+                        break
+                    print("\t" + game_def.graph.node_names[node])
             
 
     def to_json(self):
