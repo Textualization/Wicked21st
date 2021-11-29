@@ -42,14 +42,15 @@ initial_graph = GraphState(graph_def)
 for topic in config.IN_CRISIS:
     initial_graph.in_crisis(topic)
 
-def simulate_one(seed):
+def simulate_one(arg):
+    run, seed = arg
     rand = random.Random(seed)
     
     game_init = GameInit(initial_graph)
     game_def = GameDef(game_init, num_players, config.CRISIS_CHECK, classes_def, graph_def, cascade_def, tree_def, project_def)
 
     # assemble random players
-    players = [ Player("Player{}".format(p+1), p) for p in range(num_players) ]
+    players = [ GreedyPlayer("Player{}".format(p+1), p) for p in range(num_players) ]
 
     game = Game(game_def, players)
 
@@ -76,7 +77,7 @@ def simulate_one(seed):
     return not game.finished, False
 
 pool = multiprocessing.Pool(20)
-results = pool.map(simulate_one, seeds)
+results = pool.map(simulate_one, enumerate(seeds))
 won = sum(map(lambda x: 0 if x[1] else x[0], results))
 errors = sum(map(lambda x: x[1], results))
 

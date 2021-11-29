@@ -14,6 +14,11 @@ from .drawpiles import DrawPiles
 
 class GreedyPlayer(Player):
 
+    TOP_TIER      = 0.166
+    SECOND_TIER   = 0.333
+
+    RESEARCH_TIER = TOP_TIER
+
     def __init__(self, name: str, ordering: int):
         super().__init__(name, ordering)
         self.rnd = random.Random(ordering * 7)
@@ -157,9 +162,9 @@ class GreedyPlayer(Player):
 
         target_tech = None
 
-        # research protection for 16%, if available
+        # research protection for top tier, if available
         for idx, node in enumerate(state.extra.order):
-            if idx > len(state.extra.order) * 0.166:
+            if idx > len(state.extra.order) * GreedyPlayer.RESEARCH_TIER:
                 break
             catid = game_def.graph.class_for_node[node]
             needed = []
@@ -178,7 +183,7 @@ class GreedyPlayer(Player):
         if not target_tech:
             # research shortest path for top 16% unprotected
             for idx, node in enumerate(state.extra.order):
-                if idx > len(state.extra.order) * 0.166:
+                if idx > len(state.extra.order) * GreedyPlayer.RESEARCH_TIER:
                     break
                     
                 for tech in researching + available:
@@ -202,9 +207,9 @@ class GreedyPlayer(Player):
         
         for idx, node in enumerate(order):
             if game_def.graph.node_names[node] in in_crisis:
-                if idx < len(order) * 0.166:
+                if idx < len(order) * GreedyPlayer.TOP_TIER:
                     crisis_top_16perc.append(node)
-                elif idx < len(order) * 0.333:
+                elif idx < len(order) * GreedyPlayer.SECOND_TIER:
                     crisis_top_33perc.append(node)
                 elif idx < len(order) * 0.666:
                     crisis_top_66perc.append(node)
@@ -618,9 +623,9 @@ class GreedyPlayerState:
 
             self.phase_mem = {}
 
-            print("My top 16%:")
+            print("My top tier:")
             for idx, node in enumerate(self.order):
-                if idx > len(self.order) * 0.166:
+                if idx >= len(self.order) * GreedyPlayer.TOP_TIER:
                     break
                 print("\t" + game_def.graph.node_names[node])
             
