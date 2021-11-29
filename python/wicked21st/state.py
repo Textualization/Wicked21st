@@ -162,7 +162,7 @@ class ProjectState(ValidKeysDict):
                 if project.name not in self:
                     result.append(project)
         else:
-            for obj in self.values():
+            for obj in sorted(self.values(),key=lambda x:x['name']):
                 if obj['status'] == status:
                     result.append(obj['project'])
         return result

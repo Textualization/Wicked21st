@@ -266,7 +266,7 @@ class Game:
 ###   	CRISIS RISING
 ###         	Two crisis chip are added per turn
             if self.state.player == 0:
-                self.state.crisis_chips += 5 #+ len(self.state.players) - 3
+                self.state.crisis_chips += 4 #+ len(self.state.players) - 3
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][2],
                                    'state' : self.state.to_json() } )
@@ -666,7 +666,7 @@ class Game:
                 counts = dict()
                 for tech, player in tech_started:
                     counts[tech.name] = counts.get(tech.name, list()) + [ player ]
-                for n, players in counts.items():
+                for n, players in sorted(counts.items()):
                     players = sorted(players)
                     for p in players[1:]:
                         self.state.players[p].tech.remove(n)
@@ -803,7 +803,7 @@ class Game:
                                            'state' : self.state.to_json() } )
 
                 ## see if any of the projects was finished and apply its actions
-                print("actions", "\n".join(map(str,self.phase_actions)))
+                #print("actions", "\n".join(map(str,self.phase_actions)))
                 for project in self.state.projects.projects_for_status(ProjectState.IN_PROGRESS):
                     for act in self.phase_actions:
                         if act[1] == Game.A_SUCCESS_SKILL and act[2] == project:
@@ -817,7 +817,7 @@ class Game:
                             else:
                                 del missing[missing.index(act[3][1])]
                                 self.state.projects[project.name]['missing'] = missing
-                    print("ONGOING:", project.name, "missing", self.state.projects[project.name]['missing'])
+                    #print("ONGOING:", project.name, "missing", self.state.projects[project.name]['missing'])
                     if len(self.state.projects[project.name]['missing']) == 0:
                         # finished
                         proj_player = self.state.projects[project.name]['player']

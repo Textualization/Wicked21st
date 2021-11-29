@@ -223,13 +223,19 @@ class GreedyPlayer(Player):
             print("crisis_top_16perc")
 
             # there are projects for them?
-            project = None
+            projects = list()
             for crisis_node in crisis_top_16perc:
                 for ongoingp in ongoing:
                     if ongoingp.fixes == crisis_node:
-                        project = ongoingp
-                        break
-                    
+                        projects.append(ongoingp)
+
+            # check if any of the projects is mine
+            project = None
+            if state.projects and game.projects.project_for_name(state.projects[0]) in projects:
+                project = game.projects.project_for_name(state.projects[0])
+            if projects and project is None:
+                project = projects[0]
+            
             if project:
                 # all resources to it
                 missing = list(game.projects[project.name]['missing'])

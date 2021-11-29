@@ -81,4 +81,4 @@ results = pool.map(simulate_one, enumerate(seeds))
 won = sum(map(lambda x: 0 if x[1] else x[0], results))
 errors = sum(map(lambda x: x[1], results))
 
-print("players=", num_players, "crisis<", config.CRISIS_CHECK, "runs=", config.NUM_RUNS, "won=", won, int(won * 1.0 / config.NUM_RUNS * 1000) / 10, "%", "errors=", errors )
+print("\n\n\n\n\n\nplayers=", num_players, "crisis<", config.CRISIS_CHECK, "runs=", config.NUM_RUNS, "won=", won, int(won * 1.0 / config.NUM_RUNS * 1000) / 10, "%", "errors=", errors )
