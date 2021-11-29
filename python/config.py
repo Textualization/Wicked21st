@@ -14,4 +14,4 @@ IN_CRISIS = [ 'Social Inequity',
              ]
 GAME_LENGTH = 12
 CRISIS_CHECK = 7
-
+CRISIS_RISING = 4

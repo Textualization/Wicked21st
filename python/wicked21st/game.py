@@ -266,7 +266,7 @@ class Game:
 ###   	CRISIS RISING
 ###         	Two crisis chip are added per turn
             if self.state.player == 0:
-                self.state.crisis_chips += 4 #+ len(self.state.players) - 3
+                self.state.crisis_chips += self.game_def.crisis_rising #+ len(self.state.players) - 3
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][2],
                                    'state' : self.state.to_json() } )

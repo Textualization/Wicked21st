@@ -25,6 +25,7 @@ class GameDef:
     def __init__(self, game_init: GameInit,
                  num_players: int,
                  crisis_check: int,
+                 crisis_rising: int,
                  classes_def: Classes,
                  graph_def: Graph,
                  cascade_def: Cascades,
@@ -33,6 +34,7 @@ class GameDef:
         self.game_init = game_init
         self.num_players = num_players
         self.crisis_check = crisis_check
+        self.crisis_rising = crisis_rising
         self.classes = classes_def
         self.graph = graph_def
         self.cascades = cascade_def
@@ -45,6 +47,7 @@ class GameDef:
             self.tojson_memo = {
                 'num_players' : self.num_players,
                 'crisis_check' : self.crisis_check,
+                'crisis_rising' : self.crisis_rising,
                 'game_init' : self.game_init.to_json(),
                 'classes' : self.classes_def.to_json(),
                 'graph' : self.graph.to_json(),
