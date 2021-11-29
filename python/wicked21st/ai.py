@@ -238,7 +238,6 @@ class GreedyPlayer(Player):
                     elif len(draw) == 1:
                         draw.append(rnd.choice([ self.player_class.suit_a, self.player_class.suit_b ]))
                     
-                    
                     return {
                         Player.PILE_DRAW: draw,
                         Player.START_PROJECT: None,
