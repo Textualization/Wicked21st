@@ -82,7 +82,7 @@ class PlayerState:
                    'technologies' : self.tech,
                   }
         if self.extra:
-            result['extra'] = extra.to_json()
+            result['extra'] = self.extra.to_json()
         return result
     
     def copy(self):
@@ -90,5 +90,5 @@ class PlayerState:
         copy.projects = list(self.projects)
         copy.tech = list(self.tech)
         if self.extra:
-            copy.extra = extra.copy()
+            copy.extra = self.extra.copy()
         return copy

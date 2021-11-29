@@ -19,6 +19,7 @@ from wicked21st.player import Player
 from wicked21st.state import GraphState
 from wicked21st.game import Game
 from wicked21st.exceptions import EmptyDrawPile
+from wicked21st.ai import GreedyPlayer
 
 import config
 
@@ -27,10 +28,7 @@ num_players = int(sys.argv[1])
 mainrand = random.Random(config.SEED)
 seeds = list()
 for _ in range(config.NUM_RUNS):
-    n = mainrand.randbytes(8)
-    s = 0
-    for b in n:
-        s = s*256 + b
+    s = mainrand.getrandbits(8 * 8)
     seeds.append(s)
 
 # definitions

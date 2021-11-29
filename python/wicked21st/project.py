@@ -38,6 +38,7 @@ class Project:
                   }
         if self.parent is not None:
             result['parent'] = self.parent.name
+        return result
    
 class Projects:
 

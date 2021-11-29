@@ -22,6 +22,13 @@ class Graph:
   LIVING_STANDARDS = ( 'LIVING STANDARDS', '#987db3' )
 
   CATEGORIES = [ INDUSTRIAL, ECONOMIC, SOCIAL, CLASS, ENVIRONMENTAL, LIVING_STANDARDS ]
+
+  def class_name(catid):
+    for name, otherid in Graph.CATEGORIES:
+      if otherid == catid:
+        return name
+    print("Unknown catid:", catid)
+    assert False
     
   GRAPH_PRINT_SIZE = "10,10"
   

@@ -39,9 +39,6 @@ class GameState:
         self.tech = techtree_state
         self.drawpiles = drawpiles_state
 
-    def quorum(self):
-        return len(self.players) // 2 + 1
-
     def to_json(self):
         return { 'players' : to_json(self.players),
                  'player' : self.player,
@@ -238,11 +235,11 @@ class Game:
 ###            If a suit pile is consumed, shuffle the discard pile and set it as the new pile for the suit.
 
             accessible_piles = sorted(list(DrawPiles.SUITS))
-            
+
             draw_pile = self.players[self.state.player].pick(
                 Player.PILE_DRAW,
                 accessible_piles,
-                rand, self.state.players[self.state.player], self.phase_start_state)
+                rand, self.state.players[self.state.player], self.phase_start_state, { 'game_def' : self.game_def })
             drawn = self.state.drawpiles.draw(draw_pile, rand)
             self.state.players[self.state.player].cards.append(drawn)
             self.log.append( { 'phase' : phase,
@@ -257,7 +254,7 @@ class Game:
             draw_pile = self.players[self.state.player].pick(
                 Player.PILE_DRAW,
                 accessible_piles,
-                rand, self.state.players[self.state.player], self.phase_start_state)
+                rand, self.state.players[self.state.player], self.phase_start_state, { 'game_def' : self.game_def })
             drawn = self.state.drawpiles.draw(draw_pile, rand)
             self.state.players[self.state.player].cards.append(drawn)
             self.log.append( { 'phase' : phase,
@@ -427,7 +424,7 @@ class Game:
                 play_card = self.players[self.state.player].pick(
                     Player.PLAY_CARD,
                     card_choices,
-                    rand, self.state.players[self.state.player], self.phase_start_state)
+                    rand, self.state.players[self.state.player], self.phase_start_state, { 'game_def' : self.game_def })
                 self.log.append( { 'phase' : phase,
                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                    'target' : play_card,
@@ -480,7 +477,7 @@ class Game:
                         
                     roll = self.roll_dice(2, self.state.player, 'skill check', rand, 0)
                     if roll <= value:
-                        succeed = True
+                        succeeded = True
                     if roll == 12:
                         self.state.crisis_chips += 1
                         self.log.append( { 'phase' : phase,
@@ -806,19 +803,21 @@ class Game:
                                            'state' : self.state.to_json() } )
 
                 ## see if any of the projects was finished and apply its actions
+                print("actions", "\n".join(map(str,self.phase_actions)))
                 for project in self.state.projects.projects_for_status(ProjectState.IN_PROGRESS):
                     for act in self.phase_actions:
                         if act[1] == Game.A_SUCCESS_SKILL and act[2] == project:
                             missing = self.state.projects[project.name]['missing']
-                            if act[3][0] not in missing:
+                            if act[3][1] not in missing:
                                 self.log.append( { 'phase' : phase,
                                                    'step' : Game.STEPS_PER_PHASE[phase][0],
                                                    'target' : project.name,
                                                    'memo' : Game.L_PROJECT_OVERSKILLED, 'args' : [ act[3][0] ],
                                                    'state' : self.state.to_json() } )
                             else:
-                                del missing[missing.index(act[3][0])]
+                                del missing[missing.index(act[3][1])]
                                 self.state.projects[project.name]['missing'] = missing
+                    print("ONGOING:", project.name, "missing", self.state.projects[project.name]['missing'])
                     if len(self.state.projects[project.name]['missing']) == 0:
                         # finished
                         proj_player = self.state.projects[project.name]['player']
@@ -850,7 +849,7 @@ class Game:
                             self.log.append( { 'phase' : phase,
                                                'step' : Game.STEPS_PER_PHASE[phase][0],
                                                'target' : 1,
-                                               'memo' : L_CRISIS_CHIP_TRIGGERED, 'args' : [ project.name ],
+                                               'memo' : Game.L_CRISIS_CHIP_TRIGGERED, 'args' : [ project.name ],
                                                'state' : self.state.to_json() } )
 
 

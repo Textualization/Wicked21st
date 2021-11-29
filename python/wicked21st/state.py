@@ -174,6 +174,14 @@ class ProjectState(ValidKeysDict):
             # else, continue
         raise Exception("Not found: find_project({}, {})".format(type_, fix))
 
+    def project_for_name(self, project_name):
+        for project in self.projects.projects:
+            if project.name == project_name:
+                return project
+            # else, continue
+        raise Exception("Not found: project_for_name({})".format(project_name))
+        
+
     def copy(self):
         copy = ProjectState(self.projects)
         for n, obj in self.items():
@@ -218,7 +226,7 @@ class TechTreeState(ValidKeysDict):
     def techs_for_status(self, status: str):
         result = list()
         for tech in self.tree.technologies:
-            if self[tech.name] == status:
+            if self[tech.name]['status'] == status:
                 result.append(tech)
         return result
 

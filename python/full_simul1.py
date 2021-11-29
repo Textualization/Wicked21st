@@ -18,6 +18,7 @@ from wicked21st.player import Player
 from wicked21st.state import GraphState
 from wicked21st.game import Game
 from wicked21st.exceptions import EmptyDrawPile
+from wicked21st.ai import GreedyPlayer
 
 import config
 
@@ -48,7 +49,7 @@ game_def = GameDef(game_init, NUM_PLAYERS, config.CRISIS_CHECK, classes_def, gra
 
 # assemble random players
 
-players = [ Player("Player{}".format(p+1), p) for p in range(NUM_PLAYERS) ]
+players = [ GreedyPlayer("Player{}".format(p+1), p) for p in range(NUM_PLAYERS) ]
 
 game = Game(game_def, players)
 game.start(rand)
