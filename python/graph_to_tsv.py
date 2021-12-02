@@ -4,7 +4,7 @@ import math
 from wicked21st.graph import load_graph, Graph
 
 
-g = load_graph(sys.argv[1])
+g, c = load_graph(sys.argv[1])
 
 node_to_code = dict()
 for catid in g.node_classes:
@@ -30,7 +30,7 @@ for node in g.node_names.keys():
             this_inflow.append(other)
     inflows[node] = this_inflow
 
-print("CAT\tNAME\tCODE\t#INF\t#OUTF\tINFLOWS\tOUTFLOWS")
+print("CAT\tNAME\tCODE\t#INF\t#OUTF\tINFLOWS\tOUTFLOWS\tCASCADE")
 for name, catid in Graph.CATEGORIES:
     print("{}\t{}\t{}\t{}\t{}\t{}\t{}".format(name, "", "", "", "","",""))
     nodes = g.node_classes[catid]
@@ -38,5 +38,5 @@ for name, catid in Graph.CATEGORIES:
     for node in sorted(nodes, key=lambda x:g.ordering[x]):
         inf = ",".join(map(lambda x:node_to_code[x], inflows[node]))
         outf = ",".join(map(lambda x:node_to_code[x], g.outlinks[node]))
-        print("{}\t{}\t{}\t{}\t{}\t{}\t{}".format("", g.node_names[node], node_to_code[node],
-                                                  len(inflows[node]), len(g.outlinks[node]), inf, outf))
+        print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("", g.node_names[node], node_to_code[node],
+                                                      len(inflows[node]), len(g.outlinks[node]), inf, outf, ", ".join(c.cascade[node])))
