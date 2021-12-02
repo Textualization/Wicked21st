@@ -1,0 +1,1030 @@
+{
+  "AFF": {
+    "code": "AFF",
+    "name": "Lack of Affordable Housing",
+    "order": 3,
+    "category": {
+      "name": "CLASS",
+      "code": "#e69545"
+    },
+    "outlinks": [
+      "COM",
+      "SPR",
+      "SOC",
+      "POL",
+      "UNR"
+    ],
+    "cascading": [
+      "HEA",
+      "LOW",
+      "INE",
+      "LAN",
+      "LAB",
+      "FOO",
+      "ECO",
+      "BIO",
+      "DIS",
+      "SYS",
+      "INF",
+      "MON",
+      "IND",
+      "MAR",
+      "UNS",
+      "CHE",
+      "AIR",
+      "FRE",
+      "NIT",
+      "ENE",
+      "CLE"
+    ]
+  },
+  "AIR": {
+    "code": "AIR",
+    "name": "Air & Ozone Degradation",
+    "order": 5,
+    "category": {
+      "name": "ENVIRONMENTAL",
+      "code": "#a7cc5c"
+    },
+    "outlinks": [
+      "HEA"
+    ],
+    "cascading": [
+      "SOC",
+      "LOW",
+      "AFF",
+      "UNR",
+      "SPR",
+      "POL",
+      "COM",
+      "INE",
+      "LAB",
+      "LAN",
+      "DIS",
+      "ECO",
+      "FOO",
+      "BIO",
+      "SYS",
+      "INF",
+      "MON",
+      "MAR",
+      "IND",
+      "CHE",
+      "UNS",
+      "NIT",
+      "FRE",
+      "CLE",
+      "ENE"
+    ]
+  },
+  "BIO": {
+    "code": "BIO",
+    "name": "Biodiversity Loss",
+    "order": 1,
+    "category": {
+      "name": "ENVIRONMENTAL",
+      "code": "#a7cc5c"
+    },
+    "outlinks": [],
+    "cascading": []
+  },
+  "CHE": {
+    "code": "CHE",
+    "name": "Chemical Pollution",
+    "order": 2,
+    "category": {
+      "name": "ENVIRONMENTAL",
+      "code": "#a7cc5c"
+    },
+    "outlinks": [
+      "FRE",
+      "HEA",
+      "BIO"
+    ],
+    "cascading": [
+      "LOW",
+      "CLE",
+      "FOO",
+      "ENE",
+      "SOC",
+      "AFF",
+      "SPR",
+      "COM",
+      "POL",
+      "UNR",
+      "LAN",
+      "INE",
+      "LAB",
+      "DIS",
+      "ECO",
+      "SYS",
+      "INF",
+      "MON",
+      "MAR",
+      "IND",
+      "UNS",
+      "AIR",
+      "NIT"
+    ]
+  },
+  "CLE": {
+    "code": "CLE",
+    "name": "Clean Water Shortage",
+    "order": 4,
+    "category": {
+      "name": "CLASS",
+      "code": "#e69545"
+    },
+    "outlinks": [
+      "HEA"
+    ],
+    "cascading": [
+      "SOC",
+      "AFF",
+      "LOW",
+      "POL",
+      "SPR",
+      "UNR",
+      "COM",
+      "LAN",
+      "LAB",
+      "INE",
+      "BIO",
+      "FOO",
+      "DIS",
+      "ECO",
+      "INF",
+      "SYS",
+      "MON",
+      "IND",
+      "MAR",
+      "AIR",
+      "CHE",
+      "UNS",
+      "NIT",
+      "FRE",
+      "ENE"
+    ]
+  },
+  "CLI": {
+    "code": "CLI",
+    "name": "Climate Change",
+    "order": 3,
+    "category": {
+      "name": "ENVIRONMENTAL",
+      "code": "#a7cc5c"
+    },
+    "outlinks": [
+      "FOO",
+      "ENE",
+      "BIO",
+      "HEA",
+      "SOC",
+      "FRE",
+      "LAN"
+    ],
+    "cascading": [
+      "AFF",
+      "LOW",
+      "CLE",
+      "UNR",
+      "POL",
+      "COM",
+      "SPR",
+      "LAB",
+      "ECO",
+      "DIS",
+      "INE",
+      "INF",
+      "SYS",
+      "MON",
+      "IND",
+      "MAR",
+      "AIR",
+      "CHE",
+      "UNS",
+      "NIT"
+    ]
+  },
+  "COM": {
+    "code": "COM",
+    "name": "Lack of Community Networks",
+    "order": 5,
+    "category": {
+      "name": "SOCIAL",
+      "code": "#e67c73"
+    },
+    "outlinks": [
+      "HEA",
+      "SOC"
+    ],
+    "cascading": [
+      "AFF",
+      "POL",
+      "LOW",
+      "UNR",
+      "LAB",
+      "SPR",
+      "INE",
+      "DIS",
+      "ECO",
+      "LAN",
+      "SYS",
+      "INF",
+      "BIO",
+      "FOO",
+      "MON",
+      "MAR",
+      "IND",
+      "AIR",
+      "UNS",
+      "CHE",
+      "NIT",
+      "FRE",
+      "ENE",
+      "CLE"
+    ]
+  },
+  "DIS": {
+    "code": "DIS",
+    "name": "Discrimination",
+    "order": 2,
+    "category": {
+      "name": "LIVING STANDARDS",
+      "code": "#987db3"
+    },
+    "outlinks": [
+      "ECO",
+      "SOC"
+    ],
+    "cascading": [
+      "SYS",
+      "AFF",
+      "LOW",
+      "UNR",
+      "POL",
+      "INF",
+      "COM",
+      "LAB",
+      "INE",
+      "SPR",
+      "MON",
+      "HEA",
+      "IND",
+      "LAN",
+      "MAR",
+      "UNS",
+      "BIO",
+      "CHE",
+      "FOO",
+      "AIR",
+      "NIT",
+      "FRE",
+      "CLE",
+      "ENE"
+    ]
+  },
+  "ECO": {
+    "code": "ECO",
+    "name": "Economic Inequality",
+    "order": 1,
+    "category": {
+      "name": "LIVING STANDARDS",
+      "code": "#987db3"
+    },
+    "outlinks": [
+      "INF",
+      "AFF",
+      "SOC",
+      "SYS"
+    ],
+    "cascading": [
+      "COM",
+      "UNR",
+      "MON",
+      "INE",
+      "POL",
+      "LOW",
+      "SPR",
+      "LAN",
+      "HEA",
+      "LAB",
+      "IND",
+      "MAR",
+      "BIO",
+      "CHE",
+      "UNS",
+      "FOO",
+      "AIR",
+      "DIS",
+      "FRE",
+      "NIT",
+      "ENE",
+      "CLE"
+    ]
+  },
+  "ENE": {
+    "code": "ENE",
+    "name": "Energy Shortage",
+    "order": 1,
+    "category": {
+      "name": "CLASS",
+      "code": "#e69545"
+    },
+    "outlinks": [
+      "AFF",
+      "LOW"
+    ],
+    "cascading": [
+      "SOC",
+      "UNR",
+      "SPR",
+      "POL",
+      "COM",
+      "LAN",
+      "HEA",
+      "INE",
+      "LAB",
+      "FOO",
+      "ECO",
+      "BIO",
+      "DIS",
+      "SYS",
+      "INF",
+      "MON",
+      "MAR",
+      "IND",
+      "CHE",
+      "UNS",
+      "AIR",
+      "NIT",
+      "FRE",
+      "CLE"
+    ]
+  },
+  "FOO": {
+    "code": "FOO",
+    "name": "Food Shortage",
+    "order": 5,
+    "category": {
+      "name": "CLASS",
+      "code": "#e69545"
+    },
+    "outlinks": [
+      "COM",
+      "HEA",
+      "SOC"
+    ],
+    "cascading": [
+      "AFF",
+      "UNR",
+      "LOW",
+      "POL",
+      "SPR",
+      "LAB",
+      "LAN",
+      "DIS",
+      "INE",
+      "ECO",
+      "BIO",
+      "SYS",
+      "INF",
+      "MON",
+      "IND",
+      "MAR",
+      "UNS",
+      "AIR",
+      "CHE",
+      "FRE",
+      "NIT",
+      "ENE",
+      "CLE"
+    ]
+  },
+  "FRE": {
+    "code": "FRE",
+    "name": "Freshwater Depletion",
+    "order": 4,
+    "category": {
+      "name": "ENVIRONMENTAL",
+      "code": "#a7cc5c"
+    },
+    "outlinks": [
+      "CLE",
+      "FOO",
+      "ENE"
+    ],
+    "cascading": [
+      "SOC",
+      "COM",
+      "LOW",
+      "AFF",
+      "HEA",
+      "SPR",
+      "POL",
+      "UNR",
+      "INE",
+      "LAB",
+      "LAN",
+      "ECO",
+      "DIS",
+      "BIO",
+      "SYS",
+      "INF",
+      "MON",
+      "MAR",
+      "IND",
+      "CHE",
+      "AIR",
+      "UNS",
+      "NIT"
+    ]
+  },
+  "HEA": {
+    "code": "HEA",
+    "name": "Lack of Healthcare",
+    "order": 2,
+    "category": {
+      "name": "CLASS",
+      "code": "#e69545"
+    },
+    "outlinks": [
+      "SOC",
+      "AFF",
+      "LOW"
+    ],
+    "cascading": [
+      "COM",
+      "SPR",
+      "UNR",
+      "POL",
+      "LAN",
+      "INE",
+      "LAB",
+      "ECO",
+      "FOO",
+      "DIS",
+      "BIO",
+      "INF",
+      "SYS",
+      "MON",
+      "IND",
+      "MAR",
+      "UNS",
+      "AIR",
+      "CHE",
+      "NIT",
+      "FRE",
+      "CLE",
+      "ENE"
+    ]
+  },
+  "IND": {
+    "code": "IND",
+    "name": "Industrial Emissions",
+    "order": 2,
+    "category": {
+      "name": "INDUSTRIAL",
+      "code": "#6bb3b3"
+    },
+    "outlinks": [
+        "AIR",
+        "CHE",
+        "CLI",
+        "INE",
+        "NIT",
+        "OCE"        
+    ],
+    "cascading": [
+      "BIO",
+      "FRE",
+      "HEA",
+      "FOO",
+      "CLE",
+      "LOW",
+      "ENE",
+      "AFF",
+      "SOC",
+      "POL",
+      "UNR",
+      "COM",
+      "SPR",
+      "LAN",
+      "LAB",
+      "ECO",
+      "DIS",
+      "INF",
+      "SYS",
+      "MON",
+      "MAR",
+      "UNS",
+      "NIT"
+    ]
+  },
+  "INF": {
+    "code": "INF",
+    "name": "Inflation",
+    "order": 1,
+    "category": {
+      "name": "ECONOMIC",
+      "code": "#33bbff"
+    },
+    "outlinks": [
+      "ECO"
+    ],
+    "cascading": [
+      "SOC",
+      "SYS",
+      "AFF",
+      "LOW",
+      "SPR",
+      "COM",
+      "UNR",
+      "POL",
+      "MON",
+      "IND",
+      "LAB",
+      "HEA",
+      "LAN",
+      "MAR",
+      "FOO",
+      "DIS",
+      "CHE",
+      "BIO",
+      "UNS",
+      "AIR",
+      "NIT",
+      "FRE",
+      "CLE",
+      "ENE"
+    ]
+  },
+  "LAB": {
+    "code": "LAB",
+    "name": "Low Labour Standards",
+    "order": 3,
+    "category": {
+      "name": "LIVING STANDARDS",
+      "code": "#987db3"
+    },
+    "outlinks": [
+      "ECO",
+      "HEA",
+      "DIS",
+      "POL",
+      "LOW"
+    ],
+    "cascading": [
+      "INF",
+      "SOC",
+      "SYS",
+      "AFF",
+      "COM",
+      "MON",
+      "UNR",
+      "SPR",
+      "MAR",
+      "IND",
+      "LAN",
+      "UNS",
+      "CHE",
+      "AIR",
+      "FOO",
+      "BIO",
+      "FRE",
+      "NIT",
+      "ENE",
+      "CLE"
+    ]
+  },
+  "LAN": {
+    "code": "LAN",
+    "name": "Land Conversion",
+    "order": 176,
+    "category": {
+      "name": "ENVIRONMENTAL",
+      "code": "#a7cc5c"
+    },
+    "outlinks": [
+      "FOO",
+      "BIO"
+    ],
+    "cascading": [
+      "HEA",
+      "SOC",
+      "COM",
+      "LOW",
+      "POL",
+      "AFF",
+      "UNR",
+      "SPR",
+      "LAB",
+      "DIS",
+      "ECO",
+      "SYS",
+      "INF",
+      "MON",
+      "MAR",
+      "IND",
+      "UNS",
+      "AIR",
+      "CHE",
+      "NIT",
+      "FRE",
+      "ENE",
+      "CLE"
+    ]
+  },
+  "LOW": {
+    "code": "LOW",
+    "name": "Low Education",
+    "order": 2,
+    "category": {
+      "name": "SOCIAL",
+      "code": "#e67c73"
+    },
+    "outlinks": [],
+    "cascading": []
+  },
+  "MAR": {
+    "code": "MAR",
+    "name": "Market Externalities",
+    "order": 3,
+    "category": {
+      "name": "ECONOMIC",
+      "code": "#33bbff"
+    },
+    "outlinks": [
+      "UNS",
+      "ECO",
+      "IND"
+    ],
+    "cascading": [
+      "INF",
+      "FRE",
+      "SOC",
+      "AFF",
+      "LAN",
+      "AIR",
+      "CHE",
+      "SYS",
+      "NIT",
+      "POL",
+      "SPR",
+      "ENE",
+      "MON",
+      "BIO",
+      "HEA",
+      "CLE",
+      "UNR",
+      "COM",
+      "FOO",
+      "LOW",
+      "LAB",
+      "DIS"
+    ]
+  },
+  "MON": {
+    "code": "MON",
+    "name": "Monopoly",
+    "order": 2,
+    "category": {
+      "name": "ECONOMIC",
+      "code": "#33bbff"
+    },
+    "outlinks": [
+      "MAR",
+      "IND",
+      "SYS",
+      "LAB"
+    ],
+    "cascading": [
+      "CHE",
+      "POL",
+      "UNR",
+      "HEA",
+      "UNS",
+      "ECO",
+      "AIR",
+      "INF",
+      "SOC",
+      "LOW",
+      "DIS",
+      "FRE",
+      "LAN",
+      "COM",
+      "AFF",
+      "BIO",
+      "NIT",
+      "SPR",
+      "FOO",
+      "CLE",
+      "ENE"
+    ]
+  },
+  "NIT": {
+    "code": "NIT",
+    "name": "Nitrogen & Phosphorous Loading",
+    "order": 178,
+    "category": {
+      "name": "ENVIRONMENTAL",
+      "code": "#a7cc5c"
+    },
+    "outlinks": [
+      "FOO",
+      "BIO"
+    ],
+    "cascading": [
+      "HEA",
+      "SOC",
+      "COM",
+      "AFF",
+      "LOW",
+      "POL",
+      "UNR",
+      "SPR",
+      "LAB",
+      "ECO",
+      "DIS",
+      "LAN",
+      "INF",
+      "SYS",
+      "MON",
+      "MAR",
+      "IND",
+      "AIR",
+      "UNS",
+      "CHE",
+      "FRE",
+      "CLE",
+      "ENE"
+    ]
+  },
+  "OCE": {
+    "code": "OCE",
+    "name": "Ocean Degradation",
+    "order": 6,
+    "category": {
+      "name": "ENVIRONMENTAL",
+      "code": "#a7cc5c"
+    },
+    "outlinks": [
+      "FOO",
+      "BIO"
+    ],
+    "cascading": [
+      "HEA",
+      "SOC",
+      "COM",
+      "UNR",
+      "POL",
+      "LOW",
+      "AFF",
+      "LAB",
+      "SPR",
+      "DIS",
+      "ECO",
+      "LAN",
+      "SYS",
+      "INF",
+      "MON",
+      "MAR",
+      "IND",
+      "UNS",
+      "CHE",
+      "AIR",
+      "FRE",
+      "NIT",
+      "ENE",
+      "CLE"
+    ]
+  },
+  "POL": {
+    "code": "POL",
+    "name": "Lack of Political Voice",
+    "order": 3,
+    "category": {
+      "name": "SOCIAL",
+      "code": "#e67c73"
+    },
+    "outlinks": [
+      "COM",
+      "SOC",
+      "LAB"
+    ],
+    "cascading": [
+      "DIS",
+      "LOW",
+      "ECO",
+      "HEA",
+      "UNR",
+      "INF",
+      "SYS",
+      "AFF",
+      "SPR",
+      "MON",
+      "MAR",
+      "IND",
+      "LAN",
+      "FOO",
+      "BIO",
+      "CHE",
+      "AIR",
+      "UNS",
+      "FRE",
+      "NIT",
+      "CLE",
+      "ENE"
+    ]
+  },
+  "SOC": {
+    "code": "SOC",
+    "name": "Social Inequity",
+    "order": 1,
+    "category": {
+      "name": "SOCIAL",
+      "code": "#e67c73"
+    },
+    "outlinks": [
+      "POL",
+      "UNR",
+      "COM",
+      "LOW"
+    ],
+    "cascading": [
+      "HEA",
+      "LAB",
+      "DIS",
+      "ECO",
+      "AFF",
+      "SPR",
+      "INF",
+      "SYS",
+      "MON",
+      "LAN",
+      "FOO",
+      "BIO",
+      "MAR",
+      "IND",
+      "AIR",
+      "UNS",
+      "CHE",
+      "FRE",
+      "NIT",
+      "ENE",
+      "CLE"
+    ]
+  },
+  "SPR": {
+    "code": "SPR",
+    "name": "Sprawl",
+    "order": 3,
+    "category": {
+      "name": "INDUSTRIAL",
+      "code": "#6bb3b3"
+    },
+    "outlinks": [
+      "LAN",
+      "AFF"
+    ],
+    "cascading": [
+      "BIO",
+      "UNR",
+      "FOO",
+      "POL",
+      "SOC",
+      "COM",
+      "HEA",
+      "LAB",
+      "LOW",
+      "ECO",
+      "DIS",
+      "INF",
+      "SYS",
+      "MON",
+      "MAR",
+      "IND",
+      "UNS",
+      "CHE",
+      "AIR",
+      "NIT",
+      "FRE",
+      "ENE",
+      "CLE"
+    ]
+  },
+  "SYS": {
+    "code": "SYS",
+    "name": "Systemic Corruption",
+    "order": 4,
+    "category": {
+      "name": "LIVING STANDARDS",
+      "code": "#987db3"
+    },
+    "outlinks": [
+      "ECO",
+      "MON",
+      "SOC",
+      "INF",
+      "UNR"
+    ],
+    "cascading": [
+      "AFF",
+      "LOW",
+      "IND",
+      "LAB",
+      "COM",
+      "POL",
+      "MAR",
+      "AIR",
+      "UNS",
+      "HEA",
+      "CHE",
+      "DIS",
+      "SPR",
+      "LAN",
+      "FRE",
+      "BIO",
+      "NIT",
+      "ENE",
+      "CLE",
+      "FOO"
+    ]
+  },
+  "UNR": {
+    "code": "UNR",
+    "name": "Unrest & Injustice",
+    "order": 4,
+    "category": {
+      "name": "SOCIAL",
+      "code": "#e67c73"
+    },
+    "outlinks": [
+      "COM",
+      "SOC"
+    ],
+    "cascading": [
+      "HEA",
+      "LOW",
+      "POL",
+      "AFF",
+      "LAB",
+      "ECO",
+      "DIS",
+      "SPR",
+      "INF",
+      "LAN",
+      "SYS",
+      "BIO",
+      "MON",
+      "FOO",
+      "IND",
+      "MAR",
+      "UNS",
+      "AIR",
+      "CHE",
+      "FRE",
+      "NIT",
+      "CLE",
+      "ENE"
+    ]
+  },
+  "UNS": {
+    "code": "UNS",
+    "name": "Unsustainable Harvesting",
+    "order": 1,
+    "category": {
+      "name": "INDUSTRIAL",
+      "code": "#6bb3b3"
+    },
+    "outlinks": [
+      "CHE",
+      "NIT",
+      "FRE",
+      "LAN"
+    ],
+    "cascading": [
+      "HEA",
+      "BIO",
+      "FOO",
+      "ENE",
+      "CLE",
+      "COM",
+      "LOW",
+      "SOC",
+      "AFF",
+      "POL",
+      "UNR",
+      "SPR",
+      "LAB",
+      "ECO",
+      "DIS",
+      "SYS",
+      "INF",
+      "MON",
+      "IND",
+      "MAR",
+      "AIR"
+    ]
+  }
+}
