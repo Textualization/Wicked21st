@@ -11,16 +11,20 @@
       "COM",
       "SPR",
       "SOC",
-      "VOI",
+      "POL",
       "UNR"
     ],
     "cascading": [
-      "INE",
-      "EDU",
-      "HEA",
       "LAN",
+      "INE",
+      "LAB",
+      "LOW",
+      "HEA",
+      "FOO",
+      "DIS",
+      "ECO",
       "BIO",
-      "FOO"
+      "INF"
     ]
   },
   "AIR": {
@@ -35,17 +39,21 @@
       "HEA"
     ],
     "cascading": [
-      "EDU",
-      "SOC",
       "AFF",
-      "COM",
-      "VOI",
-      "UNR",
+      "SOC",
+      "LOW",
+      "POL",
       "SPR",
+      "COM",
+      "UNR",
       "INE",
       "LAN",
+      "LAB",
       "FOO",
-      "BIO"
+      "DIS",
+      "ECO",
+      "BIO",
+      "INF"
     ]
   },
   "BIO": {
@@ -73,18 +81,22 @@
       "BIO"
     ],
     "cascading": [
-      "EDU",
       "CLE",
+      "LOW",
       "ENE",
+      "FOO",
       "AFF",
       "SOC",
-      "FOO",
-      "COM",
       "UNR",
+      "POL",
       "SPR",
-      "VOI",
+      "COM",
+      "INE",
       "LAN",
-      "INE"
+      "LAB",
+      "DIS",
+      "ECO",
+      "INF"
     ]
   },
   "CLE": {
@@ -99,17 +111,21 @@
       "HEA"
     ],
     "cascading": [
-      "EDU",
-      "AFF",
+      "LOW",
       "SOC",
-      "COM",
-      "VOI",
+      "AFF",
+      "POL",
       "UNR",
       "SPR",
+      "COM",
       "LAN",
       "INE",
+      "LAB",
+      "DIS",
+      "ECO",
       "FOO",
-      "BIO"
+      "BIO",
+      "INF"
     ]
   },
   "CLI": {
@@ -130,14 +146,18 @@
       "LAN"
     ],
     "cascading": [
-      "AFF",
-      "CLE",
       "COM",
       "UNR",
-      "VOI",
-      "EDU",
+      "CLE",
+      "AFF",
+      "LOW",
+      "POL",
+      "LAB",
       "SPR",
-      "INE"
+      "DIS",
+      "ECO",
+      "INE",
+      "INF"
     ]
   },
   "COM": {
@@ -153,15 +173,19 @@
       "SOC"
     ],
     "cascading": [
+      "LOW",
       "AFF",
-      "VOI",
+      "POL",
       "UNR",
-      "EDU",
       "SPR",
-      "INE",
+      "LAB",
+      "ECO",
       "LAN",
-      "FOO",
-      "BIO"
+      "DIS",
+      "INE",
+      "BIO",
+      "INF",
+      "FOO"
     ]
   },
   "DIS": {
@@ -177,14 +201,15 @@
       "SOC"
     ],
     "cascading": [
-      "EDU",
+      "LOW",
+      "POL",
+      "INF",
       "UNR",
       "COM",
       "AFF",
-      "INF",
-      "VOI",
       "HEA",
       "SPR",
+      "LAB",
       "INE",
       "LAN",
       "BIO",
@@ -205,29 +230,19 @@
       "SOC"
     ],
     "cascading": [
-      "COM",
-      "SPR",
-      "VOI",
+      "LOW",
       "UNR",
-      "EDU",
+      "POL",
+      "SPR",
+      "COM",
+      "HEA",
       "INE",
       "LAN",
-      "HEA",
-      "BIO",
-        "FOO",
-        "SYS"
+      "LAB",
+      "FOO",
+      "DIS",
+      "BIO"
     ]
-  },
-  "EDU": {
-    "code": "EDU",
-    "name": "Low Education",
-    "order": 2,
-    "category": {
-      "name": "SOCIAL",
-      "code": "#e67c73"
-    },
-    "outlinks": [],
-    "cascading": []
   },
   "ENE": {
     "code": "ENE",
@@ -239,19 +254,23 @@
     },
     "outlinks": [
       "AFF",
-      "EDU"
+      "LOW"
     ],
     "cascading": [
-      "COM",
-      "VOI",
+      "SOC",
+      "POL",
       "SPR",
       "UNR",
-      "SOC",
-      "INE",
+      "COM",
       "LAN",
       "HEA",
+      "INE",
+      "LAB",
       "FOO",
-      "BIO"
+      "ECO",
+      "BIO",
+      "DIS",
+      "INF"
     ]
   },
   "FOO": {
@@ -268,14 +287,18 @@
       "SOC"
     ],
     "cascading": [
-      "VOI",
-      "EDU",
       "UNR",
+      "POL",
+      "LOW",
       "AFF",
+      "LAB",
       "SPR",
-      "INE",
+      "ECO",
+      "DIS",
       "LAN",
-      "BIO"
+      "INE",
+      "BIO",
+      "INF"
     ]
   },
   "FOS": {
@@ -293,21 +316,25 @@
       "OCE"
     ],
     "cascading": [
-      "FOO",
-      "SOC",
       "FRE",
       "BIO",
       "ENE",
       "LAN",
+      "FOO",
+      "SOC",
       "HEA",
-      "AFF",
-      "VOI",
-      "EDU",
-      "CLE",
-      "UNR",
+      "LOW",
       "COM",
+      "AFF",
+      "UNR",
+      "CLE",
+      "POL",
       "SPR",
-      "INE"
+      "LAB",
+      "ECO",
+      "INE",
+      "DIS",
+      "INF"
     ]
   },
   "FRE": {
@@ -326,15 +353,19 @@
     "cascading": [
       "COM",
       "HEA",
+      "LOW",
       "AFF",
-      "EDU",
       "SOC",
-      "SPR",
       "UNR",
-      "VOI",
+      "POL",
+      "SPR",
       "INE",
+      "LAB",
       "LAN",
-      "BIO"
+      "ECO",
+      "DIS",
+      "BIO",
+      "INF"
     ]
   },
   "HEA": {
@@ -348,17 +379,55 @@
     "outlinks": [
       "SOC",
       "AFF",
-      "EDU"
+      "LOW"
     ],
     "cascading": [
       "UNR",
-      "VOI",
+      "POL",
       "SPR",
       "COM",
-      "LAN",
       "INE",
+      "LAB",
+      "LAN",
+      "DIS",
       "FOO",
-      "BIO"
+      "BIO",
+      "ECO",
+      "INF"
+    ]
+  },
+  "IND": {
+    "code": "IND",
+    "name": "Polluting Industry",
+    "order": 2,
+    "category": {
+      "name": "INDUSTRIAL",
+      "code": "#6bb3b3"
+    },
+    "outlinks": [
+      "INE",
+      "CHE",
+      "AIR"
+    ],
+    "cascading": [
+      "BIO",
+      "HEA",
+      "FRE",
+      "CLE",
+      "AFF",
+      "ENE",
+      "SOC",
+      "FOO",
+      "LOW",
+      "POL",
+      "UNR",
+      "COM",
+      "SPR",
+      "LAB",
+      "LAN",
+      "ECO",
+      "DIS",
+      "INF"
     ]
   },
   "INE": {
@@ -386,16 +455,46 @@
     "cascading": [
       "SOC",
       "AFF",
-      "VOI",
-      "UNR",
-      "COM",
       "SPR",
-      "EDU",
-      "INE",
-      "HEA",
+      "POL",
+      "COM",
+      "UNR",
+      "LOW",
       "LAN",
-      "BIO",
-      "FOO"
+      "INE",
+      "LAB",
+      "HEA",
+      "DIS",
+      "FOO",
+      "BIO"
+    ]
+  },
+  "LAB": {
+    "code": "LAB",
+    "name": "Low Labour Standards",
+    "order": 3,
+    "category": {
+      "name": "LIVING STANDARDS",
+      "code": "#987db3"
+    },
+    "outlinks": [
+      "ECO",
+      "HEA",
+      "DIS",
+      "POL",
+      "LOW"
+    ],
+    "cascading": [
+      "COM",
+      "INF",
+      "AFF",
+      "SOC",
+      "SPR",
+      "UNR",
+      "INE",
+      "LAN",
+      "FOO",
+      "BIO"
     ]
   },
   "LAN": {
@@ -412,43 +511,30 @@
     ],
     "cascading": [
       "HEA",
-      "SOC",
       "COM",
-      "UNR",
+      "SOC",
       "AFF",
-      "EDU",
-      "VOI",
+      "POL",
+      "UNR",
+      "LOW",
       "SPR",
-      "INE"
+      "LAB",
+      "DIS",
+      "INE",
+      "ECO",
+      "INF"
     ]
   },
   "LOW": {
     "code": "LOW",
-    "name": "Low Labour Standards",
-    "order": 3,
+    "name": "Low Education",
+    "order": 2,
     "category": {
-      "name": "LIVING STANDARDS",
-      "code": "#987db3"
+      "name": "SOCIAL",
+      "code": "#e67c73"
     },
-    "outlinks": [
-      "ECO",
-      "HEA",
-      "DIS",
-      "VOI",
-      "EDU"
-    ],
-    "cascading": [
-      "AFF",
-      "COM",
-      "INF",
-      "SOC",
-      "UNR",
-      "SPR",
-      "LAN",
-      "INE",
-      "FOO",
-      "BIO"
-    ]
+    "outlinks": [],
+    "cascading": []
   },
   "MAR": {
     "code": "MAR",
@@ -462,27 +548,29 @@
       "UNS",
       "ECO",
       "INE",
-      "POL"
+      "IND"
     ],
     "cascading": [
       "AFF",
-      "LAN",
-      "FRE",
-      "AIR",
       "INF",
       "CHE",
+      "FRE",
+      "LAN",
+      "AIR",
       "NIT",
       "SOC",
-      "ENE",
-      "EDU",
-      "CLE",
       "COM",
-      "FOO",
-      "HEA",
-      "BIO",
+      "POL",
       "UNR",
+      "ENE",
       "SPR",
-      "VOI"
+      "HEA",
+      "CLE",
+      "LOW",
+      "FOO",
+      "BIO",
+      "LAB",
+      "DIS"
     ]
   },
   "MON": {
@@ -495,32 +583,33 @@
     },
     "outlinks": [
       "MAR",
-      "POL",
-        "INE",
-        "SYS",
-        "LOW"
+      "IND",
+      "INE",
+      "SYS",
+      "LAB"
     ],
     "cascading": [
-      "CHE",
-      "UNS",
-      "ECO",
-      "AIR",
-      "LAN",
-      "AFF",
-      "NIT",
-      "HEA",
+      "DIS",
       "INF",
-      "BIO",
-      "FRE",
-      "SOC",
-      "VOI",
-      "ENE",
-      "FOO",
-      "EDU",
-      "CLE",
+      "LOW",
+      "POL",
+      "AIR",
       "UNR",
-      "SPR",
-      "COM"
+      "CHE",
+      "HEA",
+      "ECO",
+      "SOC",
+      "UNS",
+      "AFF",
+      "BIO",
+      "NIT",
+      "COM",
+      "FRE",
+      "LAN",
+      "FOO",
+      "CLE",
+      "ENE",
+      "SPR"
     ]
   },
   "NIT": {
@@ -536,16 +625,20 @@
       "BIO"
     ],
     "cascading": [
-      "SOC",
-      "COM",
       "HEA",
-      "VOI",
-      "EDU",
+      "COM",
+      "SOC",
       "AFF",
+      "POL",
+      "LOW",
       "UNR",
+      "LAB",
       "SPR",
+      "ECO",
+      "INE",
+      "DIS",
       "LAN",
-      "INE"
+      "INF"
     ]
   },
   "OCE": {
@@ -561,46 +654,48 @@
       "BIO"
     ],
     "cascading": [
-      "SOC",
       "COM",
+      "SOC",
       "HEA",
-      "EDU",
+      "POL",
       "UNR",
       "AFF",
-      "VOI",
+      "LOW",
       "SPR",
+      "LAB",
+      "LAN",
+      "ECO",
       "INE",
-      "LAN"
+      "DIS",
+      "INF"
     ]
   },
   "POL": {
     "code": "POL",
-    "name": "Polluting Industry",
-    "order": 2,
+    "name": "Lack of Political Voice",
+    "order": 3,
     "category": {
-      "name": "INDUSTRIAL",
-      "code": "#6bb3b3"
+      "name": "SOCIAL",
+      "code": "#e67c73"
     },
     "outlinks": [
-      "INE",
-      "CHE",
-      "AIR"
+      "COM",
+      "SOC",
+      "LAB"
     ],
     "cascading": [
-      "BIO",
-      "FRE",
-      "HEA",
-      "SOC",
-      "AFF",
-      "CLE",
-      "ENE",
-      "FOO",
-      "EDU",
-      "SPR",
-      "COM",
-      "VOI",
+      "LOW",
+      "ECO",
       "UNR",
-      "LAN"
+      "DIS",
+      "HEA",
+      "INF",
+      "AFF",
+      "SPR",
+      "LAN",
+      "INE",
+      "BIO",
+      "FOO"
     ]
   },
   "SOC": {
@@ -612,19 +707,23 @@
       "code": "#e67c73"
     },
     "outlinks": [
-      "VOI",
+      "POL",
       "UNR",
       "COM",
-      "EDU"
+      "LOW"
     ],
     "cascading": [
+      "LAB",
       "HEA",
       "AFF",
+      "ECO",
+      "DIS",
+      "INF",
       "SPR",
-      "LAN",
       "INE",
-      "FOO",
-      "BIO"
+      "LAN",
+      "BIO",
+      "FOO"
     ]
   },
   "SPR": {
@@ -643,12 +742,16 @@
     "cascading": [
       "COM",
       "UNR",
-      "VOI",
       "BIO",
       "FOO",
+      "POL",
       "SOC",
-      "EDU",
-      "HEA"
+      "LOW",
+      "LAB",
+      "HEA",
+      "DIS",
+      "ECO",
+      "INF"
     ]
   },
   "SYS": {
@@ -669,19 +772,21 @@
     ],
     "cascading": [
       "POL",
+      "LOW",
       "MAR",
       "COM",
-      "EDU",
-      "VOI",
+      "IND",
+      "LAB",
       "AFF",
-      "SPR",
-      "UNS",
-      "AIR",
-      "HEA",
       "CHE",
+      "SPR",
+      "HEA",
+      "AIR",
+      "DIS",
+      "UNS",
       "BIO",
-      "FRE",
       "NIT",
+      "FRE",
       "LAN",
       "FOO",
       "ENE",
@@ -701,15 +806,19 @@
       "SOC"
     ],
     "cascading": [
+      "POL",
       "HEA",
-      "EDU",
-      "VOI",
+      "LOW",
+      "LAB",
       "AFF",
+      "DIS",
       "SPR",
+      "ECO",
       "LAN",
       "INE",
-      "FOO",
-      "BIO"
+      "INF",
+      "BIO",
+      "FOO"
     ]
   },
   "UNS": {
@@ -728,43 +837,22 @@
       "LAN"
     ],
     "cascading": [
-      "BIO",
-      "HEA",
-      "ENE",
       "FOO",
-      "CLE",
-      "COM",
-      "EDU",
-      "SOC",
-      "AFF",
-      "SPR",
-      "VOI",
-      "UNR"
-    ]
-  },
-  "VOI": {
-    "code": "VOI",
-    "name": "Lack of Political Voice",
-    "order": 3,
-    "category": {
-      "name": "SOCIAL",
-      "code": "#e67c73"
-    },
-    "outlinks": [
-      "COM",
-        "SOC",
-        "LOW"
-    ],
-    "cascading": [
-      "EDU",
-      "UNR",
-      "HEA",
-      "AFF",
-      "SPR",
-      "INE",
-      "LAN",
       "BIO",
-      "FOO"
+      "HEA",
+      "CLE",
+      "ENE",
+      "COM",
+      "SOC",
+      "LOW",
+      "AFF",
+      "POL",
+      "SPR",
+      "UNR",
+      "LAB",
+      "ECO",
+      "DIS",
+      "INF"
     ]
   }
 }
