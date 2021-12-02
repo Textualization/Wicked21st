@@ -32,8 +32,7 @@ if len(sys.argv) > 1:
 rand = random.Random(seed) 
 
 # definitions
-graph_def = load_graph(config.GRAPH)
-cascade_def  = Cascades(graph_def, "cascading.tsv")
+graph_def, cascade_def = load_graph(config.GRAPH)
 classes_def = Classes()
 project_def = Projects(graph_def)
 tree_def = TechTree(graph_def)

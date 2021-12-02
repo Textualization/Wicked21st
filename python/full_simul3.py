@@ -32,8 +32,7 @@ for _ in range(config.NUM_RUNS):
     seeds.append(s)
 
 # definitions
-graph_def = load_graph(config.GRAPH)
-cascade_def  = Cascades(graph_def, "cascading.tsv")
+graph_def, cascade_def = load_graph(config.GRAPH)
 classes_def = Classes()
 project_def = Projects(graph_def)
 tree_def = TechTree(graph_def)

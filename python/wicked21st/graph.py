@@ -154,6 +154,35 @@ class Graph:
       return { self.node_names[n]: [ self.node_names[nn] for nn in self.outlinks[n] ] for n in self.node_names }
 
 def load_graph(graph_file, verbose=False):
+  if graph_file.endswith(".mm"):
+    graph_def = self.load_graph_mm(graph_file, verbose)
+    cascade_def = Cascades(graph_file[:-3] + ".cascading.tsv")
+    return graph_def, cascade_def
+  elif graph_file.endswith(".json"):
+    #TODO
+    pass
+  else:
+    print("Unknown graph file type:", graph_file)
+  assert False
+
+def load_graph_json(graph_file, verbose=False):
+  with open(graph_file, "rb") as j:
+    jgraph = json.load(j)
+
+    nodes = dict() # name to node dict
+    node_classes = dict() # bg color to set of names
+    class_for_node = dict()
+    
+    graph = Graph({ _id : node.attrib['TEXT'] for _id, node in nodes.items()}, class_for_node, links,
+                 { p[1] : p[0] for p in Graph.CATEGORIES })
+    cascades = Cascades(jgraph)
+    for n in sorted(jgraph.keys()):
+      cascades.cascade[n] = jgraph[n]['cascading']
+      
+    return graph, cascades
+    
+  
+def load_graph_mm(graph_file, verbose=False):
     root = ET.parse(graph_file).getroot()
 
     nodes = dict() # name to node dict
@@ -192,14 +221,15 @@ def load_graph(graph_file, verbose=False):
 
 class Cascades:
 
-  def __init__(self, graph, tsv):
+  def __init__(self, graph, tsv=None):
     self.cascade = dict() # node -> list of node
-    with open(tsv) as t:
-      for line in t:
-        line = line[:-1]
-        if line[-1] == "\t":
+    if tsv:
+      with open(tsv) as t:
+        for line in t:
           line = line[:-1]
-        nodes = line.split("\t")
-        for n in nodes:
-          assert n in graph.node_names
-        self.cascade[nodes[0]] = nodes[1:]
+          if line[-1] == "\t":
+            line = line[:-1]
+          nodes = line.split("\t")
+          for n in nodes:
+            assert n in graph.node_names
+          self.cascade[nodes[0]] = nodes[1:]
