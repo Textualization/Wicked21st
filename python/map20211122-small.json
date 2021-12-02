@@ -30,7 +30,6 @@
       "VOI",
       "UNR",
       "LAN",
-      "INE",
       "LAB",
       "ECO",
       "SYS",
@@ -60,7 +59,6 @@
       "UNR",
       "LAN",
       "LAB",
-      "INE",
       "BIO",
       "FOO",
       "ECO",
@@ -96,7 +94,6 @@
       "SPR",
       "LAB",
       "ECO",
-      "INE",
       "INF",
       "SYS",
       "MON",
@@ -122,7 +119,6 @@
     "cascading": [
       "UNR",
       "MON",
-      "INE",
       "VOI",
       "SPR",
       "LAN",
@@ -157,7 +153,6 @@
       "VOI",
       "LAN",
       "HEA",
-      "INE",
       "LAB",
       "FOO",
       "ECO",
@@ -189,7 +184,6 @@
       "SPR",
       "VOI",
       "UNR",
-      "INE",
       "LAB",
       "LAN",
       "ECO",
@@ -219,7 +213,6 @@
       "UNR",
       "VOI",
       "LAN",
-      "INE",
       "LAB",
       "ECO",
       "FOO",
@@ -244,7 +237,6 @@
     "outlinks": [
         "POL",
         "CLI",
-        "INE",
         "OCE"        
     ],
     "cascading": [
