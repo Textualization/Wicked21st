@@ -32,15 +32,13 @@
       "LAN",
       "INE",
       "LAB",
-      "DIS",
       "ECO",
       "SYS",
       "INF",
       "MON",
       "MAR",
       "IND",
-      "UNS",
-      "NIT"
+      "UNS"
     ]
   },
   "FOO": {
@@ -65,7 +63,6 @@
       "INE",
       "BIO",
       "FOO",
-      "DIS",
       "ECO",
       "INF",
       "SYS",
@@ -73,7 +70,6 @@
       "IND",
       "MAR",
       "UNS",
-      "NIT",
       "FRE"
     ]
   },
@@ -100,47 +96,13 @@
       "SPR",
       "LAB",
       "ECO",
-      "DIS",
       "INE",
       "INF",
       "SYS",
       "MON",
       "IND",
       "MAR",
-      "UNS",
-      "NIT"
-    ]
-  },
-  "DIS": {
-    "code": "DIS",
-    "name": "Discrimination",
-    "order": 2,
-    "category": {
-      "name": "LIVING STANDARDS",
-      "code": "#987db3"
-    },
-    "outlinks": [
-      "ECO",
-      "SOC"
-    ],
-    "cascading": [
-      "SYS",
-      "UNR",
-      "VOI",
-      "INF",
-      "LAB",
-      "INE",
-      "SPR",
-      "MON",
-      "HEA",
-      "IND",
-      "LAN",
-      "MAR",
-      "UNS",
-      "BIO",
-      "FOO",
-      "NIT",
-      "FRE"
+      "UNS"
     ]
   },
   "ECO": {
@@ -171,9 +133,7 @@
       "BIO",
       "UNS",
       "FOO",
-      "DIS",
-      "FRE",
-      "NIT"
+      "FRE"
     ]
   },
   "INS": {
@@ -202,14 +162,12 @@
       "FOO",
       "ECO",
       "BIO",
-      "DIS",
       "SYS",
       "INF",
       "MON",
       "MAR",
       "IND",
       "UNS",
-      "NIT",
       "FRE"
     ]
   },
@@ -235,15 +193,13 @@
       "LAB",
       "LAN",
       "ECO",
-      "DIS",
       "BIO",
       "SYS",
       "INF",
       "MON",
       "MAR",
       "IND",
-      "UNS",
-      "NIT"
+      "UNS"
     ]
   },
   "HEA": {
@@ -267,7 +223,6 @@
       "LAB",
       "ECO",
       "FOO",
-      "DIS",
       "BIO",
       "INF",
       "SYS",
@@ -275,7 +230,6 @@
       "IND",
       "MAR",
       "UNS",
-      "NIT",
       "FRE"
     ]
   },
@@ -291,7 +245,6 @@
         "POL",
         "CLI",
         "INE",
-        "NIT",
         "OCE"        
     ],
     "cascading": [
@@ -306,13 +259,11 @@
       "LAN",
       "LAB",
       "ECO",
-      "DIS",
       "INF",
       "SYS",
       "MON",
       "MAR",
-      "UNS",
-      "NIT"
+      "UNS"
     ]
   },
   "INF": {
@@ -339,25 +290,23 @@
       "LAN",
       "MAR",
       "FOO",
-      "DIS",
       "BIO",
       "UNS",
-      "NIT",
       "FRE"
     ]
   },
   "LAB": {
     "code": "LAB",
     "name": "Low Labour Standards",
-    "order": 3,
+    "order": 2,
     "category": {
       "name": "LIVING STANDARDS",
       "code": "#987db3"
     },
     "outlinks": [
+        "SOC",
       "ECO",
       "HEA",
-      "DIS",
       "VOI"
     ],
     "cascading": [
@@ -373,8 +322,7 @@
       "UNS",
       "FOO",
       "BIO",
-      "FRE",
-      "NIT"
+      "FRE"
     ]
   },
   "LAN": {
@@ -396,7 +344,6 @@
       "UNR",
       "SPR",
       "LAB",
-      "DIS",
       "ECO",
       "SYS",
       "INF",
@@ -404,7 +351,6 @@
       "MAR",
       "IND",
       "UNS",
-      "NIT",
       "FRE"
     ]
   },
@@ -427,7 +373,6 @@
       "SOC",
       "LAN",
       "SYS",
-      "NIT",
       "VOI",
       "SPR",
       "MON",
@@ -435,8 +380,7 @@
       "HEA",
       "UNR",
       "FOO",
-      "LAB",
-      "DIS"
+      "LAB"
     ]
   },
   "MON": {
@@ -461,44 +405,11 @@
       "ECO",
       "INF",
       "SOC",
-      "DIS",
       "FRE",
       "LAN",
       "BIO",
-      "NIT",
       "SPR",
       "FOO"
-    ]
-  },
-  "NIT": {
-    "code": "NIT",
-    "name": "Nitrogen & Phosphorous Loading",
-    "order": 178,
-    "category": {
-      "name": "ENVIRONMENTAL",
-      "code": "#a7cc5c"
-    },
-    "outlinks": [
-      "FOO",
-      "BIO"
-    ],
-    "cascading": [
-      "HEA",
-      "SOC",
-      "VOI",
-      "UNR",
-      "SPR",
-      "LAB",
-      "ECO",
-      "DIS",
-      "LAN",
-      "INF",
-      "SYS",
-      "MON",
-      "MAR",
-      "IND",
-      "UNS",
-      "FRE"
     ]
   },
   "OCE": {
@@ -520,7 +431,6 @@
       "VOI",
       "LAB",
       "SPR",
-      "DIS",
       "ECO",
       "LAN",
       "SYS",
@@ -529,8 +439,7 @@
       "MAR",
       "IND",
       "UNS",
-      "FRE",
-      "NIT"
+      "FRE"
     ]
   },
   "VOI": {
@@ -546,7 +455,6 @@
       "LAB"
     ],
     "cascading": [
-      "DIS",
       "ECO",
       "HEA",
       "UNR",
@@ -560,8 +468,7 @@
       "FOO",
       "BIO",
       "UNS",
-      "FRE",
-      "NIT"
+      "FRE"
     ]
   },
   "SOC": {
@@ -579,7 +486,6 @@
     "cascading": [
       "HEA",
       "LAB",
-      "DIS",
       "ECO",
       "SPR",
       "INF",
@@ -591,8 +497,7 @@
       "MAR",
       "IND",
       "UNS",
-      "FRE",
-      "NIT"
+      "FRE"
     ]
   },
   "SPR": {
@@ -616,21 +521,19 @@
       "HEA",
       "LAB",
       "ECO",
-      "DIS",
       "INF",
       "SYS",
       "MON",
       "MAR",
       "IND",
       "UNS",
-      "NIT",
       "FRE"
     ]
   },
   "SYS": {
     "code": "SYS",
     "name": "Systemic Corruption",
-    "order": 4,
+    "order": 3,
     "category": {
       "name": "LIVING STANDARDS",
       "code": "#987db3"
@@ -649,12 +552,10 @@
       "MAR",
       "UNS",
       "HEA",
-      "DIS",
       "SPR",
       "LAN",
       "FRE",
       "BIO",
-      "NIT",
       "FOO"
     ]
   },
@@ -674,7 +575,6 @@
       "VOI",
       "LAB",
       "ECO",
-      "DIS",
       "SPR",
       "INF",
       "LAN",
@@ -685,8 +585,7 @@
       "IND",
       "MAR",
       "UNS",
-      "FRE",
-      "NIT"
+      "FRE"
     ]
   },
   "UNS": {
@@ -699,7 +598,7 @@
     },
     "outlinks": [
       "POL",
-      "NIT",
+      "OCE",
       "FRE",
       "LAN"
     ],
@@ -713,7 +612,6 @@
       "SPR",
       "LAB",
       "ECO",
-      "DIS",
       "SYS",
       "INF",
       "MON",
