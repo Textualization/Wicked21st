@@ -5,6 +5,7 @@
 
 import random
 import copy
+import json
 
 import graphviz
 
@@ -33,10 +34,13 @@ class Graph:
   GRAPH_PRINT_SIZE = "10,10"
   
   # nodes: dict( id -> name ), class_for_node: dict( id -> clazz ), outlinks: dict( id -> set(id) )
-  def __init__(self, nodes, class_for_node, outlinks, categories):
+  def __init__(self, nodes, class_for_node, outlinks, categories, ordering=None):
     class_for_node = { n: clazz.lower() for n, clazz in class_for_node.items() }
     self.node_names = { i :  ((n if n[0] != '*' else n[1:]) if '.' not in n else n[n.index(' ')+1:])  for i,n in nodes.items() }
-    self.ordering =   { i : 100 + ord(n[1]) if '.' not in n else int(n[:n.index('.')]) for i,n in nodes.items() }
+    if ordering is None:
+      self.ordering =   { i : 100 + ord(n[1]) if '.' not in n else int(n[:n.index('.')]) for i,n in nodes.items() }
+    else:
+      self.ordering = ordering
     self.name_to_id = { n: i for i, n in self.node_names.items() }
     self.node_classes = dict() # class to set of ids
     for _id, clazz in class_for_node.items():
@@ -155,12 +159,11 @@ class Graph:
 
 def load_graph(graph_file, verbose=False):
   if graph_file.endswith(".mm"):
-    graph_def = self.load_graph_mm(graph_file, verbose)
-    cascade_def = Cascades(graph_file[:-3] + ".cascading.tsv")
+    graph_def = load_graph_mm(graph_file, verbose)
+    cascade_def = Cascades(graph_def, graph_file[:-3] + ".cascading.tsv")
     return graph_def, cascade_def
   elif graph_file.endswith(".json"):
-    #TODO
-    pass
+    return load_graph_json(graph_file, verbose)
   else:
     print("Unknown graph file type:", graph_file)
   assert False
@@ -169,12 +172,12 @@ def load_graph_json(graph_file, verbose=False):
   with open(graph_file, "rb") as j:
     jgraph = json.load(j)
 
-    nodes = dict() # name to node dict
-    node_classes = dict() # bg color to set of names
-    class_for_node = dict()
-    
-    graph = Graph({ _id : node.attrib['TEXT'] for _id, node in nodes.items()}, class_for_node, links,
-                 { p[1] : p[0] for p in Graph.CATEGORIES })
+    nodes = { code: obj['name'] for code, obj in jgraph.items() }
+    class_for_node = { code: obj['category']['code'] for code, obj in jgraph.items() }
+    links = { code: obj['outlinks'] for code, obj in jgraph.items() }
+    ordering = { code: obj['order'] for code, obj in jgraph.items() }
+
+    graph = Graph(nodes, class_for_node, links, { p[1] : p[0] for p in Graph.CATEGORIES }, ordering)
     cascades = Cascades(jgraph)
     for n in sorted(jgraph.keys()):
       cascades.cascade[n] = jgraph[n]['cascading']
@@ -218,6 +221,48 @@ def load_graph_mm(graph_file, verbose=False):
         
     return Graph({ _id : node.attrib['TEXT'] for _id, node in nodes.items()}, class_for_node, links,
                  { p[1] : p[0] for p in Graph.CATEGORIES })
+
+
+def save_graph(graph_json_file: str, graph: Graph, cascades=None):
+  # compute codes
+  node_to_code = dict()
+  for catid in graph.node_classes:
+      nodes = graph.node_classes[catid]
+
+      for node in sorted(nodes, key=lambda x:graph.ordering[x]):
+          name = graph.node_names[node].upper()
+          if name[0] == '*':
+              name
+          if name.startswith("LACK OF"):
+              name = name[len("LACK OF "):]
+          code = name[:3]
+          if code in node_to_code.values():
+              code = name.split(" ")[1][:3]
+              if code in node_to_code.values():
+                  raise Error(graph.node_names[node]+ " " + str(node_to_code))
+          node_to_code[node] = code
+
+  code_to_node = { c: n for n, c in node_to_code.items() }
+
+  j = dict()
+
+  for code in sorted(code_to_node.keys()):
+    node = code_to_node[code]
+    
+    j[code] = {
+      'code': code,
+      'name': graph.node_names[node],
+      'order' : graph.ordering[node],
+      'category' : { 'name' : Graph.class_name(graph.class_for_node[node]),
+                     'code' : graph.class_for_node[node] },
+      'outlinks' : [ node_to_code[outlink] for outlink in graph.outlinks[node] ]
+      }
+    if cascades is not None:
+      j[code]['cascading'] = [ node_to_code[cascade] for cascade in cascades.cascade[node] ]
+    
+  with open(graph_json_file, "w") as jf:
+    json.dump(j, jf, indent=2)
+  
 
 class Cascades:
 
