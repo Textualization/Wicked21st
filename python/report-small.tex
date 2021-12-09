@@ -1,0 +1,2884 @@
+
+\documentclass[oneside,canadian,landscape]{article}
+\usepackage[landscape]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+
+\begin{document}
+\title{Wicked 21st: Simulation Report}
+\author{Textualization Software Ltd.}
+\maketitle
+\tableofcontents
+
+\section{win-sensor: won}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{won} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ won, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&44 (88.0\%)&45 (90.0\%)\\ \hline
+6&3&random&31 (62.0\%)&34 (68.0\%)&30 (60.0\%)&30 (60.0\%)\\ \hline
+7&3&random&6 (12.0\%)&8 (16.0\%)&10 (20.0\%)&\\ \hline
+5&4&random&42 (84.0\%)&40 (80.0\%)&40 (80.0\%)&38 (76.0\%)\\ \hline
+6&4&random&10 (20.0\%)&15 (30.0\%)&8 (16.0\%)&12 (24.0\%)\\ \hline
+4&5&random&&&&44 (88.0\%)\\ \hline
+5&5&random&27 (54.0\%)&27 (54.0\%)&29 (58.0\%)&23 (46.0\%)\\ \hline
+6&5&random&&6 (12.0\%)&7 (14.0\%)&\\ \hline
+4&6&random&43 (86.0\%)&42 (84.0\%)&37 (74.0\%)&\\ \hline
+5&6&random&18 (36.0\%)&19 (38.0\%)&14 (28.0\%)&17 (34.0\%)\\ \hline
+4&7&random&34 (68.0\%)&39 (78.0\%)&38 (76.0\%)&33 (66.0\%)\\ \hline
+5&7&random&9 (18.0\%)&7 (14.0\%)&15 (30.0\%)&14 (28.0\%)\\ \hline
+4&8&random&40 (80.0\%)&34 (68.0\%)&31 (62.0\%)&28 (56.0\%)\\ \hline
+5&8&random&&&7 (14.0\%)&7 (14.0\%)\\ \hline
+6&3&greedy&36 (72.0\%)&37 (74.0\%)&44 (88.0\%)&42 (84.0\%)\\ \hline
+7&3&greedy&10 (20.0\%)&8 (16.0\%)&19 (38.0\%)&33 (66.0\%)\\ \hline
+5&4&greedy&39 (78.0\%)&45 (90.0\%)&&\\ \hline
+6&4&greedy&12 (24.0\%)&25 (50.0\%)&24 (48.0\%)&35 (70.0\%)\\ \hline
+7&4&greedy&&&6 (12.0\%)&10 (20.0\%)\\ \hline
+5&5&greedy&33 (66.0\%)&41 (82.0\%)&38 (76.0\%)&\\ \hline
+6&5&greedy&&8 (16.0\%)&14 (28.0\%)&26 (52.0\%)\\ \hline
+4&6&greedy&42 (84.0\%)&42 (84.0\%)&&\\ \hline
+5&6&greedy&12 (24.0\%)&23 (46.0\%)&29 (58.0\%)&31 (62.0\%)\\ \hline
+6&6&greedy&&&10 (20.0\%)&7 (14.0\%)\\ \hline
+4&7&greedy&43 (86.0\%)&44 (88.0\%)&&\\ \hline
+5&7&greedy&16 (32.0\%)&19 (38.0\%)&24 (48.0\%)&27 (54.0\%)\\ \hline
+6&7&greedy&&&&6 (12.0\%)\\ \hline
+4&8&greedy&38 (76.0\%)&34 (68.0\%)&40 (80.0\%)&44 (88.0\%)\\ \hline
+5&8&greedy&7 (14.0\%)&14 (28.0\%)&10 (20.0\%)&18 (36.0\%)\\ \hline
+\end{longtable}
+\end{center}
+\section{error-sensor}
+\subsubsection{empty-drawpile}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{empty-drawpile} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ empty-drawpile, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&1 (2.0\%)&3 (6.0\%)\\ \hline
+6&3&random&1 (2.0\%)&1 (2.0\%)&0 (0.0\%)&2 (4.0\%)\\ \hline
+7&3&random&0 (0.0\%)&1 (2.0\%)&1 (2.0\%)&\\ \hline
+5&4&random&1 (2.0\%)&4 (8.0\%)&2 (4.0\%)&2 (4.0\%)\\ \hline
+6&4&random&0 (0.0\%)&1 (2.0\%)&0 (0.0\%)&1 (2.0\%)\\ \hline
+4&5&random&&&&2 (4.0\%)\\ \hline
+5&5&random&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)&1 (2.0\%)\\ \hline
+6&5&random&&1 (2.0\%)&0 (0.0\%)&\\ \hline
+4&6&random&1 (2.0\%)&2 (4.0\%)&5 (10.0\%)&\\ \hline
+5&6&random&0 (0.0\%)&1 (2.0\%)&3 (6.0\%)&2 (4.0\%)\\ \hline
+4&7&random&0 (0.0\%)&2 (4.0\%)&3 (6.0\%)&2 (4.0\%)\\ \hline
+5&7&random&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)&2 (4.0\%)\\ \hline
+4&8&random&0 (0.0\%)&2 (4.0\%)&1 (2.0\%)&3 (6.0\%)\\ \hline
+5&8&random&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&3&greedy&36 (72.0\%)&27 (54.0\%)&44 (88.0\%)&42 (84.0\%)\\ \hline
+7&3&greedy&10 (20.0\%)&7 (14.0\%)&17 (34.0\%)&33 (66.0\%)\\ \hline
+5&4&greedy&39 (78.0\%)&33 (66.0\%)&&\\ \hline
+6&4&greedy&12 (24.0\%)&21 (42.0\%)&24 (48.0\%)&35 (70.0\%)\\ \hline
+7&4&greedy&&&6 (12.0\%)&10 (20.0\%)\\ \hline
+5&5&greedy&33 (66.0\%)&30 (60.0\%)&37 (74.0\%)&\\ \hline
+6&5&greedy&&8 (16.0\%)&14 (28.0\%)&26 (52.0\%)\\ \hline
+4&6&greedy&42 (84.0\%)&25 (50.0\%)&&\\ \hline
+5&6&greedy&12 (24.0\%)&16 (32.0\%)&29 (58.0\%)&31 (62.0\%)\\ \hline
+6&6&greedy&&&10 (20.0\%)&7 (14.0\%)\\ \hline
+4&7&greedy&43 (86.0\%)&22 (44.0\%)&&\\ \hline
+5&7&greedy&16 (32.0\%)&17 (34.0\%)&24 (48.0\%)&27 (54.0\%)\\ \hline
+6&7&greedy&&&&6 (12.0\%)\\ \hline
+4&8&greedy&38 (76.0\%)&18 (36.0\%)&36 (72.0\%)&44 (88.0\%)\\ \hline
+5&8&greedy&7 (14.0\%)&14 (28.0\%)&10 (20.0\%)&18 (36.0\%)\\ \hline
+\end{longtable}
+\end{center}
+\subsubsection{empty-drawpile-C}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{empty-drawpile-C} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ empty-drawpile-C, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&3&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+7&3&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&\\ \hline
+5&4&random&1 (2.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&4&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&5&random&&&&0 (0.0\%)\\ \hline
+5&5&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&5&random&&0 (0.0\%)&0 (0.0\%)&\\ \hline
+4&6&random&0 (0.0\%)&1 (2.0\%)&0 (0.0\%)&\\ \hline
+5&6&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)\\ \hline
+4&7&random&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)&0 (0.0\%)\\ \hline
+5&7&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&8&random&0 (0.0\%)&1 (2.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&8&random&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&3&greedy&0 (0.0\%)&0 (0.0\%)&5 (10.0\%)&8 (16.0\%)\\ \hline
+7&3&greedy&0 (0.0\%)&0 (0.0\%)&2 (4.0\%)&3 (6.0\%)\\ \hline
+5&4&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+6&4&greedy&0 (0.0\%)&0 (0.0\%)&3 (6.0\%)&5 (10.0\%)\\ \hline
+7&4&greedy&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&5&greedy&0 (0.0\%)&0 (0.0\%)&10 (20.0\%)&\\ \hline
+6&5&greedy&&0 (0.0\%)&2 (4.0\%)&5 (10.0\%)\\ \hline
+4&6&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+5&6&greedy&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)&1 (2.0\%)\\ \hline
+6&6&greedy&&&1 (2.0\%)&0 (0.0\%)\\ \hline
+4&7&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+5&7&greedy&0 (0.0\%)&0 (0.0\%)&8 (16.0\%)&1 (2.0\%)\\ \hline
+6&7&greedy&&&&2 (4.0\%)\\ \hline
+4&8&greedy&0 (0.0\%)&0 (0.0\%)&10 (20.0\%)&7 (14.0\%)\\ \hline
+5&8&greedy&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)&1 (2.0\%)\\ \hline
+\end{longtable}
+\end{center}
+\subsubsection{empty-drawpile-D}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{empty-drawpile-D} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ empty-drawpile-D, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&3&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+7&3&random&0 (0.0\%)&1 (2.0\%)&0 (0.0\%)&\\ \hline
+5&4&random&0 (0.0\%)&1 (2.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&4&random&0 (0.0\%)&1 (2.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&5&random&&&&0 (0.0\%)\\ \hline
+5&5&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&5&random&&0 (0.0\%)&0 (0.0\%)&\\ \hline
+4&6&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&\\ \hline
+5&6&random&0 (0.0\%)&1 (2.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&7&random&0 (0.0\%)&1 (2.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&7&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&8&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&8&random&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&3&greedy&36 (72.0\%)&27 (54.0\%)&39 (78.0\%)&32 (64.0\%)\\ \hline
+7&3&greedy&10 (20.0\%)&7 (14.0\%)&15 (30.0\%)&28 (56.0\%)\\ \hline
+5&4&greedy&39 (78.0\%)&33 (66.0\%)&&\\ \hline
+6&4&greedy&12 (24.0\%)&21 (42.0\%)&21 (42.0\%)&29 (58.0\%)\\ \hline
+7&4&greedy&&&6 (12.0\%)&10 (20.0\%)\\ \hline
+5&5&greedy&33 (66.0\%)&30 (60.0\%)&27 (54.0\%)&\\ \hline
+6&5&greedy&&8 (16.0\%)&12 (24.0\%)&20 (40.0\%)\\ \hline
+4&6&greedy&42 (84.0\%)&25 (50.0\%)&&\\ \hline
+5&6&greedy&12 (24.0\%)&16 (32.0\%)&28 (56.0\%)&30 (60.0\%)\\ \hline
+6&6&greedy&&&9 (18.0\%)&6 (12.0\%)\\ \hline
+4&7&greedy&43 (86.0\%)&22 (44.0\%)&&\\ \hline
+5&7&greedy&16 (32.0\%)&17 (34.0\%)&16 (32.0\%)&25 (50.0\%)\\ \hline
+6&7&greedy&&&&4 (8.0\%)\\ \hline
+4&8&greedy&38 (76.0\%)&18 (36.0\%)&26 (52.0\%)&35 (70.0\%)\\ \hline
+5&8&greedy&7 (14.0\%)&14 (28.0\%)&9 (18.0\%)&17 (34.0\%)\\ \hline
+\end{longtable}
+\end{center}
+\subsubsection{empty-drawpile-H}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{empty-drawpile-H} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ empty-drawpile-H, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&0 (0.0\%)&2 (4.0\%)\\ \hline
+6&3&random&1 (2.0\%)&1 (2.0\%)&0 (0.0\%)&1 (2.0\%)\\ \hline
+7&3&random&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)&\\ \hline
+5&4&random&0 (0.0\%)&1 (2.0\%)&1 (2.0\%)&0 (0.0\%)\\ \hline
+6&4&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&5&random&&&&1 (2.0\%)\\ \hline
+5&5&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)\\ \hline
+6&5&random&&1 (2.0\%)&0 (0.0\%)&\\ \hline
+4&6&random&0 (0.0\%)&1 (2.0\%)&2 (4.0\%)&\\ \hline
+5&6&random&0 (0.0\%)&0 (0.0\%)&2 (4.0\%)&0 (0.0\%)\\ \hline
+4&7&random&0 (0.0\%)&1 (2.0\%)&2 (4.0\%)&1 (2.0\%)\\ \hline
+5&7&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&2 (4.0\%)\\ \hline
+4&8&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&2 (4.0\%)\\ \hline
+5&8&random&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&3&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+7&3&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&4&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+6&4&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+7&4&greedy&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&5&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&\\ \hline
+6&5&greedy&&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&6&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+5&6&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&6&greedy&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&7&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+5&7&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&7&greedy&&&&0 (0.0\%)\\ \hline
+4&8&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&8&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+\end{longtable}
+\end{center}
+\subsubsection{empty-drawpile-S}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{empty-drawpile-S} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ empty-drawpile-S, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&1 (2.0\%)&1 (2.0\%)\\ \hline
+6&3&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)\\ \hline
+7&3&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&\\ \hline
+5&4&random&0 (0.0\%)&2 (4.0\%)&1 (2.0\%)&2 (4.0\%)\\ \hline
+6&4&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)\\ \hline
+4&5&random&&&&1 (2.0\%)\\ \hline
+5&5&random&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)&0 (0.0\%)\\ \hline
+6&5&random&&0 (0.0\%)&0 (0.0\%)&\\ \hline
+4&6&random&1 (2.0\%)&0 (0.0\%)&3 (6.0\%)&\\ \hline
+5&6&random&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)&1 (2.0\%)\\ \hline
+4&7&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)\\ \hline
+5&7&random&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)&0 (0.0\%)\\ \hline
+4&8&random&0 (0.0\%)&1 (2.0\%)&1 (2.0\%)&1 (2.0\%)\\ \hline
+5&8&random&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&3&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&2 (4.0\%)\\ \hline
+7&3&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&2 (4.0\%)\\ \hline
+5&4&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+6&4&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)\\ \hline
+7&4&greedy&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&5&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&\\ \hline
+6&5&greedy&&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)\\ \hline
+4&6&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+5&6&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&6&greedy&&&0 (0.0\%)&1 (2.0\%)\\ \hline
+4&7&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+5&7&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&1 (2.0\%)\\ \hline
+6&7&greedy&&&&0 (0.0\%)\\ \hline
+4&8&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&2 (4.0\%)\\ \hline
+5&8&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+\end{longtable}
+\end{center}
+\subsubsection{other-error}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{other-error} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ other-error, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&3&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+7&3&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&\\ \hline
+5&4&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&4&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&5&random&&&&0 (0.0\%)\\ \hline
+5&5&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&5&random&&0 (0.0\%)&0 (0.0\%)&\\ \hline
+4&6&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&\\ \hline
+5&6&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&7&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&7&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&8&random&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&8&random&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&3&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+7&3&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&4&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+6&4&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+7&4&greedy&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&5&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&\\ \hline
+6&5&greedy&&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&6&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+5&6&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&6&greedy&&&0 (0.0\%)&0 (0.0\%)\\ \hline
+4&7&greedy&0 (0.0\%)&0 (0.0\%)&&\\ \hline
+5&7&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+6&7&greedy&&&&0 (0.0\%)\\ \hline
+4&8&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+5&8&greedy&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)&0 (0.0\%)\\ \hline
+\end{longtable}
+\end{center}
+\section{crisis-counter-sensor: are-in-crisis}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{are-in-crisis} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ are-in-crisis, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_0.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_8.pdf}
+\end{minipage}
+\\ \hline
+6&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_16.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_24.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_32.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_40.pdf}
+\end{minipage}
+\\ \hline
+7&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_48.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_56.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_64.pdf}
+\end{minipage}
+&\\ \hline
+5&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_72.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_80.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_88.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_96.pdf}
+\end{minipage}
+\\ \hline
+6&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_104.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_112.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_120.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_128.pdf}
+\end{minipage}
+\\ \hline
+4&5&random&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_136.pdf}
+\end{minipage}
+\\ \hline
+5&5&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_144.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_152.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_160.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_168.pdf}
+\end{minipage}
+\\ \hline
+6&5&random&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_176.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_184.pdf}
+\end{minipage}
+&\\ \hline
+4&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_192.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_200.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_208.pdf}
+\end{minipage}
+&\\ \hline
+5&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_216.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_224.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_232.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_240.pdf}
+\end{minipage}
+\\ \hline
+4&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_248.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_256.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_264.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_272.pdf}
+\end{minipage}
+\\ \hline
+5&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_280.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_288.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_296.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_304.pdf}
+\end{minipage}
+\\ \hline
+4&8&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_312.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_320.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_328.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_336.pdf}
+\end{minipage}
+\\ \hline
+5&8&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_344.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_352.pdf}
+\end{minipage}
+\\ \hline
+6&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_360.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_368.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_376.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_384.pdf}
+\end{minipage}
+\\ \hline
+7&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_392.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_400.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_408.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_416.pdf}
+\end{minipage}
+\\ \hline
+5&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_424.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_432.pdf}
+\end{minipage}
+&&\\ \hline
+6&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_440.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_448.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_456.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_464.pdf}
+\end{minipage}
+\\ \hline
+7&4&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_472.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_480.pdf}
+\end{minipage}
+\\ \hline
+5&5&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_488.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_496.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_504.pdf}
+\end{minipage}
+&\\ \hline
+6&5&greedy&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_512.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_520.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_528.pdf}
+\end{minipage}
+\\ \hline
+4&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_536.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_544.pdf}
+\end{minipage}
+&&\\ \hline
+5&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_552.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_560.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_568.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_576.pdf}
+\end{minipage}
+\\ \hline
+6&6&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_584.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_592.pdf}
+\end{minipage}
+\\ \hline
+4&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_600.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_608.pdf}
+\end{minipage}
+&&\\ \hline
+5&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_616.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_624.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_632.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_640.pdf}
+\end{minipage}
+\\ \hline
+6&7&greedy&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_648.pdf}
+\end{minipage}
+\\ \hline
+4&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_656.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_664.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_672.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_680.pdf}
+\end{minipage}
+\\ \hline
+5&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_688.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_696.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_704.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_712.pdf}
+\end{minipage}
+\\ \hline
+\end{longtable}
+\end{center}
+\section{abandoned-project-sensor: abandoned-project}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{abandoned-project} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ abandoned-project, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_1.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_9.pdf}
+\end{minipage}
+\\ \hline
+6&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_17.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_25.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_33.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_41.pdf}
+\end{minipage}
+\\ \hline
+7&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_49.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_57.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_65.pdf}
+\end{minipage}
+&\\ \hline
+5&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_73.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_81.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_89.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_97.pdf}
+\end{minipage}
+\\ \hline
+6&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_105.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_113.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_121.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_129.pdf}
+\end{minipage}
+\\ \hline
+4&5&random&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_137.pdf}
+\end{minipage}
+\\ \hline
+5&5&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_145.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_153.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_161.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_169.pdf}
+\end{minipage}
+\\ \hline
+6&5&random&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_177.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_185.pdf}
+\end{minipage}
+&\\ \hline
+4&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_193.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_201.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_209.pdf}
+\end{minipage}
+&\\ \hline
+5&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_217.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_225.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_233.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_241.pdf}
+\end{minipage}
+\\ \hline
+4&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_249.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_257.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_265.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_273.pdf}
+\end{minipage}
+\\ \hline
+5&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_281.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_289.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_297.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_305.pdf}
+\end{minipage}
+\\ \hline
+4&8&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_313.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_321.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_329.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_337.pdf}
+\end{minipage}
+\\ \hline
+5&8&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_345.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_353.pdf}
+\end{minipage}
+\\ \hline
+6&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_361.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_369.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_377.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_385.pdf}
+\end{minipage}
+\\ \hline
+7&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_393.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_401.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_409.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_417.pdf}
+\end{minipage}
+\\ \hline
+5&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_425.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_433.pdf}
+\end{minipage}
+&&\\ \hline
+6&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_441.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_449.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_457.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_465.pdf}
+\end{minipage}
+\\ \hline
+7&4&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_473.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_481.pdf}
+\end{minipage}
+\\ \hline
+5&5&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_489.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_497.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_505.pdf}
+\end{minipage}
+&\\ \hline
+6&5&greedy&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_513.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_521.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_529.pdf}
+\end{minipage}
+\\ \hline
+4&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_537.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_545.pdf}
+\end{minipage}
+&&\\ \hline
+5&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_553.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_561.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_569.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_577.pdf}
+\end{minipage}
+\\ \hline
+6&6&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_585.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_593.pdf}
+\end{minipage}
+\\ \hline
+4&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_601.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_609.pdf}
+\end{minipage}
+&&\\ \hline
+5&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_617.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_625.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_633.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_641.pdf}
+\end{minipage}
+\\ \hline
+6&7&greedy&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_649.pdf}
+\end{minipage}
+\\ \hline
+4&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_657.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_665.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_673.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_681.pdf}
+\end{minipage}
+\\ \hline
+5&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_689.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_697.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_705.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_713.pdf}
+\end{minipage}
+\\ \hline
+\end{longtable}
+\end{center}
+\section{failed-rolls-sensor: failed-rolls}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{failed-rolls} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ failed-rolls, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_2.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_10.pdf}
+\end{minipage}
+\\ \hline
+6&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_18.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_26.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_34.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_42.pdf}
+\end{minipage}
+\\ \hline
+7&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_50.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_58.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_66.pdf}
+\end{minipage}
+&\\ \hline
+5&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_74.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_82.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_90.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_98.pdf}
+\end{minipage}
+\\ \hline
+6&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_106.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_114.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_122.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_130.pdf}
+\end{minipage}
+\\ \hline
+4&5&random&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_138.pdf}
+\end{minipage}
+\\ \hline
+5&5&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_146.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_154.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_162.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_170.pdf}
+\end{minipage}
+\\ \hline
+6&5&random&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_178.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_186.pdf}
+\end{minipage}
+&\\ \hline
+4&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_194.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_202.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_210.pdf}
+\end{minipage}
+&\\ \hline
+5&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_218.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_226.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_234.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_242.pdf}
+\end{minipage}
+\\ \hline
+4&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_250.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_258.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_266.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_274.pdf}
+\end{minipage}
+\\ \hline
+5&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_282.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_290.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_298.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_306.pdf}
+\end{minipage}
+\\ \hline
+4&8&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_314.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_322.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_330.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_338.pdf}
+\end{minipage}
+\\ \hline
+5&8&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_346.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_354.pdf}
+\end{minipage}
+\\ \hline
+6&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_362.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_370.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_378.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_386.pdf}
+\end{minipage}
+\\ \hline
+7&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_394.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_402.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_410.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_418.pdf}
+\end{minipage}
+\\ \hline
+5&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_426.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_434.pdf}
+\end{minipage}
+&&\\ \hline
+6&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_442.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_450.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_458.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_466.pdf}
+\end{minipage}
+\\ \hline
+7&4&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_474.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_482.pdf}
+\end{minipage}
+\\ \hline
+5&5&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_490.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_498.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_506.pdf}
+\end{minipage}
+&\\ \hline
+6&5&greedy&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_514.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_522.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_530.pdf}
+\end{minipage}
+\\ \hline
+4&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_538.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_546.pdf}
+\end{minipage}
+&&\\ \hline
+5&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_554.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_562.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_570.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_578.pdf}
+\end{minipage}
+\\ \hline
+6&6&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_586.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_594.pdf}
+\end{minipage}
+\\ \hline
+4&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_602.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_610.pdf}
+\end{minipage}
+&&\\ \hline
+5&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_618.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_626.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_634.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_642.pdf}
+\end{minipage}
+\\ \hline
+6&7&greedy&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_650.pdf}
+\end{minipage}
+\\ \hline
+4&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_658.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_666.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_674.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_682.pdf}
+\end{minipage}
+\\ \hline
+5&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_690.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_698.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_706.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_714.pdf}
+\end{minipage}
+\\ \hline
+\end{longtable}
+\end{center}
+\section{tech-sensor}
+\subsubsection{researching}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{researching} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ researching, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_3.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_11.pdf}
+\end{minipage}
+\\ \hline
+6&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_19.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_27.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_35.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_43.pdf}
+\end{minipage}
+\\ \hline
+7&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_51.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_59.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_67.pdf}
+\end{minipage}
+&\\ \hline
+5&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_75.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_83.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_91.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_99.pdf}
+\end{minipage}
+\\ \hline
+6&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_107.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_115.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_123.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_131.pdf}
+\end{minipage}
+\\ \hline
+4&5&random&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_139.pdf}
+\end{minipage}
+\\ \hline
+5&5&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_147.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_155.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_163.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_171.pdf}
+\end{minipage}
+\\ \hline
+6&5&random&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_179.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_187.pdf}
+\end{minipage}
+&\\ \hline
+4&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_195.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_203.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_211.pdf}
+\end{minipage}
+&\\ \hline
+5&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_219.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_227.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_235.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_243.pdf}
+\end{minipage}
+\\ \hline
+4&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_251.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_259.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_267.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_275.pdf}
+\end{minipage}
+\\ \hline
+5&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_283.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_291.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_299.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_307.pdf}
+\end{minipage}
+\\ \hline
+4&8&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_315.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_323.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_331.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_339.pdf}
+\end{minipage}
+\\ \hline
+5&8&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_347.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_355.pdf}
+\end{minipage}
+\\ \hline
+6&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_363.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_371.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_379.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_387.pdf}
+\end{minipage}
+\\ \hline
+7&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_395.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_403.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_411.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_419.pdf}
+\end{minipage}
+\\ \hline
+5&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_427.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_435.pdf}
+\end{minipage}
+&&\\ \hline
+6&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_443.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_451.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_459.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_467.pdf}
+\end{minipage}
+\\ \hline
+7&4&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_475.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_483.pdf}
+\end{minipage}
+\\ \hline
+5&5&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_491.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_499.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_507.pdf}
+\end{minipage}
+&\\ \hline
+6&5&greedy&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_515.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_523.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_531.pdf}
+\end{minipage}
+\\ \hline
+4&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_539.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_547.pdf}
+\end{minipage}
+&&\\ \hline
+5&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_555.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_563.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_571.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_579.pdf}
+\end{minipage}
+\\ \hline
+6&6&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_587.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_595.pdf}
+\end{minipage}
+\\ \hline
+4&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_603.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_611.pdf}
+\end{minipage}
+&&\\ \hline
+5&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_619.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_627.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_635.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_643.pdf}
+\end{minipage}
+\\ \hline
+6&7&greedy&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_651.pdf}
+\end{minipage}
+\\ \hline
+4&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_659.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_667.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_675.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_683.pdf}
+\end{minipage}
+\\ \hline
+5&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_691.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_699.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_707.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_715.pdf}
+\end{minipage}
+\\ \hline
+\end{longtable}
+\end{center}
+\subsubsection{researched}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{researched} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ researched, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_4.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_12.pdf}
+\end{minipage}
+\\ \hline
+6&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_20.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_28.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_36.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_44.pdf}
+\end{minipage}
+\\ \hline
+7&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_52.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_60.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_68.pdf}
+\end{minipage}
+&\\ \hline
+5&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_76.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_84.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_92.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_100.pdf}
+\end{minipage}
+\\ \hline
+6&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_108.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_116.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_124.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_132.pdf}
+\end{minipage}
+\\ \hline
+4&5&random&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_140.pdf}
+\end{minipage}
+\\ \hline
+5&5&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_148.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_156.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_164.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_172.pdf}
+\end{minipage}
+\\ \hline
+6&5&random&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_180.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_188.pdf}
+\end{minipage}
+&\\ \hline
+4&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_196.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_204.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_212.pdf}
+\end{minipage}
+&\\ \hline
+5&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_220.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_228.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_236.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_244.pdf}
+\end{minipage}
+\\ \hline
+4&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_252.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_260.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_268.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_276.pdf}
+\end{minipage}
+\\ \hline
+5&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_284.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_292.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_300.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_308.pdf}
+\end{minipage}
+\\ \hline
+4&8&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_316.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_324.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_332.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_340.pdf}
+\end{minipage}
+\\ \hline
+5&8&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_348.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_356.pdf}
+\end{minipage}
+\\ \hline
+6&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_364.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_372.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_380.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_388.pdf}
+\end{minipage}
+\\ \hline
+7&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_396.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_404.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_412.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_420.pdf}
+\end{minipage}
+\\ \hline
+5&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_428.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_436.pdf}
+\end{minipage}
+&&\\ \hline
+6&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_444.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_452.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_460.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_468.pdf}
+\end{minipage}
+\\ \hline
+7&4&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_476.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_484.pdf}
+\end{minipage}
+\\ \hline
+5&5&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_492.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_500.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_508.pdf}
+\end{minipage}
+&\\ \hline
+6&5&greedy&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_516.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_524.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_532.pdf}
+\end{minipage}
+\\ \hline
+4&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_540.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_548.pdf}
+\end{minipage}
+&&\\ \hline
+5&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_556.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_564.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_572.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_580.pdf}
+\end{minipage}
+\\ \hline
+6&6&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_588.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_596.pdf}
+\end{minipage}
+\\ \hline
+4&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_604.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_612.pdf}
+\end{minipage}
+&&\\ \hline
+5&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_620.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_628.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_636.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_644.pdf}
+\end{minipage}
+\\ \hline
+6&7&greedy&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_652.pdf}
+\end{minipage}
+\\ \hline
+4&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_660.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_668.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_676.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_684.pdf}
+\end{minipage}
+\\ \hline
+5&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_692.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_700.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_708.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_716.pdf}
+\end{minipage}
+\\ \hline
+\end{longtable}
+\end{center}
+\subsubsection{researched-base}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{researched-base} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ researched-base, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_5.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_13.pdf}
+\end{minipage}
+\\ \hline
+6&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_21.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_29.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_37.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_45.pdf}
+\end{minipage}
+\\ \hline
+7&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_53.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_61.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_69.pdf}
+\end{minipage}
+&\\ \hline
+5&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_77.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_85.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_93.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_101.pdf}
+\end{minipage}
+\\ \hline
+6&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_109.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_117.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_125.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_133.pdf}
+\end{minipage}
+\\ \hline
+4&5&random&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_141.pdf}
+\end{minipage}
+\\ \hline
+5&5&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_149.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_157.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_165.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_173.pdf}
+\end{minipage}
+\\ \hline
+6&5&random&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_181.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_189.pdf}
+\end{minipage}
+&\\ \hline
+4&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_197.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_205.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_213.pdf}
+\end{minipage}
+&\\ \hline
+5&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_221.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_229.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_237.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_245.pdf}
+\end{minipage}
+\\ \hline
+4&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_253.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_261.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_269.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_277.pdf}
+\end{minipage}
+\\ \hline
+5&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_285.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_293.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_301.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_309.pdf}
+\end{minipage}
+\\ \hline
+4&8&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_317.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_325.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_333.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_341.pdf}
+\end{minipage}
+\\ \hline
+5&8&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_349.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_357.pdf}
+\end{minipage}
+\\ \hline
+6&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_365.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_373.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_381.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_389.pdf}
+\end{minipage}
+\\ \hline
+7&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_397.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_405.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_413.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_421.pdf}
+\end{minipage}
+\\ \hline
+5&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_429.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_437.pdf}
+\end{minipage}
+&&\\ \hline
+6&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_445.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_453.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_461.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_469.pdf}
+\end{minipage}
+\\ \hline
+7&4&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_477.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_485.pdf}
+\end{minipage}
+\\ \hline
+5&5&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_493.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_501.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_509.pdf}
+\end{minipage}
+&\\ \hline
+6&5&greedy&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_517.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_525.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_533.pdf}
+\end{minipage}
+\\ \hline
+4&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_541.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_549.pdf}
+\end{minipage}
+&&\\ \hline
+5&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_557.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_565.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_573.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_581.pdf}
+\end{minipage}
+\\ \hline
+6&6&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_589.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_597.pdf}
+\end{minipage}
+\\ \hline
+4&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_605.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_613.pdf}
+\end{minipage}
+&&\\ \hline
+5&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_621.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_629.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_637.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_645.pdf}
+\end{minipage}
+\\ \hline
+6&7&greedy&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_653.pdf}
+\end{minipage}
+\\ \hline
+4&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_661.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_669.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_677.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_685.pdf}
+\end{minipage}
+\\ \hline
+5&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_693.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_701.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_709.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_717.pdf}
+\end{minipage}
+\\ \hline
+\end{longtable}
+\end{center}
+\subsubsection{researched-expanded}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{researched-expanded} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ researched-expanded, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_6.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_14.pdf}
+\end{minipage}
+\\ \hline
+6&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_22.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_30.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_38.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_46.pdf}
+\end{minipage}
+\\ \hline
+7&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_54.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_62.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_70.pdf}
+\end{minipage}
+&\\ \hline
+5&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_78.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_86.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_94.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_102.pdf}
+\end{minipage}
+\\ \hline
+6&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_110.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_118.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_126.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_134.pdf}
+\end{minipage}
+\\ \hline
+4&5&random&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_142.pdf}
+\end{minipage}
+\\ \hline
+5&5&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_150.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_158.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_166.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_174.pdf}
+\end{minipage}
+\\ \hline
+6&5&random&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_182.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_190.pdf}
+\end{minipage}
+&\\ \hline
+4&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_198.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_206.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_214.pdf}
+\end{minipage}
+&\\ \hline
+5&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_222.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_230.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_238.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_246.pdf}
+\end{minipage}
+\\ \hline
+4&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_254.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_262.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_270.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_278.pdf}
+\end{minipage}
+\\ \hline
+5&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_286.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_294.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_302.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_310.pdf}
+\end{minipage}
+\\ \hline
+4&8&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_318.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_326.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_334.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_342.pdf}
+\end{minipage}
+\\ \hline
+5&8&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_350.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_358.pdf}
+\end{minipage}
+\\ \hline
+6&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_366.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_374.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_382.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_390.pdf}
+\end{minipage}
+\\ \hline
+7&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_398.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_406.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_414.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_422.pdf}
+\end{minipage}
+\\ \hline
+5&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_430.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_438.pdf}
+\end{minipage}
+&&\\ \hline
+6&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_446.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_454.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_462.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_470.pdf}
+\end{minipage}
+\\ \hline
+7&4&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_478.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_486.pdf}
+\end{minipage}
+\\ \hline
+5&5&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_494.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_502.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_510.pdf}
+\end{minipage}
+&\\ \hline
+6&5&greedy&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_518.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_526.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_534.pdf}
+\end{minipage}
+\\ \hline
+4&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_542.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_550.pdf}
+\end{minipage}
+&&\\ \hline
+5&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_558.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_566.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_574.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_582.pdf}
+\end{minipage}
+\\ \hline
+6&6&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_590.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_598.pdf}
+\end{minipage}
+\\ \hline
+4&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_606.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_614.pdf}
+\end{minipage}
+&&\\ \hline
+5&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_622.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_630.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_638.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_646.pdf}
+\end{minipage}
+\\ \hline
+6&7&greedy&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_654.pdf}
+\end{minipage}
+\\ \hline
+4&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_662.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_670.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_678.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_686.pdf}
+\end{minipage}
+\\ \hline
+5&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_694.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_702.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_710.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_718.pdf}
+\end{minipage}
+\\ \hline
+\end{longtable}
+\end{center}
+\subsubsection{researched-auto-protect}
+\begin{center}
+\begin{longtable}{|l|l|l||l|l|l|l|}
+\caption{researched-auto-protect} \\
+\hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endfirsthead
+\multicolumn{7}{c}{{\bfseries Table \thetable\ researched-auto-protect, continued from previous page}}\\ \hline
+\multicolumn{3}{|c||}{Condition} & \multicolumn{4}{|c|}{Num. Players}\\ \hline
+crisis-check&crisis-rising&players & 3&4&5&6\\  \hline
+\endhead
+\multicolumn{7}{|r|}{{Continued on next page}}\\ \hline
+\endfoot
+\hline
+\endlastfoot
+5&3&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_7.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_15.pdf}
+\end{minipage}
+\\ \hline
+6&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_23.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_31.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_39.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_47.pdf}
+\end{minipage}
+\\ \hline
+7&3&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_55.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_63.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_71.pdf}
+\end{minipage}
+&\\ \hline
+5&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_79.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_87.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_95.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_103.pdf}
+\end{minipage}
+\\ \hline
+6&4&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_111.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_119.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_127.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_135.pdf}
+\end{minipage}
+\\ \hline
+4&5&random&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_143.pdf}
+\end{minipage}
+\\ \hline
+5&5&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_151.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_159.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_167.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_175.pdf}
+\end{minipage}
+\\ \hline
+6&5&random&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_183.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_191.pdf}
+\end{minipage}
+&\\ \hline
+4&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_199.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_207.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_215.pdf}
+\end{minipage}
+&\\ \hline
+5&6&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_223.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_231.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_239.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_247.pdf}
+\end{minipage}
+\\ \hline
+4&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_255.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_263.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_271.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_279.pdf}
+\end{minipage}
+\\ \hline
+5&7&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_287.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_295.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_303.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_311.pdf}
+\end{minipage}
+\\ \hline
+4&8&random&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_319.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_327.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_335.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_343.pdf}
+\end{minipage}
+\\ \hline
+5&8&random&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_351.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_359.pdf}
+\end{minipage}
+\\ \hline
+6&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_367.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_375.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_383.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_391.pdf}
+\end{minipage}
+\\ \hline
+7&3&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_399.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_407.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_415.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_423.pdf}
+\end{minipage}
+\\ \hline
+5&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_431.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_439.pdf}
+\end{minipage}
+&&\\ \hline
+6&4&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_447.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_455.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_463.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_471.pdf}
+\end{minipage}
+\\ \hline
+7&4&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_479.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_487.pdf}
+\end{minipage}
+\\ \hline
+5&5&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_495.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_503.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_511.pdf}
+\end{minipage}
+&\\ \hline
+6&5&greedy&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_519.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_527.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_535.pdf}
+\end{minipage}
+\\ \hline
+4&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_543.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_551.pdf}
+\end{minipage}
+&&\\ \hline
+5&6&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_559.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_567.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_575.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_583.pdf}
+\end{minipage}
+\\ \hline
+6&6&greedy&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_591.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_599.pdf}
+\end{minipage}
+\\ \hline
+4&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_607.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_615.pdf}
+\end{minipage}
+&&\\ \hline
+5&7&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_623.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_631.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_639.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_647.pdf}
+\end{minipage}
+\\ \hline
+6&7&greedy&&&&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_655.pdf}
+\end{minipage}
+\\ \hline
+4&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_663.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_671.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_679.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_687.pdf}
+\end{minipage}
+\\ \hline
+5&8&greedy&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_695.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_703.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_711.pdf}
+\end{minipage}
+&\begin{minipage}{3.5cm}
+\includegraphics[width=3.5cm]{figs/fig_719.pdf}
+\end{minipage}
+\\ \hline
+\end{longtable}
+\end{center}
+
+\end{document}
+
