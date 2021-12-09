@@ -15,7 +15,7 @@ else:
     import config
     graph_file = config.GRAPH
 
-graph_def = load_graph(graph_file)
+graph_def, _ = load_graph(graph_file)
 
 if len(sys.argv) > 2:
     print(graph_def.show().source)

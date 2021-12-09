@@ -31,7 +31,7 @@ class Graph:
     print("Unknown catid:", catid)
     assert False
     
-  GRAPH_PRINT_SIZE = "10,10"
+  GRAPH_PRINT_SIZE = "20,20"
   
   # nodes: dict( id -> name ), class_for_node: dict( id -> clazz ), outlinks: dict( id -> set(id) )
   def __init__(self, nodes, class_for_node, outlinks, categories, ordering=None):

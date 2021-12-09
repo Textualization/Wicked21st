@@ -82,6 +82,8 @@ class Game:
     L_USING_TECH            = 'Using tech "{}"'
     L_CONSULTANT_FEES       = 'Consultant fees'
     L_CHIP_ADDED            = 'Added a crisis chip'
+    L_ROLL_SUCCEEDED        = 'Dice roll succeeded'
+    L_ROLL_FAILED           = 'Dice roll failed'
     L_START_RESEARCH        = 'Start researching'
     L_SKILL_FOR_RESEARCH    = 'Skill for research'
     L_FUNDS_FOR_RESEARCH    = 'Funds for research'
@@ -489,9 +491,19 @@ class Game:
                 if succeeded:
                     self.phase_actions.append( ( self.state.player, Game.A_SUCCESS_SKILL,
                                                  self.state.projects[play_card[3]]['project'], play_card, roll, value ) )
+                    self.log.append( { 'phase' : phase,
+                                       'step' : Game.STEPS_PER_PHASE[phase][0],
+                                       'target' : roll,
+                                       'memo' : Game.L_ROLL_SUCCEEDED,
+                                       'state' : self.state.to_json() } )
                 else:
                     self.phase_actions.append( ( self.state.player, Game.A_FAILED_SKILL,
                                                  self.state.projects[play_card[3]]['project'], play_card, roll, value ) )
+                    self.log.append( { 'phase' : phase,
+                                       'step' : Game.STEPS_PER_PHASE[phase][0],
+                                       'target' : roll,
+                                       'memo' : Game.L_ROLL_FAILED,
+                                       'state' : self.state.to_json() } )
                     
                 # closing the project is left to the end phase
                 self.state.drawpiles.return_card(play_card[0], play_card[1])
@@ -585,7 +597,7 @@ class Game:
                 if chosen_card_for_tech is None:
                     break
                 self.phase_actions.append( ( self.state.player, Game.A_SKILL_RESEARCH,
-                                             chosen_card_for_tech[1], self.state.tech[chosen_card_for_tech[0]] ) )
+                                             chosen_card_for_tech[1], self.state.tech[chosen_card_for_tech[0]]['tech'] ) )
                 self.state.drawpiles.return_card(chosen_card_for_tech[1], chosen_card_for_tech[3])
                 del self.state.players[self.state.player].cards[chosen_card_for_tech[2]]
                 
@@ -634,7 +646,7 @@ class Game:
                                    'state' : self.state.to_json() } )
                 if chosen_to_fund is None:
                     break
-                self.phase_actions.append( ( self.state.player, Game.A_FUND_RESEARCH, self.state.tech[chosen_to_fund] ) )
+                self.phase_actions.append( ( self.state.player, Game.A_FUND_RESEARCH, self.state.tech[chosen_to_fund]['tech'] ) )
                 self.state.players[self.state.player].resources['$'] -= 1
                 
                 for idx, tech in enumerate(to_fund):
@@ -683,9 +695,9 @@ class Game:
                     skills = 0
                     funds  = 0
                     for act in self.phase_actions:
-                        if act[1] == Game.A_SKILL_RESEARCH and act[2] == tech:
+                        if   act[1] == Game.A_SKILL_RESEARCH and act[3] == tech:
                             skills += 1
-                        elif act[1] == Game.A_FUND_RESEARCH and act[2] == tech:
+                        elif act[1] == Game.A_FUND_RESEARCH  and act[2] == tech:
                             funds  += 1
                     if skills == 0 and funds == 0:
                         continue
@@ -724,7 +736,7 @@ class Game:
 
                             if tech.type_ == Tech.BASE or tech.type_ == Tech.A:
                                 # see if any failed roll would have succeeded with the extra boost
-                                boost = 1 if tech.type == Tech.BASE else 2
+                                boost = 1 if tech.type_ == Tech.BASE else 2
                                 for idx, act in enumerate(self.phase_actions):
                                     if act[1] == Game.A_FAILED_SKILL and act[3][1] == tech.suit and act[-2] <= act[-1] + boost:
                                         self.log.append( { 'phase' : phase,

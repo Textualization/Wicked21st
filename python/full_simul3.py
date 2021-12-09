@@ -46,7 +46,7 @@ def simulate_one(arg):
     rand = random.Random(seed)
     
     game_init = GameInit(initial_graph)
-    game_def = GameDef(game_init, num_players, config.CRISIS_CHECK, classes_def, graph_def, cascade_def, tree_def, project_def)
+    game_def = GameDef(game_init, num_players, config.CRISIS_CHECK, config.CRISIS_RISING, classes_def, graph_def, cascade_def, tree_def, project_def)
 
     # assemble random players
     players = [ GreedyPlayer("Player{}".format(p+1), p) for p in range(num_players) ]
@@ -80,4 +80,4 @@ results = pool.map(simulate_one, enumerate(seeds))
 won = sum(map(lambda x: 0 if x[1] else x[0], results))
 errors = sum(map(lambda x: x[1], results))
 
-print("\n\n\n\n\n\nplayers=", num_players, "crisis<", config.CRISIS_CHECK, "runs=", config.NUM_RUNS, "won=", won, int(won * 1.0 / config.NUM_RUNS * 1000) / 10, "%", "errors=", errors )
+print("\n\n\n\n\n\nplayers=", num_players, "crisis<", config.CRISIS_CHECK, "rising=", config.CRISIS_RISING, "runs=", config.NUM_RUNS, "won=", won, int(won * 1.0 / config.NUM_RUNS * 1000) / 10, "%", "errors=", errors )

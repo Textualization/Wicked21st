@@ -19,7 +19,7 @@ def textwidth(text, font='Arial', fontsize=14):
     xbearing, ybearing, width, height, xadvance, yadvance = cr.text_extents(text)
     return width
 
-g = load_graph(sys.argv[1])
+g, c = load_graph(sys.argv[1])
 dwg = svgwrite.Drawing(sys.argv[2], size=(1080,1080))
 dwg.add(dwg.rect(insert=(-100, -100), size=(1280, 1280), rx=None, ry=None, fill='white'))
 
@@ -30,21 +30,32 @@ rad_per_node = 2 * math.pi * 1.0 / total_nodes
 current_rad = 0
 node_to_rad = dict()
 node_to_code = dict()
-for catid in g.node_classes:
-    nodes = g.node_classes[catid]
-    
-    for node in sorted(nodes, key=lambda x:g.ordering[x]):
-        name = g.node_names[node].upper()
-        if name[0] == '*':
-            name
-        code = name[:3]
-        if code in node_to_code:
-            code = name.split(" ")[1][:3]
+if len(next(iter(g.node_names.keys()))) == 3:
+    node_to_code = { x: x for x in g.node_names }
+    code_to_node = node_to_code
+
+    for catid in g.node_classes:
+        nodes = g.node_classes[catid]
+
+        for node in sorted(nodes, key=lambda x:g.ordering[x]):
+            node_to_rad[node] = current_rad
+            current_rad += rad_per_node        
+else:
+    for catid in g.node_classes:
+        nodes = g.node_classes[catid]
+
+        for node in sorted(nodes, key=lambda x:g.ordering[x]):
+            name = g.node_names[node].upper()
+            if name[0] == '*':
+                name
+            code = name[:3]
             if code in node_to_code:
-                raise Error(g.node_names[node]+ " " + str(node_to_code))
-        node_to_code[node] = code
-        node_to_rad[node] = current_rad
-        current_rad += rad_per_node
+                code = name.split(" ")[1][:3]
+                if code in node_to_code:
+                    raise Error(g.node_names[node]+ " " + str(node_to_code))
+            node_to_code[node] = code
+            node_to_rad[node] = current_rad
+            current_rad += rad_per_node
 
 ## STATS
 node_to_stats = dict()

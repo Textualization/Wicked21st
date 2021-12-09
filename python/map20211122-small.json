@@ -10,67 +10,6 @@
     "outlinks": [],
     "cascading": []
   },
-  "POL": {
-    "code": "POL",
-    "name": "Pollution",
-    "order": 2,
-    "category": {
-      "name": "ENVIRONMENTAL",
-      "code": "#a7cc5c"
-    },
-    "outlinks": [
-      "FRE",
-      "HEA",
-      "BIO"
-    ],
-    "cascading": [
-      "FOO",
-      "SOC",
-      "SPR",
-      "VOI",
-      "UNR",
-      "LAN",
-      "LAB",
-      "ECO",
-      "SYS",
-      "INF",
-      "MON",
-      "MAR",
-      "IND",
-      "UNS"
-    ]
-  },
-  "FOO": {
-    "code": "FOO",
-    "name": "Food & Water Shortage",
-    "order": 3,
-    "category": {
-      "name": "CLASS",
-      "code": "#e69545"
-    },
-    "outlinks": [
-      "HEA",
-      "SOC"
-    ],
-    "cascading": [
-      "SOC",
-      "VOI",
-      "SPR",
-      "UNR",
-      "LAN",
-      "LAB",
-      "BIO",
-      "FOO",
-      "ECO",
-      "INF",
-      "SYS",
-      "MON",
-      "IND",
-      "MAR",
-      "UNS",
-      "FRE"
-    ]
-  },
   "CLI": {
     "code": "CLI",
     "name": "Climate Change",
@@ -89,17 +28,19 @@
       "LAN"
     ],
     "cascading": [
-      "UNR",
-      "VOI",
       "SPR",
-      "LAB",
+      "VOI",
+      "UNR",
+      "LOW",
       "ECO",
       "INF",
       "SYS",
       "MON",
       "IND",
       "MAR",
-      "UNS"
+      "UNS",
+      "OCE",
+      "POL"
     ]
   },
   "ECO": {
@@ -117,51 +58,53 @@
       "SYS"
     ],
     "cascading": [
-      "UNR",
+      "SPR",
       "MON",
       "VOI",
-      "SPR",
-      "LAN",
-      "HEA",
-      "LAB",
-      "IND",
+      "UNR",
       "MAR",
-      "BIO",
-      "UNS",
+      "LOW",
+      "IND",
+      "LAN",
+      "CLI",
       "FOO",
+      "OCE",
+      "BIO",
+      "POL",
+      "UNS",
+      "HEA",
       "FRE"
     ]
   },
-  "INS": {
-    "code": "INS",
-    "name": "Insufficient Housing & Energy",
-    "order": 1,
+  "FOO": {
+    "code": "FOO",
+    "name": "Food & Water Shortage",
+    "order": 3,
     "category": {
       "name": "CLASS",
       "code": "#e69545"
     },
     "outlinks": [
-      "SPR",
-      "SOC",
-      "VOI",
-      "UNR"
+      "HEA",
+      "SOC"
     ],
     "cascading": [
-      "SOC",
+      "INS",
+      "VOI",
       "UNR",
       "SPR",
-      "VOI",
+      "LOW",
       "LAN",
-      "HEA",
-      "LAB",
-      "FOO",
       "ECO",
       "BIO",
-      "SYS",
       "INF",
+      "SYS",
       "MON",
       "MAR",
       "IND",
+      "POL",
+      "OCE",
+      "CLI",
       "UNS",
       "FRE"
     ]
@@ -180,20 +123,23 @@
     ],
     "cascading": [
       "SOC",
-      "HEA",
-      "SPR",
-      "VOI",
       "UNR",
-      "LAB",
+      "HEA",
+      "VOI",
+      "SPR",
       "LAN",
-      "ECO",
+      "LOW",
       "BIO",
+      "ECO",
       "SYS",
       "INF",
       "MON",
-      "MAR",
       "IND",
-      "UNS"
+      "MAR",
+      "UNS",
+      "POL",
+      "OCE",
+      "CLI"
     ]
   },
   "HEA": {
@@ -209,20 +155,23 @@
       "INS"
     ],
     "cascading": [
+      "VOI",
       "SPR",
       "UNR",
-      "VOI",
       "LAN",
-      "LAB",
+      "LOW",
       "ECO",
-      "FOO",
       "BIO",
-      "INF",
+      "FOO",
       "SYS",
+      "INF",
       "MON",
       "IND",
       "MAR",
+      "OCE",
       "UNS",
+      "CLI",
+      "POL",
       "FRE"
     ]
   },
@@ -235,24 +184,25 @@
       "code": "#6bb3b3"
     },
     "outlinks": [
-        "POL",
-        "CLI",
-        "OCE"        
+      "POL",
+      "CLI",
+      "OCE"
     ],
     "cascading": [
-      "BIO",
-      "FRE",
-      "HEA",
       "FOO",
       "SOC",
+      "HEA",
+      "LAN",
+      "INS",
+      "FRE",
+      "BIO",
+      "SPR",
       "VOI",
       "UNR",
-      "SPR",
-      "LAN",
-      "LAB",
+      "LOW",
       "ECO",
-      "INF",
       "SYS",
+      "INF",
       "MON",
       "MAR",
       "UNS"
@@ -270,50 +220,57 @@
       "ECO"
     ],
     "cascading": [
-      "SOC",
+      "INS",
       "SYS",
+      "SOC",
+      "MON",
+      "VOI",
       "SPR",
       "UNR",
-      "VOI",
-      "MON",
       "IND",
-      "LAB",
-      "HEA",
-      "LAN",
       "MAR",
-      "FOO",
+      "LAN",
+      "LOW",
       "BIO",
+      "HEA",
+      "CLI",
+      "POL",
       "UNS",
+      "FOO",
+      "OCE",
       "FRE"
     ]
   },
-  "LAB": {
-    "code": "LAB",
-    "name": "Low Labour Standards",
-    "order": 2,
+  "INS": {
+    "code": "INS",
+    "name": "Insufficient Housing & Energy",
+    "order": 1,
     "category": {
-      "name": "LIVING STANDARDS",
-      "code": "#987db3"
+      "name": "CLASS",
+      "code": "#e69545"
     },
     "outlinks": [
-        "SOC",
-      "ECO",
-      "HEA",
-      "VOI"
+      "SPR",
+      "SOC",
+      "VOI",
+      "UNR"
     ],
     "cascading": [
-      "INF",
-      "SOC",
-      "SYS",
-      "MON",
-      "UNR",
-      "SPR",
-      "MAR",
-      "IND",
       "LAN",
-      "UNS",
+      "LOW",
+      "HEA",
       "FOO",
+      "ECO",
       "BIO",
+      "SYS",
+      "INF",
+      "MON",
+      "IND",
+      "MAR",
+      "OCE",
+      "POL",
+      "UNS",
+      "CLI",
       "FRE"
     ]
   },
@@ -334,14 +291,51 @@
       "SOC",
       "VOI",
       "UNR",
+      "INS",
       "SPR",
-      "LAB",
+      "LOW",
       "ECO",
       "SYS",
       "INF",
       "MON",
-      "MAR",
       "IND",
+      "MAR",
+      "POL",
+      "UNS",
+      "CLI",
+      "OCE",
+      "FRE"
+    ]
+  },
+  "LOW": {
+    "code": "LOW",
+    "name": "Low Labour Standards",
+    "order": 2,
+    "category": {
+      "name": "LIVING STANDARDS",
+      "code": "#987db3"
+    },
+    "outlinks": [
+      "SOC",
+      "ECO",
+      "HEA",
+      "VOI"
+    ],
+    "cascading": [
+      "INF",
+      "INS",
+      "SYS",
+      "UNR",
+      "MON",
+      "SPR",
+      "IND",
+      "LAN",
+      "MAR",
+      "CLI",
+      "FOO",
+      "BIO",
+      "OCE",
+      "POL",
       "UNS",
       "FRE"
     ]
@@ -361,18 +355,22 @@
     ],
     "cascading": [
       "INF",
-      "FRE",
-      "SOC",
+      "OCE",
       "LAN",
+      "FRE",
+      "POL",
+      "CLI",
       "SYS",
-      "VOI",
+      "SOC",
+      "INS",
+      "UNR",
       "SPR",
       "MON",
+      "VOI",
       "BIO",
-      "HEA",
-      "UNR",
       "FOO",
-      "LAB"
+      "HEA",
+      "LOW"
     ]
   },
   "MON": {
@@ -387,21 +385,25 @@
       "MAR",
       "IND",
       "SYS",
-      "LAB"
+      "LOW"
     ],
     "cascading": [
-      "VOI",
+      "ECO",
+      "UNS",
+      "POL",
+      "SOC",
+      "OCE",
+      "CLI",
+      "INF",
       "UNR",
       "HEA",
-      "UNS",
-      "ECO",
-      "INF",
-      "SOC",
-      "FRE",
+      "VOI",
       "LAN",
       "BIO",
-      "SPR",
-      "FOO"
+      "FRE",
+      "INS",
+      "FOO",
+      "SPR"
     ]
   },
   "OCE": {
@@ -420,47 +422,54 @@
       "HEA",
       "SOC",
       "UNR",
+      "INS",
       "VOI",
-      "LAB",
       "SPR",
+      "LOW",
       "ECO",
       "LAN",
-      "SYS",
       "INF",
+      "SYS",
       "MON",
       "MAR",
       "IND",
+      "CLI",
       "UNS",
+      "POL",
       "FRE"
     ]
   },
-  "VOI": {
-    "code": "VOI",
-    "name": "Lack of Political Voice",
+  "POL": {
+    "code": "POL",
+    "name": "Pollution",
     "order": 2,
     "category": {
-      "name": "SOCIAL",
-      "code": "#e67c73"
+      "name": "ENVIRONMENTAL",
+      "code": "#a7cc5c"
     },
     "outlinks": [
-      "SOC",
-      "LAB"
+      "FRE",
+      "HEA",
+      "BIO"
     ],
     "cascading": [
-      "ECO",
-      "HEA",
-      "UNR",
-      "INF",
-      "SYS",
-      "SPR",
-      "MON",
-      "MAR",
-      "IND",
-      "LAN",
+      "SOC",
+      "INS",
       "FOO",
-      "BIO",
+      "UNR",
+      "SPR",
+      "VOI",
+      "LAN",
+      "LOW",
+      "ECO",
+      "SYS",
+      "INF",
+      "MON",
+      "IND",
+      "MAR",
       "UNS",
-      "FRE"
+      "OCE",
+      "CLI"
     ]
   },
   "SOC": {
@@ -476,19 +485,23 @@
       "UNR"
     ],
     "cascading": [
+      "LOW",
       "HEA",
-      "LAB",
       "ECO",
-      "SPR",
       "INF",
+      "INS",
       "SYS",
       "MON",
-      "LAN",
-      "FOO",
-      "BIO",
+      "SPR",
       "MAR",
+      "LAN",
       "IND",
       "UNS",
+      "POL",
+      "BIO",
+      "FOO",
+      "OCE",
+      "CLI",
       "FRE"
     ]
   },
@@ -505,19 +518,22 @@
       "INS"
     ],
     "cascading": [
-      "BIO",
       "UNR",
-      "FOO",
       "VOI",
       "SOC",
+      "BIO",
+      "FOO",
+      "LOW",
       "HEA",
-      "LAB",
       "ECO",
       "INF",
       "SYS",
       "MON",
-      "MAR",
       "IND",
+      "MAR",
+      "CLI",
+      "OCE",
+      "POL",
       "UNS",
       "FRE"
     ]
@@ -538,16 +554,20 @@
       "UNR"
     ],
     "cascading": [
-      "IND",
-      "LAB",
-      "VOI",
+      "INS",
       "MAR",
-      "UNS",
-      "HEA",
+      "VOI",
+      "LOW",
+      "IND",
+      "CLI",
       "SPR",
-      "LAN",
-      "FRE",
+      "UNS",
+      "POL",
+      "HEA",
+      "OCE",
       "BIO",
+      "FRE",
+      "LAN",
       "FOO"
     ]
   },
@@ -563,20 +583,24 @@
       "SOC"
     ],
     "cascading": [
-      "HEA",
       "VOI",
-      "LAB",
+      "LOW",
       "ECO",
-      "SPR",
-      "INF",
-      "LAN",
+      "HEA",
       "SYS",
-      "BIO",
+      "INS",
+      "INF",
+      "SPR",
       "MON",
-      "FOO",
-      "IND",
+      "LAN",
       "MAR",
+      "IND",
+      "FOO",
+      "CLI",
+      "BIO",
       "UNS",
+      "POL",
+      "OCE",
       "FRE"
     ]
   },
@@ -595,20 +619,55 @@
       "LAN"
     ],
     "cascading": [
-      "HEA",
       "BIO",
       "FOO",
-      "SOC",
+      "HEA",
+      "INS",
+      "SPR",
       "VOI",
       "UNR",
-      "SPR",
-      "LAB",
+      "SOC",
+      "LOW",
       "ECO",
       "SYS",
       "INF",
       "MON",
+      "MAR",
       "IND",
-      "MAR"
+      "CLI"
+    ]
+  },
+  "VOI": {
+    "code": "VOI",
+    "name": "Lack of Political Voice",
+    "order": 2,
+    "category": {
+      "name": "SOCIAL",
+      "code": "#e67c73"
+    },
+    "outlinks": [
+      "SOC",
+      "LOW"
+    ],
+    "cascading": [
+      "UNR",
+      "HEA",
+      "ECO",
+      "INS",
+      "SYS",
+      "INF",
+      "MON",
+      "SPR",
+      "LAN",
+      "MAR",
+      "IND",
+      "POL",
+      "CLI",
+      "BIO",
+      "UNS",
+      "FOO",
+      "OCE",
+      "FRE"
     ]
   }
 }
