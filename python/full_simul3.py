@@ -49,7 +49,7 @@ def simulate_one(arg):
     game_def = GameDef(game_init, num_players, config.CRISIS_CHECK, config.CRISIS_RISING, classes_def, graph_def, cascade_def, tree_def, project_def)
 
     # assemble random players
-    players = [ GreedyPlayer("Player{}".format(p+1), p) for p in range(num_players) ]
+    players = [ Player("Player{}".format(p+1), p) for p in range(num_players) ]
 
     game = Game(game_def, players)
 
