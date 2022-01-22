@@ -255,7 +255,25 @@ class GreedyPlayer(Player):
     def analyze(self, rnd, state, game, game_def):
         """The core of the AI, analyze the state of the board and decide next actions"""
 
-        # choose research
+        target_tech = self._analyze_research(rnd, state, game, game_def)
+        actions, extra = self._analyze_projects(rnd, state, game, game_def, target_tech)
+
+        if actions is not None:
+            return actions, extra
+
+        print("something went wrong")
+        return {
+            Player.PILE_DRAW: None,
+            Player.START_PROJECT: None,
+            Player.PLAY_CARD: None,
+            Player.START_RESEARCH: None,
+            Player.CARD_FOR_RESEARCH: None,
+            Player.FUND_RESEARCH: None,
+        }, {}
+
+    def _analyze_research(self, rnd, state, game, game_def):
+        """Decide what research to tackle next"""
+
         researching = list(game.tech.techs_for_status(TechTreeState.IN_PROGRESS))
         self.rnd.shuffle(researching)
         available = list(game.tech.research_boundary())
@@ -299,6 +317,11 @@ class GreedyPlayer(Player):
         self.debug("target_tech: ", target_tech.name if target_tech else None)
 
         # else: do not do any research
+
+        return target_tech
+
+    def _analyze_projects(self, rnd, state, game, game_def, target_tech):
+        """Decide what project to tackle next"""
 
         crisis_top_16perc = list()
         crisis_top_33perc = list()
@@ -677,16 +700,7 @@ class GreedyPlayer(Player):
                 else None,
             }, {}
 
-        print("something went wrong")
-
-        return {
-            Player.PILE_DRAW: None,
-            Player.START_PROJECT: None,
-            Player.PLAY_CARD: None,
-            Player.START_RESEARCH: None,
-            Player.CARD_FOR_RESEARCH: None,
-            Player.FUND_RESEARCH: None,
-        }, {}
+        return (None,)
 
     def analyze_cards(self, rnd, state, game, actions):
         """check the cards drawn and use them to fund project and tech using the priorities"""
