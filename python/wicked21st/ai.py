@@ -294,7 +294,7 @@ class GreedyPlayer(Player):
 
             for tech in researching + available:
                 if tech.suit in needed and (
-                    tech.type_ == Tech.BASE or tech.type_ == Tech.A
+                    tech.type_ == Tech.BASE
                 ):
                     target_tech = tech
                     break
@@ -308,7 +308,7 @@ class GreedyPlayer(Player):
                     break
 
                 for tech in researching + available:
-                    if tech.type_ == Tech.B and tech.node == node:
+                    if tech.type_ == Tech.PROTECT and tech.node == node:
                         target_tech = tech
                         break
                 if target_tech:
@@ -736,14 +736,8 @@ class GreedyPlayer(Player):
                         fee = 0  # TODO smarter allocation of money based on card values is possible
                         value = min(10, card[1] if card[1] > 1 else 10)
                         base_tech = game.tech.find_tech(Tech.BASE, card[0])
-                        expanded_tech = game.tech.find_tech(Tech.A, card[0])
                         if game.tech.status(base_tech.name) == TechTreeState.RESEARCHED:
                             value += 1
-                        if (
-                            game.tech.status(expanded_tech.name)
-                            == TechTreeState.RESEARCHED
-                        ):
-                            value = min(11, value + 2)
 
                         if project_prio in ["top", "medium"]:
                             if money > 0 and value < 11:

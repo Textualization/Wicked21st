@@ -555,7 +555,6 @@ class Game:
                 else:
                     value = min(10, play_card[0][1] if play_card[0][1] > 1 else 10)
                     base_tech = self.state.tech.find_tech(Tech.BASE, play_card[0][0])
-                    expanded_tech = self.state.tech.find_tech(Tech.A, play_card[0][0])
 
                     if (
                         self.state.tech.status(base_tech.name)
@@ -572,23 +571,6 @@ class Game:
                                 "state": self.state.to_json(),
                             }
                         )
-                    if (
-                        self.state.tech.status(expanded_tech.name)
-                        == TechTreeState.RESEARCHED
-                    ):
-                        base = value
-                        value = min(11, value + 2)
-                        if base > value:
-                            self.log.append(
-                                {
-                                    "phase": phase,
-                                    "step": Game.STEPS_PER_PHASE[phase][0],
-                                    "target": (value - base),
-                                    "memo": Game.L_USING_TECH,
-                                    "args": [expanded_tech.name],
-                                    "state": self.state.to_json(),
-                                }
-                            )
 
                     if (
                         value < 11
@@ -976,7 +958,7 @@ class Game:
                                 }
                             )
 
-                            if tech.type_ == Tech.BASE or tech.type_ == Tech.A:
+                            if tech.type_ == Tech.BASE:
                                 # see if any failed roll would have succeeded with the extra boost
                                 boost = 1 if tech.type_ == Tech.BASE else 2
                                 for idx, act in enumerate(self.phase_actions):
@@ -1003,7 +985,7 @@ class Game:
                                             act[4],
                                             act[5] + boost,
                                         )
-                            elif tech.type_ == Tech.B:
+                            elif tech.type_ == Tech.PROTECT:
                                 # auto-protect, apply protection
                                 node = self.game_def.graph.node_names[tech.node]
                                 self.state.graph[node]["auto-protected"] = True

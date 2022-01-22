@@ -10,18 +10,17 @@ from .drawpiles import DrawPiles
 ### Tech details:
 ###
 ###
-### Technologies take a discard of a given suit plus a unit of money to make a research cycle in a turn. It takes 3 research cycles to research a technology.
+### Technologies take a discard of a given suit plus a unit of money to make a research cycle in a turn. It takes 2 research cycles to research a technology.
 ###
-### The tech tree is as follows: Base-<suit> can be researched right away and needs <suit> as the discard card. Expanded-<suit> can be researched once Base-<suit> has been researched. It also needs a <suit> discard. Finally, once Expanded-<suit 1> and Base-<suit 2> have been researched, Auto-Protect-<problem-in-CAT> can be researched. It takes card of suit 2 for discard:
+### The tech tree is as follows: Base-<suit> can be researched right away and needs <suit> as the discard card. Once Base-<suit 1> and Base-<suit 2> have been researched, Auto-Protect-<problem-in-CAT> can be researched. It takes card of suit 2 for discard:
 
 
 class Tech:
 
     BASE = 0
-    A = 1
-    B = 2
+    PROTECT = 1
 
-    TYPES = ["Base", "Expanded", "Auto-Protect"]
+    TYPES = ["Base", "Auto-Protect"]
 
     def __init__(self, name, type_, suit, node=None, parents: set = None, turns=2):
         self.name = name
@@ -42,34 +41,32 @@ class Tech:
 
 class TechTree:
     ###
-    ### |    CAT          |	suits |
-    ### |ENVIRONMENTAL    |	C, D  |
-    ### |LIVING_STANDARDS | H, C  |
-    ### |SOCIAL           |	D, H  |
-    ### |CLASS            |	H, S  |
-    ### |ECONOMIC         | S, D  |
+    ### |    CAT          | suits |
     ### |INDUSTRIAL       | S, C  |
+    ### |ECONOMIC         | S, D  |
+    ### |LIVING_STANDARDS | S, H  |
+    ### |CLASS            | C, H  |
+    ### |ENVIRONMENTAL    | C, D  |
+    ### |SOCIAL           | H, D  |
 
     BASE_TABLE = [
-        (Graph.ENVIRONMENTAL, "C", "D"),
-        (Graph.LIVING_STANDARDS, "H", "C"),
-        (Graph.SOCIAL, "D", "H"),
-        (Graph.CLASS, "H", "S"),
-        (Graph.ECONOMIC, "S", "D"),
         (Graph.INDUSTRIAL, "S", "C"),
+        (Graph.ECONOMIC, "S", "D"),
+        (Graph.LIVING_STANDARDS, "S", "H"),
+        (Graph.CLASS, "C", "H"),
+        (Graph.ENVIRONMENTAL, "C", "D"),
+        (Graph.SOCIAL, "H", "D"),
     ]
     ###
     ###   At any given time, the "research boundary" (or "state of the art") are the techs that can be researched at a given point.
     ###
     ### For example, at the start of the game, Base-C, Base-H, Base-D, Base-S can be researched.
     ###
-    ### Upon researching Base-D, the research boundary is Base-C, Base-H, Expanded-D, Base-S
-    ###
-    ### Upon researching Expanded-D, the research boundary is Base-C, Base-H, Base-S
+    ### Upon researching Base-D, the research boundary is Base-C, Base-H, Base-S
     ###
     ### Upon researching Base-H, according to the table above, any node in the category "SOCIAL" can be researched, so the boundary becomes:
     ###
-    ### Base-C, Base-S, Expanded-H, Auto-Protect-"Weak Political Voice", Auto-Protect-"Social Inequity", Auto-Protect-"Food Shortage", Auto-Protect-"Affordable Housing", Auto-Protect-"Clean Water Shortage"
+    ### Base-C, Base-S, Auto-Protect-"Weak Political Voice", Auto-Protect-"Social Inequity", Auto-Protect-"Food Shortage", Auto-Protect-"Affordable Housing", Auto-Protect-"Clean Water Shortage"
 
     def __init__(self, graph: Graph):
         self.technologies = list()
@@ -82,37 +79,28 @@ class TechTree:
             self.technologies.append(base)
             suit_to_base[suit] = base
 
-            expanded = Tech(
-                "Expanded {}".format(suit), Tech.A, suit, parents=set([base.name])
-            )
-            self.technologies.append(expanded)
-            suit_to_expanded[suit] = expanded
-
         for cat, suit_a, suit_b in TechTree.BASE_TABLE:
             for n in graph.node_classes[cat[1]]:
                 nn = graph.node_names[n]
 
-                expanded = suit_to_expanded[suit_a]
-                base = suit_to_base[suit_b]
+                base_a = suit_to_base[suit_a]
+                base_b = suit_to_base[suit_b]
 
                 protected = Tech(
                     'Protect "{}"'.format(nn),
-                    Tech.B,
+                    Tech.PROTECT,
                     suit_b,
                     n,
-                    parents=set([expanded.name, base.name]),
+                    parents=set([base_a.name, base_b.name]),
                 )
                 self.technologies.append(protected)
 
-                expanded = suit_to_expanded[suit_b]
-                base = suit_to_base[suit_a]
-
                 protected = Tech(
                     'Protect "{}"'.format(nn),
-                    Tech.B,
-                    suit_b,
+                    Tech.PROTECT,
+                    suit_a,
                     n,
-                    parents=set([expanded.name, base.name]),
+                    parents=set([base_a.name, base_b.name]),
                 )
                 self.technologies.append(protected)
 
