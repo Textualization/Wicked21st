@@ -101,7 +101,7 @@ def deterministic_run(seed, make_player):
 
 def test_determinism_random():
     def make_player(p):
-        return Player("Player{}".format(p + 1), p)         
+        return Player("Player{}".format(p + 1), p)
 
     base = deterministic_run(1, make_player)
 
@@ -110,9 +110,10 @@ def test_determinism_random():
 
         assert base == run
 
+
 def test_determinism_greedy():
     def make_player(p):
-        return GreedyPlayer("GreedyPlayer{}".format(p + 1), p)         
+        return GreedyPlayer("GreedyPlayer{}".format(p + 1), p)
 
     base = deterministic_run(1, make_player)
 

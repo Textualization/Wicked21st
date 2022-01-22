@@ -41,15 +41,26 @@ initial_graph = GraphState(graph_def)
 for topic in config.IN_CRISIS:
     initial_graph.in_crisis(topic)
 
+
 def simulate_one(arg):
     run, seed = arg
     rand = random.Random(seed)
-    
+
     game_init = GameInit(initial_graph)
-    game_def = GameDef(game_init, num_players, config.CRISIS_CHECK, config.CRISIS_RISING, classes_def, graph_def, cascade_def, tree_def, project_def)
+    game_def = GameDef(
+        game_init,
+        num_players,
+        config.CRISIS_CHECK,
+        config.CRISIS_RISING,
+        classes_def,
+        graph_def,
+        cascade_def,
+        tree_def,
+        project_def,
+    )
 
     # assemble random players
-    players = [ Player("Player{}".format(p+1), p) for p in range(num_players) ]
+    players = [Player("Player{}".format(p + 1), p) for p in range(num_players)]
 
     game = Game(game_def, players)
 
@@ -61,13 +72,15 @@ def simulate_one(arg):
             game.step(rand)
             if config.VERBOSE:
                 for e in game.log[log0:]:
-                    line = "{}\t{}\t{}\t{}".format(run, game.state.turn, e['phase'], e['step'])
-                    if 'target' in e:
-                        line = "{}\t{}".format(line, e['target'])
-                        if 'memo' in e:
-                            memo = e['memo']
-                            if 'args' in e:
-                                args = e['args']
+                    line = "{}\t{}\t{}\t{}".format(
+                        run, game.state.turn, e["phase"], e["step"]
+                    )
+                    if "target" in e:
+                        line = "{}\t{}".format(line, e["target"])
+                        if "memo" in e:
+                            memo = e["memo"]
+                            if "args" in e:
+                                args = e["args"]
                                 memo = memo.format(*args)
                         line = "{}\t{}".format(line, memo)
                     print(line)
@@ -75,9 +88,25 @@ def simulate_one(arg):
         return -1, True
     return not game.finished, False
 
+
 pool = multiprocessing.Pool(20)
 results = pool.map(simulate_one, enumerate(seeds))
 won = sum(map(lambda x: 0 if x[1] else x[0], results))
 errors = sum(map(lambda x: x[1], results))
 
-print("\n\n\n\n\n\nplayers=", num_players, "crisis<", config.CRISIS_CHECK, "rising=", config.CRISIS_RISING, "runs=", config.NUM_RUNS, "won=", won, int(won * 1.0 / config.NUM_RUNS * 1000) / 10, "%", "errors=", errors )
+print(
+    "\n\n\n\n\n\nplayers=",
+    num_players,
+    "crisis<",
+    config.CRISIS_CHECK,
+    "rising=",
+    config.CRISIS_RISING,
+    "runs=",
+    config.NUM_RUNS,
+    "won=",
+    won,
+    int(won * 1.0 / config.NUM_RUNS * 1000) / 10,
+    "%",
+    "errors=",
+    errors,
+)

@@ -29,7 +29,7 @@ seed = config.SEED
 if len(sys.argv) > 1:
     seed = int(sys.argv[1])
 
-rand = random.Random(seed) 
+rand = random.Random(seed)
 
 # definitions
 graph_def, cascade_def = load_graph(config.GRAPH)
@@ -44,34 +44,50 @@ for topic in config.IN_CRISIS:
     initial_graph.in_crisis(topic)
 
 game_init = GameInit(initial_graph)
-game_def = GameDef(game_init, NUM_PLAYERS, config.CRISIS_CHECK, config.CRISIS_RISING, classes_def, graph_def, cascade_def, tree_def, project_def)
+game_def = GameDef(
+    game_init,
+    NUM_PLAYERS,
+    config.CRISIS_CHECK,
+    config.CRISIS_RISING,
+    classes_def,
+    graph_def,
+    cascade_def,
+    tree_def,
+    project_def,
+)
 
 # assemble random players
 
-players = [ Player("Player{}".format(p+1), p) for p in range(NUM_PLAYERS) ]
+players = [Player("Player{}".format(p + 1), p) for p in range(NUM_PLAYERS)]
 
 game = Game(game_def, players)
 game.start(rand)
 
 exc = False
 while not game.finished and game.state.turn < config.GAME_LENGTH:
-    print('turn', game.state.turn, 'player', game.state.player, Game.PHASES[game.state.phase])
-    #print("\t\t", ",".join(game.state.graph.are_in_crisis('ECONOMIC')))
+    print(
+        "turn",
+        game.state.turn,
+        "player",
+        game.state.player,
+        Game.PHASES[game.state.phase],
+    )
+    # print("\t\t", ",".join(game.state.graph.are_in_crisis('ECONOMIC')))
     log0 = len(game.log)
     try:
         game.step(rand)
         for e in game.log[log0:]:
-            line = "{}\t{}".format(e['phase'], e['step'])
-            if 'target' in e:
-                line = "{}\t{}".format(line, e['target'])
-                if 'memo' in e:
-                    memo = e['memo']
-                    if 'args' in e:
-                        args = e['args']
+            line = "{}\t{}".format(e["phase"], e["step"])
+            if "target" in e:
+                line = "{}\t{}".format(line, e["target"])
+                if "memo" in e:
+                    memo = e["memo"]
+                    if "args" in e:
+                        args = e["args"]
                         memo = memo.format(*args)
                 line = "{}\t{}".format(line, memo)
             print(line)
-        #print('Piles: ' + str(game.state.drawpiles.to_json()))
+        # print('Piles: ' + str(game.state.drawpiles.to_json()))
     except EmptyDrawPile as e:
         print("GAME ERROR: ran out of {}".format(e.suit))
         exc = True

@@ -10,6 +10,3 @@ from wicked21st.graph import load_graph, Graph, Cascades, save_graph
 
 graph, cascades = load_graph(sys.argv[1])
 save_graph(sys.argv[2], graph, cascades)
-
-
-

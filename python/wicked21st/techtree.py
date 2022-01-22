@@ -14,15 +14,16 @@ from .drawpiles import DrawPiles
 ###
 ### The tech tree is as follows: Base-<suit> can be researched right away and needs <suit> as the discard card. Expanded-<suit> can be researched once Base-<suit> has been researched. It also needs a <suit> discard. Finally, once Expanded-<suit 1> and Base-<suit 2> have been researched, Auto-Protect-<problem-in-CAT> can be researched. It takes card of suit 2 for discard:
 
+
 class Tech:
 
     BASE = 0
     A = 1
     B = 2
 
-    TYPES = [ 'Base', 'Expanded', 'Auto-Protect' ]
+    TYPES = ["Base", "Expanded", "Auto-Protect"]
 
-    def __init__(self, name, type_, suit, node=None, parents: set=None, turns=2):
+    def __init__(self, name, type_, suit, node=None, parents: set = None, turns=2):
         self.name = name
         self.type_ = type_
         self.suit = suit
@@ -31,46 +32,45 @@ class Tech:
         self.turns = turns
 
     def to_json(self):
-        result = { 'name' : self.name,
-                   'type' : Tech.TYPES[self.type_],
-                   'suit' : self.suit }
+        result = {"name": self.name, "type": Tech.TYPES[self.type_], "suit": self.suit}
         if self.node is not None:
-            result['node'] = self.node
+            result["node"] = self.node
         if self.parents is not None:
-            result['parents'] = list(self.parents)
+            result["parents"] = list(self.parents)
         return result
 
-class TechTree:
-###
-### |    CAT          |	suits |
-### |ENVIRONMENTAL    |	C, D  |
-### |LIVING_STANDARDS | H, C  |
-### |SOCIAL           |	D, H  |
-### |CLASS            |	H, S  |
-### |ECONOMIC         | S, D  |
-### |INDUSTRIAL       | S, C  |
 
-    BASE_TABLE =  [ 
-        ( Graph.ENVIRONMENTAL,    'C', 'D' ),
-        ( Graph.LIVING_STANDARDS, 'H', 'C' ),
-        ( Graph.SOCIAL,	          'D', 'H' ),
-        ( Graph.CLASS,	          'H', 'S' ),
-        ( Graph.ECONOMIC,	  'S', 'D' ),
-        ( Graph.INDUSTRIAL,	  'S', 'C' ),
+class TechTree:
+    ###
+    ### |    CAT          |	suits |
+    ### |ENVIRONMENTAL    |	C, D  |
+    ### |LIVING_STANDARDS | H, C  |
+    ### |SOCIAL           |	D, H  |
+    ### |CLASS            |	H, S  |
+    ### |ECONOMIC         | S, D  |
+    ### |INDUSTRIAL       | S, C  |
+
+    BASE_TABLE = [
+        (Graph.ENVIRONMENTAL, "C", "D"),
+        (Graph.LIVING_STANDARDS, "H", "C"),
+        (Graph.SOCIAL, "D", "H"),
+        (Graph.CLASS, "H", "S"),
+        (Graph.ECONOMIC, "S", "D"),
+        (Graph.INDUSTRIAL, "S", "C"),
     ]
-###
-###   At any given time, the "research boundary" (or "state of the art") are the techs that can be researched at a given point.
-###
-### For example, at the start of the game, Base-C, Base-H, Base-D, Base-S can be researched.
-###
-### Upon researching Base-D, the research boundary is Base-C, Base-H, Expanded-D, Base-S
-###
-### Upon researching Expanded-D, the research boundary is Base-C, Base-H, Base-S
-###
-### Upon researching Base-H, according to the table above, any node in the category "SOCIAL" can be researched, so the boundary becomes:
-###
-### Base-C, Base-S, Expanded-H, Auto-Protect-"Weak Political Voice", Auto-Protect-"Social Inequity", Auto-Protect-"Food Shortage", Auto-Protect-"Affordable Housing", Auto-Protect-"Clean Water Shortage" 
-    
+    ###
+    ###   At any given time, the "research boundary" (or "state of the art") are the techs that can be researched at a given point.
+    ###
+    ### For example, at the start of the game, Base-C, Base-H, Base-D, Base-S can be researched.
+    ###
+    ### Upon researching Base-D, the research boundary is Base-C, Base-H, Expanded-D, Base-S
+    ###
+    ### Upon researching Expanded-D, the research boundary is Base-C, Base-H, Base-S
+    ###
+    ### Upon researching Base-H, according to the table above, any node in the category "SOCIAL" can be researched, so the boundary becomes:
+    ###
+    ### Base-C, Base-S, Expanded-H, Auto-Protect-"Weak Political Voice", Auto-Protect-"Social Inequity", Auto-Protect-"Food Shortage", Auto-Protect-"Affordable Housing", Auto-Protect-"Clean Water Shortage"
+
     def __init__(self, graph: Graph):
         self.technologies = list()
 
@@ -78,11 +78,13 @@ class TechTree:
         suit_to_expanded = dict()
 
         for suit in DrawPiles.SUITS:
-            base = Tech('Base {}'.format(suit), Tech.BASE, suit)
+            base = Tech("Base {}".format(suit), Tech.BASE, suit)
             self.technologies.append(base)
             suit_to_base[suit] = base
 
-            expanded = Tech('Expanded {}'.format(suit), Tech.A, suit, parents=set([base.name]))
+            expanded = Tech(
+                "Expanded {}".format(suit), Tech.A, suit, parents=set([base.name])
+            )
             self.technologies.append(expanded)
             suit_to_expanded[suit] = expanded
 
@@ -92,18 +94,29 @@ class TechTree:
 
                 expanded = suit_to_expanded[suit_a]
                 base = suit_to_base[suit_b]
-                
-                protected = Tech('Protect "{}"'.format(nn), Tech.B, suit_b, n, parents=set([expanded.name, base.name]))
+
+                protected = Tech(
+                    'Protect "{}"'.format(nn),
+                    Tech.B,
+                    suit_b,
+                    n,
+                    parents=set([expanded.name, base.name]),
+                )
                 self.technologies.append(protected)
 
                 expanded = suit_to_expanded[suit_b]
                 base = suit_to_base[suit_a]
 
-                protected = Tech('Protect "{}"'.format(nn), Tech.B, suit_b, n, parents=set([expanded.name, base.name]))
+                protected = Tech(
+                    'Protect "{}"'.format(nn),
+                    Tech.B,
+                    suit_b,
+                    n,
+                    parents=set([expanded.name, base.name]),
+                )
                 self.technologies.append(protected)
-                
-        self.names = sorted(list({ tech.name for tech in self.technologies }))
-        
+
+        self.names = sorted(list({tech.name for tech in self.technologies}))
+
     def to_json(self):
-        return [ tech.to_json() for tech in self.technologies ]
-        
+        return [tech.to_json() for tech in self.technologies]
