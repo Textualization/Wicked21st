@@ -1,0 +1,37 @@
+CAT	NAME	CODE	#INF	#OUTF	INFLOWS	OUTFLOWS
+INDUSTRIAL						
+	Unsustainable Harvesting	UNS	1	5	MAR	INE,NIT,FRE,CHE,LAN
+	Polluting Industry	POL	2	3	MON,MAR	INE,AIR,CHE
+	Fossil Fuel Dependency	FOS	0	4		OCE,NIT,CLI,CHE
+	Sprawl	SPR	1	3	LAC	LAC,INE,LAN
+ECONOMIC						
+	Inflation	INF	2	1	ECO,SYS	ECO
+	Monopoly	MON	1	3	SYS	MAR,INE,POL
+	Market Externalities	MAR	1	4	MON	UNS,INE,POL,ECO
+	Inefficiency	INE	6	0	UNS,MON,POL,MAR,SPR,SYS	
+SOCIAL						
+	Social Inequity	SOC	10	4	ECO,DIS,CLI,SYS,LAC,LAC,LAC,UNR,LAC,FOO	LAC,UNR,LOW,LAC
+	Low Education	LOW	4	0	LOW,SOC,ENE,LAC	
+	Lack of Political Voice	LAC	3	2	LOW,SOC,LAC	SOC,LAC
+	Unrest & Injustice	UNR	3	2	SOC,SYS,LAC	SOC,LAC
+	Lack of Community Networks	LAC	5	2	SOC,LAC,LAC,UNR,FOO	LAC,SOC
+CLASS						
+	Energy Shortage	ENE	2	2	CLI,FRE	LAC,LOW
+	Lack of Healthcare	LAC	7	3	CHE,CLI,LOW,AIR,CLE,LAC,FOO	LAC,SOC,LOW
+	Lack of Affordable Housing	LAC	4	5	ECO,SPR,ENE,LAC	LAC,UNR,SOC,SPR,LAC
+	Clean Water Shortage	CLE	1	1	FRE	LAC
+	Food Shortage	FOO	5	3	LAN,CLI,NIT,FRE,OCE	LAC,SOC,LAC
+ENVIRONMENTAL						
+	Biodiversity Loss	BIO	5	0	LAN,CHE,CLI,NIT,OCE	
+	Chemical Pollution	CHE	3	3	UNS,POL,FOS	LAC,FRE,BIO
+	Climate Change	CLI	1	7	FOS	SOC,ENE,BIO,FRE,LAC,LAN,FOO
+	Freshwater Depletion	FRE	3	3	UNS,CHE,CLI	CLE,ENE,FOO
+	Air & Ozone Degradation	AIR	1	1	POL	LAC
+	Ocean Degradation	OCE	1	2	FOS	FOO,BIO
+	Land Conversion	LAN	3	2	UNS,SPR,CLI	FOO,BIO
+	Nitrogen & Phosphorous Loading	NIT	2	2	UNS,FOS	FOO,BIO
+LIVING STANDARDS						
+	Economic Inequality	ECO	5	3	INF,MAR,DIS,LOW,SYS	LAC,SOC,INF
+	Discrimination	DIS	1	2	LOW	SOC,ECO
+	Low Labour Standards	LOW	0	5		LAC,DIS,ECO,LAC,LOW
+	Systemic Corruption	SYS	0	6		INE,UNR,SOC,INF,MON,ECO
