@@ -302,7 +302,7 @@ class GreedyPlayer(Player):
                 break
 
         if not target_tech:
-            # research shortest path for top 16% unprotected
+            # research shortest path for top RESEARCH_TIER unprotected
             for idx, node in enumerate(state.extra.order):
                 if idx > len(state.extra.order) * GreedyPlayer.RESEARCH_TIER:
                     break
@@ -323,9 +323,9 @@ class GreedyPlayer(Player):
     def _analyze_projects(self, rnd, state, game, game_def, target_tech):
         """Decide what project to tackle next"""
 
-        crisis_top_16perc = list()
-        crisis_top_33perc = list()
-        crisis_top_66perc = list()
+        crisis_top_tier = list()
+        crisis_second_tier = list()
+        crisis_third_tier = list()
 
         in_crisis = set(game.graph.are_in_crisis())
 
@@ -334,29 +334,29 @@ class GreedyPlayer(Player):
         for idx, node in enumerate(order):
             if game_def.graph.node_names[node] in in_crisis:
                 if idx < len(order) * GreedyPlayer.TOP_TIER:
-                    crisis_top_16perc.append(node)
+                    crisis_top_tier.append(node)
                 elif idx < len(order) * GreedyPlayer.SECOND_TIER:
-                    crisis_top_33perc.append(node)
+                    crisis_second_tier.append(node)
                 elif idx < len(order) * 0.666:
-                    crisis_top_66perc.append(node)
+                    crisis_third_tier.append(node)
 
         self.debug(
-            "crisis_top_16perc={}, crisis_top_33perc={}, crisis_top_66perc={}".format(
-                len(crisis_top_16perc),
-                len(crisis_top_33perc),
-                len(crisis_top_66perc),
+            "crisis_top_tier={}, crisis_second_tier={}, crisis_third_tier={}".format(
+                len(crisis_top_tier),
+                len(crisis_second_tier),
+                len(crisis_third_tier),
             )
         )
 
         # choose project
         ongoing = game.projects.projects_for_status(ProjectState.IN_PROGRESS)
 
-        if crisis_top_16perc:
-            self.debug("crisis_top_16perc")
+        if crisis_top_tier:
+            self.debug("crisis_top_tier")
 
             # there are projects for them?
             projects = list()
-            for crisis_node in crisis_top_16perc:
+            for crisis_node in crisis_top_tier:
                 for ongoingp in ongoing:
                     if ongoingp.fixes == crisis_node:
                         projects.append(ongoingp)
@@ -425,7 +425,7 @@ class GreedyPlayer(Player):
                     draw = []
                     in_hand = [card[1] for card in state.cards]
 
-                    for crisis_node in crisis_top_16perc:
+                    for crisis_node in crisis_top_tier:
                         if len(draw) == 2:
                             break
 
@@ -475,7 +475,7 @@ class GreedyPlayer(Player):
                 else:
                     # start project for it, with tradeoff
                     project = game.projects.find_project(
-                        Project.BASE, crisis_top_16perc[0]
+                        Project.BASE, crisis_top_tier[0]
                     )
                     needed = list(
                         game.projects[project.name]["missing"]
@@ -510,8 +510,8 @@ class GreedyPlayer(Player):
                         },
                         Player.START_RESEARCH: None,
                     }, {"project": {"name": project.name, "priority": "top"}}
-        elif crisis_top_33perc:
-            self.debug("crisis_top_33perc")
+        elif crisis_second_tier:
+            self.debug("crisis_second_tier")
             if state.projects:  # do I have a project?
                 # finish it
                 needed = list(
@@ -551,7 +551,7 @@ class GreedyPlayer(Player):
                     else None,
                 }, {"project": {"name": state.projects[0], "priority": "medium"}}
             else:  # create a project for it, no tradeoffs
-                project = game.projects.find_project(Project.A, crisis_top_33perc[0])
+                project = game.projects.find_project(Project.A, crisis_second_tier[0])
                 needed = list(
                     game.projects[project.name]["missing"]
                     if project.name in game.projects
@@ -591,9 +591,9 @@ class GreedyPlayer(Player):
                     if game.tech[target_tech.name]["status"] == TechTreeState.AVAILABLE
                     else None,
                 }, {"project": {"name": project.name, "priority": "medium"}}
-        elif crisis_top_66perc:
-            self.debug("crisis_top_66perc")
-            # same as before, but focus on research for top 16%
+        elif crisis_third_tier:
+            self.debug("crisis_third_tier")
+            # same as before, but focus on research for top TOP_TIER%
             draw = [None, None]
             if target_tech.suit in [self.player_class.suit_a, self.player_class.suit_b]:
                 draw[1] = target_tech.suit
@@ -633,7 +633,7 @@ class GreedyPlayer(Player):
                     else None,
                 }, {"project": {"name": state.projects[0], "priority": "low"}}
             else:  # create a project for it, no tradeoffs
-                project = game.projects.find_project(Project.A, crisis_top_66perc[0])
+                project = game.projects.find_project(Project.A, crisis_third_tier[0])
                 needed = list(
                     game.projects[project.name]["missing"]
                     if project.name in game.projects
@@ -675,7 +675,7 @@ class GreedyPlayer(Player):
                 }, {"project": {"name": project.name, "priority": "low"}}
         else:
             self.debug("crisis: other")
-            # research and hoard cards for top 16%
+            # research and hoard cards for top TOP_TIER%
             draw = [None, None]
             if target_tech and target_tech.suit in [
                 self.player_class.suit_a,

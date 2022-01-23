@@ -14,18 +14,12 @@ import numpy as np
 ###
 ### These are the roles with their associated suits:
 ###
-### |Engineer       | S| C|
 ### |Investor       | S| C|
-### |Union Rep      | S| H|
-### |Social Worker  | S| H|
-### |Artist         | S| D|
-### |Service Worker | S| D|
-### |Researcher     | C| H|
+### |Social Worker  | S| D|
+### |Educator       | S| H|
 ### |Scientist      | C| H|
 ### |Journalist     | C| D|
-### |Councilor      | C| D|
-### |Activist       | H| D|
-### |Local Organizer| H| D|
+### |Councilor      | H| D|
 ###
 
 
@@ -53,39 +47,19 @@ class BaseClass:
 # missing: special abilities
 
 
-class EngineerClass(BaseClass):
-    def __init__(self):
-        super().__init__("Engineer", "S", "C")
-
-
 class InvestorClass(BaseClass):
     def __init__(self):
         super().__init__("Investor", "S", "C")
 
 
-class UnionRepClass(BaseClass):
-    def __init__(self):
-        super().__init__("Union Rep", "S", "H")
-
-
 class SocialWorkerClass(BaseClass):
     def __init__(self):
-        super().__init__("Social Worker", "S", "H")
+        super().__init__("Social Worker", "S", "D")
 
 
-class ArtistClass(BaseClass):
+class EducatorClass(BaseClass):
     def __init__(self):
-        super().__init__("Artist", "S", "D")
-
-
-class ServiceWorkerClass(BaseClass):
-    def __init__(self):
-        super().__init__("Service Worker", "S", "D")
-
-
-class ResearcherClass(BaseClass):
-    def __init__(self):
-        super().__init__("Researcher", "C", "H")
+        super().__init__("Educator", "S", "H")
 
 
 class ScientistClass(BaseClass):
@@ -100,34 +74,18 @@ class JournalistClass(BaseClass):
 
 class CouncilorClass(BaseClass):
     def __init__(self):
-        super().__init__("Councilor", "C", "D")
-
-
-class ActivistClass(BaseClass):
-    def __init__(self):
-        super().__init__("Activist", "H", "D")
-
-
-class LocalOrganizerClass(BaseClass):
-    def __init__(self):
-        super().__init__("Local Organizer", "H", "D")
+        super().__init__("Councilor", "H", "D")
 
 
 class Classes:
     def __init__(self):
         self.classes = [
-            EngineerClass(),
             InvestorClass(),
-            UnionRepClass(),
             SocialWorkerClass(),
-            ArtistClass(),
-            ServiceWorkerClass(),
-            ResearcherClass(),
+            EducatorClass(),
             ScientistClass(),
             JournalistClass(),
             CouncilorClass(),
-            ActivistClass(),
-            LocalOrganizerClass(),
         ]
 
     def to_json(self):

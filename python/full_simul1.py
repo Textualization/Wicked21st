@@ -38,10 +38,16 @@ project_def = Projects(graph_def)
 tree_def = TechTree(graph_def)
 
 initial_graph = GraphState(graph_def)
-for topic in config.IN_CRISIS:
-    if topic not in set(graph_def.node_names.values()):
-        print(topic)
-    initial_graph.in_crisis(topic)
+if type(config.IN_CRISIS) is int:
+    all_nodes = list(graph_def.node_names.values())
+    rand.shuffle(all_nodes)
+    for topic in all_nodes[:config.IN_CRISIS]:
+        initial_graph.in_crisis(topic)
+else:    
+    for topic in config.IN_CRISIS:
+        if topic not in set(graph_def.node_names.values()):
+            print(topic)
+        initial_graph.in_crisis(topic)
 
 game_init = GameInit(initial_graph)
 game_def = GameDef(
