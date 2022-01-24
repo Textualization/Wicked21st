@@ -41,9 +41,9 @@ initial_graph = GraphState(graph_def)
 if type(config.IN_CRISIS) is int:
     all_nodes = list(graph_def.node_names.values())
     rand.shuffle(all_nodes)
-    for topic in all_nodes[:config.IN_CRISIS]:
+    for topic in all_nodes[: config.IN_CRISIS]:
         initial_graph.in_crisis(topic)
-else:    
+else:
     for topic in config.IN_CRISIS:
         if topic not in set(graph_def.node_names.values()):
             print(topic)

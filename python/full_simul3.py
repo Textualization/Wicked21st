@@ -46,9 +46,9 @@ def simulate_one(arg):
     if type(config.IN_CRISIS) is int:
         all_nodes = list(graph_def.node_names.values())
         rand.shuffle(all_nodes)
-        for topic in all_nodes[:config.IN_CRISIS]:
+        for topic in all_nodes[: config.IN_CRISIS]:
             initial_graph.in_crisis(topic)
-    else:    
+    else:
         for topic in config.IN_CRISIS:
             initial_graph.in_crisis(topic)
 
@@ -66,7 +66,7 @@ def simulate_one(arg):
     )
 
     # assemble random players
-    players = [Player("Player{}".format(p + 1), p) for p in range(num_players)]
+    players = [GreedyPlayer("Player{}".format(p + 1), p) for p in range(num_players)]
 
     game = Game(game_def, players)
 

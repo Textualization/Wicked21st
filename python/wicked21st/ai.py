@@ -15,10 +15,10 @@ from .drawpiles import DrawPiles
 
 class GreedyPlayer(Player):
 
-    TOP_TIER = 0.166
+    TOP_TIER = 0.0
     SECOND_TIER = 0.333
 
-    RESEARCH_TIER = TOP_TIER
+    RESEARCH_TIER = 0.166  # TOP_TIER
 
     DEBUG = False
 
@@ -293,9 +293,7 @@ class GreedyPlayer(Player):
                     needed.append(s2)
 
             for tech in researching + available:
-                if tech.suit in needed and (
-                    tech.type_ == Tech.BASE
-                ):
+                if tech.suit in needed and (tech.type_ == Tech.BASE):
                     target_tech = tech
                     break
             if target_tech:
@@ -348,9 +346,74 @@ class GreedyPlayer(Player):
             )
         )
 
-        # choose project
         ongoing = game.projects.projects_for_status(ProjectState.IN_PROGRESS)
+        own_project = (
+            game.projects.project_for_name(state.projects[0])
+            if state.projects
+            else None
+        )
 
+        def do_project(project, start, research, prio, draw=None):
+            needed = list(
+                game.projects[project.name]["missing"]
+                if project.name in game.projects
+                else game.projects.project_for_name(project.name).cost
+            )
+            for in_hand in state.cards:
+                if in_hand[1] in needed:
+                    del needed[needed.index(in_hand[1])]
+
+            # jokers
+            for in_hand in state.cards:
+                if in_hand[0] == 14 and needed:
+                    del needed[0]
+
+            if draw is None:
+                draw = [None, None]
+
+            if self.player_class.suit_a in needed and draw[1] is None:
+                draw[1] = self.player_class.suit_a
+                del needed[needed.index(self.player_class.suit_a)]
+            elif self.player_class.suit_b in needed and draw[1] is None:
+                draw[1] = self.player_class.suit_b
+                del needed[needed.index(self.player_class.suit_b)]
+            if needed and draw[0] is None:
+                draw[0] = needed[0]
+            elif draw[0] is None:
+                if research:
+                    draw[0] = research.suit
+                else:
+                    draw[0] = rnd.choice(DrawPiles.SUITS)
+
+            if draw[1] is None:
+                if research and research.suit in [
+                    self.player_class.suit_a,
+                    self.player_class.suit_b,
+                ]:
+                    draw[1] = research.suit
+                else:
+                    draw[1] = rnd.choice(
+                        [self.player_class.suit_a, self.player_class.suit_b]
+                    )
+
+            return {
+                Player.PILE_DRAW: draw,
+                Player.START_PROJECT: start,
+                Player.START_RESEARCH: research.name
+                if research
+                and game.tech[research.name]["status"] == TechTreeState.AVAILABLE
+                else None,
+            }, {"project": {"name": project.name, "priority": prio}}
+
+        if own_project:  # steady as you go
+            return do_project(
+                own_project,
+                None,
+                None if own_project.fixes in crisis_top_tier else target_tech,
+                "top" if own_project.fixes in crisis_top_tier else "medium",
+            )
+
+        # start a new project or contribute to existing one
         if crisis_top_tier:
             self.debug("crisis_top_tier")
 
@@ -361,237 +424,46 @@ class GreedyPlayer(Player):
                     if ongoingp.fixes == crisis_node:
                         projects.append(ongoingp)
 
-            # check if any of the projects is mine
-            project = None
-            if (
-                state.projects
-                and game.projects.project_for_name(state.projects[0]) in projects
-            ):
-                project = game.projects.project_for_name(state.projects[0])
-            if projects and project is None:
+            if projects:
                 project = projects[0]
+                start = None
+            else:
+                project = game.projects.find_project(Project.BASE, crisis_top_tier[0])
+                start = {
+                    "name": project.name,
+                    "type": Project.TYPES[project.type_],
+                    "category": Graph.class_name(
+                        game_def.graph.class_for_node[project.fixes]
+                    ),
+                    "node": game_def.graph.node_names[project.fixes],
+                }
+            return do_project(project, start, None, "top")
 
-            if project:
-                # all resources to it
-                missing = list(game.projects[project.name]["missing"])
-                for in_hand in state.cards:
-                    if in_hand[1] in missing:
-                        del missing[missing.index(in_hand[1])]
-                        # TODO handle jokers
-
-                if self.player_class.suit_a in missing:
-                    del missing[missing.index(self.player_class.suit_a)]
-                    if self.player_class.suit_b in missing:
-                        draw = [self.player_class.suit_a, self.player_class.suit_b]
-                    elif self.player_class.suit_a in missing:  # appears twice
-                        draw = [self.player_class.suit_a, self.player_class.suit_a]
-                    elif missing:
-                        draw = [missing[0], self.player_class.suit_a]
-                    else:  # some redundancy
-                        draw = [self.player_class.suit_a, self.player_class.suit_a]
-                elif self.player_class.suit_b in missing:
-                    del missing[missing.index(self.player_class.suit_b)]
-                    if self.player_class.suit_b in missing:  # appears twice
-                        draw = [self.player_class.suit_b, self.player_class.suit_b]
-                    elif missing:
-                        draw = [missing[0], self.player_class.suit_b]
-                    else:  # some redundancy
-                        draw = [self.player_class.suit_b, self.player_class.suit_b]
-                elif missing:
-                    draw = [
-                        missing[0],
-                        rnd.choice(
-                            [self.player_class.suit_a, self.player_class.suit_b]
-                        ),
-                    ]
-                else:
-                    draw = [
-                        rnd.choice(DrawPiles.SUITS),
-                        rnd.choice(
-                            [self.player_class.suit_a, self.player_class.suit_b]
-                        ),
-                    ]
-
-                return {
-                    Player.PILE_DRAW: draw,
-                    Player.START_PROJECT: None,
-                    Player.START_RESEARCH: None,
-                }, {"project": {"name": project.name, "priority": "top"}}
-
-            else:  # there are none, need to start one
-                if state.projects:  # do I have a project?
-                    # drop it and gather cards for a project for the top node
-
-                    draw = []
-                    in_hand = [card[1] for card in state.cards]
-
-                    for crisis_node in crisis_top_tier:
-                        if len(draw) == 2:
-                            break
-
-                        catid = game_def.graph.class_for_node[crisis_node]
-                        suits = None
-                        for c, s1, s2 in Projects.BASE_TABLE:
-                            if c[1] == catid:
-                                suits = [s1, s2]
-
-                        if suits[1] in in_hand:
-                            del in_hand[in_hand.index(suits[1])]
-                            del suits[1]
-                        if suits[0] in in_hand:
-                            del in_hand[in_hand.index(suits[0])]
-                            del suits[0]
-                        if suits:
-                            if len(draw) > 1:
-                                if suits[0] == self.player_class.suit_a:
-                                    draw.append(self.player_class.suit_a)
-                                elif suits[0] == self.player_class.suit_b:
-                                    draw.append(self.player_class.suit_b)
-                                elif len(suits) > 1:
-                                    if suits[1] == self.player_class.suit_a:
-                                        draw.append(self.player_class.suit_a)
-                                    elif suits[1] == self.player_class.suit_b:
-                                        draw.append(self.player_class.suit_b)
-
-                    if len(draw) == 0:
-                        draw = [
-                            rnd.choice(DrawPiles.SUITS),
-                            rnd.choice(
-                                [self.player_class.suit_a, self.player_class.suit_b]
-                            ),
-                        ]
-                    elif len(draw) == 1:
-                        draw.append(
-                            rnd.choice(
-                                [self.player_class.suit_a, self.player_class.suit_b]
-                            )
-                        )
-
-                    return {
-                        Player.PILE_DRAW: draw,
-                        Player.START_PROJECT: None,
-                        Player.START_RESEARCH: None,
-                    }, {}
-                else:
-                    # start project for it, with tradeoff
-                    project = game.projects.find_project(
-                        Project.BASE, crisis_top_tier[0]
-                    )
-                    needed = list(
-                        game.projects[project.name]["missing"]
-                        if project.name in game.projects
-                        else project.cost
-                    )
-                    draw = [None, None]
-                    if self.player_class.suit_a in needed:
-                        draw[1] = self.player_class.suit_a
-                        del needed[needed.index(self.player_class.suit_a)]
-                    elif self.player_class.suit_b in needed:
-                        draw[1] = self.player_class.suit_b
-                        del needed[needed.index(self.player_class.suit_b)]
-                    if needed:
-                        draw[0] = needed[0]
-                    else:
-                        draw[0] = rnd.choice(DrawPiles.SUITS)
-                    if draw[1] is None:
-                        draw[1] = rnd.choice(
-                            [self.player_class.suit_a, self.player_class.suit_b]
-                        )
-
-                    return {
-                        Player.PILE_DRAW: draw,
-                        Player.START_PROJECT: {
-                            "name": project.name,
-                            "type": Project.TYPES[project.type_],
-                            "category": Graph.class_name(
-                                game_def.graph.class_for_node[project.fixes]
-                            ),
-                            "node": game_def.graph.node_names[project.fixes],
-                        },
-                        Player.START_RESEARCH: None,
-                    }, {"project": {"name": project.name, "priority": "top"}}
-        elif crisis_second_tier:
+        if crisis_second_tier:
             self.debug("crisis_second_tier")
-            if state.projects:  # do I have a project?
-                # finish it
-                needed = list(
-                    game.projects[state.projects[0]]["missing"]
-                    if state.projects[0] in game.projects
-                    else game.projects.project_for_name(state.projects[0]).cost
-                )
-                draw = [None, None]
-                if self.player_class.suit_a in needed:
-                    draw[1] = self.player_class.suit_a
-                    del needed[needed.index(self.player_class.suit_a)]
-                elif self.player_class.suit_b in needed:
-                    draw[1] = self.player_class.suit_b
-                    del needed[needed.index(self.player_class.suit_b)]
-                if needed:
-                    draw[0] = needed[0]
-                else:
-                    if target_tech:
-                        draw[0] = target_tech.suit
-
-                if draw[1] is None:
-                    if target_tech and target_tech.suit in [
-                        self.player_class.suit_a,
-                        self.player_class.suit_b,
-                    ]:
-                        draw[1] = target_tech.suit
-                    else:
-                        draw[1] = rnd.choice(
-                            [self.player_class.suit_a, self.player_class.suit_b]
-                        )
-
-                return {
-                    Player.PILE_DRAW: draw,
-                    Player.START_PROJECT: None,
-                    Player.START_RESEARCH: target_tech.name
-                    if game.tech[target_tech.name]["status"] == TechTreeState.AVAILABLE
-                    else None,
-                }, {"project": {"name": state.projects[0], "priority": "medium"}}
-            else:  # create a project for it, no tradeoffs
-                project = game.projects.find_project(Project.A, crisis_second_tier[0])
-                needed = list(
-                    game.projects[project.name]["missing"]
-                    if project.name in game.projects
-                    else project.cost
-                )
-                draw = [None, None]
-                if self.player_class.suit_a in needed:
-                    draw[1] = self.player_class.suit_a
-                    del needed[needed.index(self.player_class.suit_a)]
-                elif self.player_class.suit_b in needed:
-                    draw[1] = self.player_class.suit_b
-                    del needed[needed.index(self.player_class.suit_b)]
-                if needed:
-                    draw[0] = needed[0]
-                else:
-                    draw[0] = rnd.choice(DrawPiles.SUITS)
-                if draw[1] is None:
-                    draw[1] = rnd.choice(
-                        [self.player_class.suit_a, self.player_class.suit_b]
-                    )
-
-                project_obj = None
-                if game.projects.status(project.name) == ProjectState.AVAILABLE:
-                    project_obj = {
+            # create a project for it, no tradeoffs
+            found = None
+            for project in crisis_second_tier:
+                if game.projects.status(project) == ProjectState.AVAILABLE:
+                    found = project
+            if found:
+                project = game.projects.find_project(Project.A, found)
+                return do_project(
+                    project,
+                    {
                         "name": project.name,
                         "type": Project.TYPES[project.type_],
                         "category": Graph.class_name(
                             game_def.graph.class_for_node[project.fixes]
                         ),
                         "node": game_def.graph.node_names[project.fixes],
-                    }
+                    },
+                    target_tech,
+                    "medium",
+                )
+            # else, continue to third tier
 
-                return {
-                    Player.PILE_DRAW: draw,
-                    Player.START_PROJECT: project_obj,
-                    Player.START_RESEARCH: target_tech.name
-                    if game.tech[target_tech.name]["status"] == TechTreeState.AVAILABLE
-                    else None,
-                }, {"project": {"name": project.name, "priority": "medium"}}
-        elif crisis_third_tier:
+        if crisis_third_tier:
             self.debug("crisis_third_tier")
             # same as before, but focus on research for top TOP_TIER%
             draw = [None, None]
@@ -600,107 +472,51 @@ class GreedyPlayer(Player):
             else:
                 draw[0] = target_tech.suit
 
-            if state.projects:  # do I have a project?
-                # finish it
-                needed = list(
-                    game.projects[state.projects[0]]["missing"]
-                    if state.projects[0] in game.projects
-                    else game.projects.project_for_name(state.projects[0]).cost
-                )
-                if draw[1] is None:
-                    if self.player_class.suit_a in needed:
-                        draw[1] = self.player_class.suit_a
-                        del needed[needed.index(self.player_class.suit_a)]
-                    elif self.player_class.suit_b in needed:
-                        draw[1] = self.player_class.suit_b
-                        del needed[needed.index(self.player_class.suit_b)]
-                if draw[0] is None:
-                    if needed:
-                        draw[0] = needed[0]
-                    else:
-                        draw[0] = rnd.choice(DrawPiles.SUITS)
-
-                if draw[1] is None:
-                    draw[1] = rnd.choice(
-                        [self.player_class.suit_a, self.player_class.suit_b]
-                    )
-
-                return {
-                    Player.PILE_DRAW: draw,
-                    Player.START_PROJECT: None,
-                    Player.START_RESEARCH: target_tech.name
-                    if game.tech[target_tech.name]["status"] == TechTreeState.AVAILABLE
-                    else None,
-                }, {"project": {"name": state.projects[0], "priority": "low"}}
-            else:  # create a project for it, no tradeoffs
-                project = game.projects.find_project(Project.A, crisis_third_tier[0])
-                needed = list(
-                    game.projects[project.name]["missing"]
-                    if project.name in game.projects
-                    else project.cost
-                )
-                if self.player_class.suit_a in needed:
-                    draw[1] = self.player_class.suit_a
-                    del needed[needed.index(self.player_class.suit_a)]
-                elif self.player_class.suit_b in needed:
-                    draw[1] = self.player_class.suit_b
-                    del needed[needed.index(self.player_class.suit_b)]
-                if draw[0] is None:
-                    if needed:
-                        draw[0] = needed[0]
-                    else:
-                        draw[0] = rnd.choice(DrawPiles.SUITS)
-
-                if draw[1] is None:
-                    draw[1] = rnd.choice(
-                        [self.player_class.suit_a, self.player_class.suit_b]
-                    )
-
-                project_obj = None
-                if game.projects.status(project.name) == ProjectState.AVAILABLE:
-                    project_obj = {
+            # create a project for it, no tradeoffs
+            found = None
+            for project in crisis_third_tier:
+                if game.projects.status(project) == ProjectState.AVAILABLE:
+                    found = project
+            if found:
+                project = game.projects.find_project(Project.A, found)
+                return do_project(
+                    project,
+                    {
                         "name": project.name,
                         "type": Project.TYPES[project.type_],
                         "category": Graph.class_name(
                             game_def.graph.class_for_node[project.fixes]
                         ),
                         "node": game_def.graph.node_names[project.fixes],
-                    }
-                return {
-                    Player.PILE_DRAW: draw,
-                    Player.START_PROJECT: project_obj,
-                    Player.START_RESEARCH: target_tech.name
-                    if game.tech[target_tech.name]["status"] == TechTreeState.AVAILABLE
-                    else None,
-                }, {"project": {"name": project.name, "priority": "low"}}
-        else:
-            self.debug("crisis: other")
-            # research and hoard cards for top TOP_TIER%
-            draw = [None, None]
-            if target_tech and target_tech.suit in [
-                self.player_class.suit_a,
-                self.player_class.suit_b,
-            ]:
-                draw[1] = target_tech.suit
-            elif target_tech:
-                draw[0] = target_tech.suit
-            if draw[0] is None:
-                draw[0] = rnd.choice(DrawPiles.SUITS)
-            if draw[1] is None:
-                draw[1] = rnd.choice(
-                    [self.player_class.suit_a, self.player_class.suit_b]
+                    },
+                    target_tech,
+                    "low",
+                    draw,
                 )
 
-            return {
-                Player.PILE_DRAW: draw,
-                Player.START_PROJECT: None,
-                Player.START_RESEARCH: target_tech.name
-                if target_tech
-                and game.tech[target_tech.name]["status"] == TechTreeState.AVAILABLE
-                else None,
-            }, {}
+        self.debug("crisis: other")
+        # research and hoard cards for top TOP_TIER%
+        draw = [None, None]
+        if target_tech and target_tech.suit in [
+            self.player_class.suit_a,
+            self.player_class.suit_b,
+        ]:
+            draw[1] = target_tech.suit
+        elif target_tech:
+            draw[0] = target_tech.suit
+        if draw[0] is None:
+            draw[0] = rnd.choice(DrawPiles.SUITS)
+        if draw[1] is None:
+            draw[1] = rnd.choice([self.player_class.suit_a, self.player_class.suit_b])
 
-        return (None,)
+        return {
+            Player.PILE_DRAW: draw,
+            Player.START_PROJECT: None,
+            Player.START_RESEARCH: target_tech.name
+            if target_tech
+            and game.tech[target_tech.name]["status"] == TechTreeState.AVAILABLE
+            else None,
+        }, {}
 
     def analyze_cards(self, rnd, state, game, actions):
         """check the cards drawn and use them to fund project and tech using the priorities"""
