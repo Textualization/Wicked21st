@@ -1,6 +1,6 @@
 SEED = 42
 NUM_RUNS = 1000
-GRAPH = "maps/map20211122.json"
+GRAPH = "maps/map20220124.json"
 VERBOSE = False
 IN_CRISIS = 6
 GAME_LENGTH = 8

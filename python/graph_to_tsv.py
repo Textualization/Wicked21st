@@ -34,7 +34,7 @@ for node in g.node_names.keys():
             this_inflow.append(other)
     inflows[node] = this_inflow
 
-print("CAT\tNAME\tCODE\t#INF\t#OUTF\tINFLOWS\tOUTFLOWS\tCASCADE")
+print("CAT\tCODE\tNAME\t#INF\t#OUTF\tINFLOWS\tOUTFLOWS\tCASCADE")
 for name, catid in Graph.CATEGORIES:
     print("{}\t{}\t{}\t{}\t{}\t{}\t{}".format(name, "", "", "", "", "", ""))
     nodes = g.node_classes[catid]
@@ -45,8 +45,8 @@ for name, catid in Graph.CATEGORIES:
         print(
             "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
                 "",
-                g.node_names[node],
                 node_to_code[node],
+                g.node_names[node],
                 len(inflows[node]),
                 len(g.outlinks[node]),
                 inf,
