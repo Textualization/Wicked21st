@@ -116,7 +116,6 @@ if len(sys.argv) > 2:
     cascades.cascade = cascade
     save_graph(sys.argv[2], graph_def, cascades)
 else:
-
     with open("cascading.tsv", "w") as tsv:
         for cnode in node_list:
             dist_buckts = buckets[cnode]
