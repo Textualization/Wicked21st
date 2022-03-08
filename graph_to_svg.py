@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+# Copyright (C) 2021-2022 Textualization Software Ltd.
+# Distributed under the terms of the MIT License
+# https://mit-license.org/
+
 import sys
 import math
 
