@@ -1,0 +1,336 @@
+    GAME INIT
+    
+    Each player chooses a class (see table at the end).
+    
+         Decision CLASS
+    
+    All players have 1 research slot and 1 project slot.
+    
+    The can contribute to research and projects from any other player but not in the turn the project or research is started.
+    
+    
+    TURN
+    
+              ENGAGE PHASE
+            
+              	for each player in parallel, without knowing what the other players do, they do, in order:
+            
+            
+              	DRAWING MONEY
+                    	The player draws a number of money units equals to
+                        	5 - number of crisis in category 'ECONOMIC'
+            
+              	DRAWING CARDS
+                    	The player draws two cards. The first card can be from any pile. The second has to be from the two suits associated with the player's class:
+            
+                        	Decision PILE_DRAW: decide from which of the 4 piles to draw a card
+                        	Decision PILE_DRAW: decide from which of the 2 piles to draw a card
+            
+                       If a suit pile is consumed, shuffle the discard pile and set it as the new pile for the suit.
+            
+              	CRISIS RISING
+                    	Two crisis chip are added per turn
+            
+              ACTIVATE PHASE
+            
+             	Once the engage phase is completed by all players, the players can see what suits the players picked.
+            
+             	Then the activate phase starts, again, parallel blind.
+            
+             	The actions recorded separately by each player are presented in the next section
+            
+                   	Each player performs the actions described
+            
+             	ATTEMPTING PROJECTS
+            
+                    	If the player has project slots available, the player has to decide whether to start a project of a given type or not start any project:
+            
+                    	Decision START_PROJECT: Choose between the two types of projects (base or remove-tradeoff) or nothing to not start a project this turn. Base projects add an extra crisis chip.
+            
+                    	If the player picked a project type to start, then the player decides which category of problem they want to fix with their project:
+            
+                        	Decision START_PROJECT_FIX_CAT: Choose among the six categories of problems.
+            
+                        	With the chosen category, the player can choose which problem to fix:
+            
+                        	Decision START_PROJECT_FIX_NODE: choose among all the problems in that category
+            
+                        	With the above decisions, the new project is created, added to the player project slot.
+            
+                        	Phase action recorded: START_PROJECT (project)
+            
+                    	After potentially creating a new project, the player can decide to play cards for any projects.
+            
+                    	That includes projects existing at the beginning of the phase or projects the player has created this turn (but not projects created by other players this phase).
+            
+                    	The player is then presented with a choice of playing a particular card for a particular project or nothing to stop playing cards.
+            
+                    	While the player does not choose to play nothing and there are cards that can be played against available projects:
+            
+            
+                            	Decision PLAY_CARD: Choose a card and a project to play it for
+            
+                            	If the card is a joker, it automatically succeeds.
+            
+                            	If the card is not a joker, the value of the card is its face value or 10 if the card is Ace, Knight, Queen or King.
+            
+                                 	To the value of the card, if the table has researched a base technology for the skill, the value is increased by 1. The value cannot exceed 11.
+            
+                                 	To the value of the card, if the table has researched an expanded technology for the skill, the value is further increased by 2. The value cannot exceed 11.
+            
+                                 	To this value, the player can decide to use money units (if the player has them) as consultant fees to further increase its value:
+            
+                                     	Decision CONSULTANT: Choose between 0 to the minimum between the amount of money the player has and the number that will take the current value to 11.
+            
+                                 	The final value to roll against (card value + research boost + consultant fees) is then rolled with 2D6:
+            
+                                 	Roll Skill Check: 2D6
+            
+                                 	If the roll is less or equal to the value, the check is successful:
+            
+                                    	Phase action recorded: SUCCESS_SKILL (project, card, value, roll)
+            
+                                 	If the roll is greater than value, the check failed:
+            
+                                    	Phase action recorded: FAILED_SKILL (project, card, value, roll)
+            
+                                 	If the roll equals 12, a crisis chip is added to the turn, immediately.
+            
+                                 	The cards used are thrown to the discard piles for each suit, with the jokers being returned to the pile of the suit they were used in replacement (not necessarily the suit they were taken from).
+            
+             	DOING RESEARCH
+            
+                    	If the player has research slots available, the player has to decide whether to start research on a specific technology or not start researching at:
+            
+                    	Decision START_RESEARCH: Choose between the research boundary (tech that can be researched given what we know already) or not starting new research.
+                       	If the player decided to start researching new technology, it is added to the player's research slot:
+            
+                            	Phase action recorded: START_RESEARCH (tech)
+            
+                    	After potentially starting a new research, the player can decide to contribute skills or funds to any tech currently being researched either by the player itself or by others (but not new tech which research started by other players this phase).
+            
+                    	While the player has cards that can be contributed to techs being researched the player hasn't yet contributed to, or the player decides not to contribute cards to any further research:
+            
+                            	Decision CARD_FOR_RESEARCH: Choose a card and a tech to contribute that card or nothing to stop contributing cards
+            
+                            	If the player chose a card to contribute to a specific tech research efforts:
+            
+                                    	Phase action recorded: SKILL_RESEARCH (tech, card)
+            
+            
+                                    	Discard the card to the suitable draw pile
+            
+            
+                    	While the player has money units to contribute to any techs being researched the player hasn't yet contributed to, or the player decides not to contribute money units to any further research:
+            
+                            	Decision FUND_RESEARCH: Choose a tech to contribute a money unit or nothing to stop contributing money units
+            
+                            	If the player chose a card to contribute to a specific tech research efforts:
+            
+                                    	Phase action recorded: FUND_RESEARCH (tech)
+                
+                    END
+                
+                	FINALIZING
+                
+                        	Research
+                
+                        	See if many players started researching the same tech. Keep the one from the lower player (the resources are aggregated).
+                
+                        	Check for techs that were over-funded or over-skilled and report them. Techs that were fully (or over-) skilled and funded can count the turn as a research cycle.
+                
+                        	Techs that were under-funded or under-skilled do not get to count the turn as a research cycle.
+                
+                        	See if any of the techs was researched, for all techs that were researched, they clear the player's research slot and check whether a consultant bump in the FAILED_SKILL checks would change them. For auto-protect technologies, if the problem auto-protected is fixed, then it gets protected.
+                        	Projects
+                
+                        	See if many players started the same project. Keep the one from the lower player (the resources are aggregated).
+                
+                        	See if any of the projects had no skill applied to them and discard them. The projects are considered abandoned and the project slot from the player carrying the project is freed.
+                
+                        	See if any of the projects were finished and apply their actions. Check whether any of the projects got over-skilled and report.
+                
+                                	To apply the actions, the problem fixed by the project is fixed. If the tech associated with auto-protecting that problem has been researched (even in this turn), it gets protected.
+                
+                                	If the project has a trade-off associated, add the crisis chip.
+                
+                                	The project slot associated with the project for the corresponding player is freed.
+                 	CRISIS ROLLING
+                
+                            	Before the crisis rolling the players can talk with each other, strategize and discuss what to do depending on the different problems that will get in crisis. The crisis rolling is silent.
+                
+                            	Add crisis chip for each category fully in crisis.
+                
+                            	While the whole graph is not in crisis and there are still crisis chips:
+                
+                                	Roll Category (1D6), if the category is fully in crisis, add a crisis chip and roll again
+                
+                                	Roll Problem-in-category (1D6 using the numbers in the graph).
+                
+                                	If the problem is saturated (it is in crisis and all its reachable problems are also in crisis), add a crisis chip and start again. If this happens ten times in a row, then the game is lost.
+                
+                                	With the problem in hand, check whether the problem is already in crisis and all its direct outflows are already in crisis. If that is the case, use the list attached at the end of this document (one list per node) and mark in crisis or remove the protection if they were protected for as many nodes in the list as crisis chips remain. If there are more crisis chips than nodes that can be changed, keep the remaining crisis chips and continue (select another category, node, etc.). Otherwise (if the node is not in crisis or not all its outflows are in crisis), roll crisis chips until either the roll is successful or all the crisis chips are exhausted
+                
+                                	While there are crisis chips or the problem is in crisis:
+                
+                                       	Roll Crisis (2D6), if crisis roll < 7, the node is in crisis
+                
+                                       	remove one crisis chip per roll (successful or otherwise)
+                
+                                	If the problem should be marked in crisis:
+                
+                                       	If the problem was stable, set it as in crisis
+                
+                                       	If the problem was protected, it loses its protection
+                
+                                       	If the problem was already in crisis, it cascades as follows:
+                
+                                            	All outflows from the node in crisis are marked as in crisis.
+    ACTIVATION PHASE ACTIONS RECORDED:
+     	START_PROJECT  = The player started a specific project.
+     	SUCCESS_SKILL  = The player performed a successful skill check for a given project, with a specific roll value against a specific card value.
+     	FAILED_SKILL   = The player failed a skill check for a given project, with a specific roll value against a specific card value.
+     	START_RESEARCH = The player started researching a specific technology.
+     	SKILL_RESEARCH = The player contributed a skill card to a specific technology being researched.
+     	FUND_RESEARCH  = The player contributed a money unit to a specific technology being researched.
+Tech details:
+
+
+Technologies take a discard of a given suit plus a unit of money to make a research cycle in a turn. It takes 2 research cycles to research a technology.
+
+The tech tree is as follows: Base-<suit> can be researched right away and needs <suit> as the discard card. Once Base-<suit 1> and Base-<suit 2> have been researched, Auto-Protect-<problem-in-CAT> can be researched. It takes card of suit 2 for discard:
+    
+    |    CAT          | suits |
+    |INDUSTRIAL       | S, C  |
+    |ECONOMIC         | S, D  |
+    |LIVING_STANDARDS | S, H  |
+    |CLASS            | C, H  |
+    |ENVIRONMENTAL    | C, D  |
+    |SOCIAL           | H, D  |
+    
+      At any given time, the "research boundary" (or "state of the art") are the techs that can be researched at a given point.
+    
+    For example, at the start of the game, Base-C, Base-H, Base-D, Base-S can be researched.
+    
+    Upon researching Base-D, the research boundary is Base-C, Base-H, Base-S
+    
+    Upon researching Base-H, according to the table above, any node in the category "SOCIAL" can be researched, so the boundary becomes:
+    
+    Base-C, Base-S, Auto-Protect-"Weak Political Voice", Auto-Protect-"Social Inequity", Auto-Protect-"Food Shortage", Auto-Protect-"Affordable Housing", Auto-Protect-"Clean Water Shortage"
+
+Project details:
+
+There are two types of projects: base projects, that have a trade-off and improved projects that do not have the trade-off (but need more resources).
+
+For base projects, use the following table:
+    | fixed problem     | suits needed |
+    | ENVIRONMENTAL     | C, D |
+    | LIVING_STANDARDS  | H, C |
+    | SOCIAL            | H, D |
+    | CLASS             | H, S |
+    | ECONOMIC          | S, D |
+    | INDUSTRIAL        | S, C |
+    
+    Improved projects double its base requirements.
+    
+    Base projects add a crisis chip when completed.
+
+Graph
+category: 'INDUSTRIAL' (size: 4)
+	Fossil Fuel Dependency
+		Links to: Chemical Pollution; Climate Change; Nitrogen & Phosphorous Loading; Ocean Degradation
+	Polluting Industry
+		Links to: Air & Ozone Degradation; Chemical Pollution; Inefficiency
+	Sprawl
+		Links to: Inefficiency; Lack of Affordable Housing; Land Conversion
+	Unsustainable Harvesting
+		Links to: Chemical Pollution; Freshwater Depletion; Inefficiency; Land Conversion; Nitrogen & Phosphorous Loading; Ocean Degradation
+category: 'ECONOMIC' (size: 4)
+	Inefficiency
+		Links to: 
+	Inflation
+		Links to: Economic Inequality
+	Market Externalities
+		Links to: Economic Inequality; Inefficiency; Polluting Industry; Unsustainable Harvesting
+	Monopoly
+		Links to: Inefficiency; Low Labour Standards; Market Externalities; Polluting Industry; Systemic Corruption
+category: 'SOCIAL' (size: 5)
+	Lack of Community Networks
+		Links to: Lack of Healthcare; Social Inequity
+	Lack of Political Voice
+		Links to: Lack of Community Networks; Low Labour Standards; Social Inequity
+	Low Education
+		Links to: Economic Inequality; Lack of Political Voice; Low Labour Standards
+	Social Inequity
+		Links to: Lack of Community Networks; Lack of Political Voice; Low Education; Unrest & Injustice
+	Unrest & Injustice
+		Links to: Lack of Community Networks; Social Inequity
+category: 'CLASS' (size: 5)
+	Clean Water Shortage
+		Links to: Lack of Healthcare
+	Energy Shortage
+		Links to: Fossil Fuel Dependency; Lack of Affordable Housing; Low Education
+	Food Shortage
+		Links to: Lack of Community Networks; Lack of Healthcare; Social Inequity
+	Lack of Affordable Housing
+		Links to: Lack of Community Networks; Lack of Political Voice; Social Inequity; Sprawl; Unrest & Injustice
+	Lack of Healthcare
+		Links to: Lack of Affordable Housing; Low Education; Social Inequity
+category: 'ENVIRONMENTAL' (size: 8)
+	Air & Ozone Degradation
+		Links to: Lack of Healthcare
+	Biodiversity Loss
+		Links to: Land Conversion
+	Chemical Pollution
+		Links to: Biodiversity Loss; Freshwater Depletion; Lack of Healthcare
+	Climate Change
+		Links to: Biodiversity Loss; Energy Shortage; Food Shortage; Freshwater Depletion; Lack of Healthcare; Land Conversion; Social Inequity
+	Freshwater Depletion
+		Links to: Clean Water Shortage; Energy Shortage; Food Shortage
+	Land Conversion
+		Links to: Biodiversity Loss; Food Shortage
+	Nitrogen & Phosphorous Loading
+		Links to: Biodiversity Loss; Food Shortage; Ocean Degradation
+	Ocean Degradation
+		Links to: Biodiversity Loss; Climate Change; Food Shortage
+category: 'LIVING STANDARDS' (size: 4)
+	Discrimination
+		Links to: Economic Inequality; Social Inequity
+	Economic Inequality
+		Links to: Inflation; Lack of Affordable Housing; Social Inequity; Systemic Corruption
+	Low Labour Standards
+		Links to: Discrimination; Economic Inequality; Lack of Healthcare; Lack of Political Voice; Low Education
+	Systemic Corruption
+		Links to: Economic Inequality; Inefficiency; Inflation; Monopoly; Social Inequity; Unrest & Injustice
+
+Cascade
+Energy Shortage (ENE): NIT, CHE, SOC, CLI, SPR, UNR, ECO, OCE, POL, LAB, COM; INE, SYS, DIS, LAN, BIO, INF, FOO, FRE, HEA; MON, CLE; MAR, IND; AIR, UNS
+Lack of Healthcare (HEA): SPR, LAB, UNR, POL, ECO, COM; INE, INF, LAN, DIS, SYS; FOO, BIO, MON; MAR, IND; AIR, UNS, CHE; FRE, NIT, OCE; CLI, ENE, CLE; FOS
+Lack of Affordable Housing (AFF): HEA, LOW, INE, LAB, LAN; FOO, ECO, BIO, DIS; SYS, INF; MON; MAR, IND; UNS, AIR, CHE; NIT, OCE, FRE; CLE, CLI, ENE; FOS
+Clean Water Shortage (CLE): AFF, LOW, SOC; POL, SPR, COM, UNR, LAB, ECO; LAN, DIS, INE, SYS, INF; FOO, BIO, MON; IND, MAR; UNS, AIR, CHE; FRE, NIT, OCE; CLI, ENE; FOS
+Food Shortage (FOO): AFF, UNR, POL, LOW; ECO, SPR, LAB; INE, INF, DIS, SYS, LAN; MON, BIO; IND, MAR; UNS, CHE, AIR; NIT, OCE, FRE; CLE, ENE, CLI; FOS
+Inflation (INF): AFF, SOC, SYS; MON, INE, COM, LOW, POL, UNR, SPR; LAB, LAN, IND, MAR, HEA; CHE, DIS, FOO, AIR, BIO, UNS; FRE, OCE, NIT; CLE, ENE, CLI; FOS
+Monopoly (MON): LOW, DIS, CHE, AIR, SOC, INF, UNR, ECO, POL, HEA, UNS; OCE, FRE, NIT, LAN, AFF, BIO, COM; ENE, FOO, CLE, SPR, CLI; FOS
+Market Externalities (MAR): AIR, SOC, CHE, FRE, INF, OCE, SYS, AFF, NIT, LAN; FOO, CLI, LOW, BIO, MON, SPR, CLE, HEA, ENE, COM, POL, UNR; FOS, LAB; DIS
+Inefficiency (INE): 
+Biodiversity Loss (BIO): FOO; COM, HEA, SOC; AFF, LOW, UNR, POL; ECO, SPR, LAB; DIS, INE, INF, SYS; MON; IND, MAR; AIR, CHE, UNS; NIT, OCE, FRE; ENE, CLI, CLE; FOS
+Chemical Pollution (CHE): SOC, AFF, LAN, CLE, FOO, ENE, LOW; ECO, LAB, UNR, POL, COM, SPR, FOS; CLI, NIT, INE, INF, DIS, SYS, OCE; MON; MAR, IND; UNS, AIR
+Climate Change (CLI): POL, UNR, CLE, COM, AFF, LOW, FOS; SPR, LAB, ECO, OCE, NIT, CHE; SYS, INF, INE, DIS; MON; IND, MAR; UNS, AIR
+Freshwater Depletion (FRE): COM, FOS, HEA, SOC, LOW, AFF; OCE, UNR, SPR, CLI, ECO, CHE, POL, NIT, LAB; SYS, INE, BIO, DIS, LAN, INF; MON; MAR, IND; AIR, UNS
+Air & Ozone Degradation (AIR): AFF, LOW, SOC; LAB, SPR, UNR, COM, POL, ECO; DIS, INE, SYS, LAN, INF; MON, FOO, BIO; IND, MAR; UNS, CHE; OCE, NIT, FRE; ENE, CLI, CLE; FOS
+Ocean Degradation (OCE): FRE, COM, SOC, LAN, HEA, ENE; UNR, LOW, AFF, POL, FOS, CLE; SPR, NIT, CHE, LAB, ECO; SYS, DIS, INE, INF; MON; MAR, IND; UNS, AIR
+Land Conversion (LAN): COM, SOC, HEA; UNR, POL, AFF, LOW; SPR, ECO, LAB; SYS, INF, DIS, INE; MON; IND, MAR; UNS, AIR, CHE; OCE, NIT, FRE; ENE, CLE, CLI; FOS
+Nitrogen & Phosphorous Loading (NIT): SOC, COM, LAN, HEA, CLI; UNR, ENE, FRE, LOW, POL, AFF; ECO, LAB, SPR, CLE, FOS; INF, DIS, INE, SYS, CHE; MON; MAR, IND; AIR, UNS
+Unsustainable Harvesting (UNS): CLE, CLI, BIO, HEA, FOO, ENE; SOC, COM, AFF, LOW, FOS; ECO, SPR, LAB, UNR, POL; SYS, INF, DIS; MON; MAR, IND; AIR
+Polluting Industry (IND): FRE, BIO, HEA; SOC, LOW, ENE, AFF, LAN, CLE, FOO; LAB, POL, SPR, COM, FOS, ECO, UNR; OCE, DIS, NIT, INF, SYS, CLI; MON; MAR; UNS
+Fossil Fuel Dependency (FOS): SOC, ENE, HEA, FOO, BIO, LAN, FRE; LOW, POL, COM, CLE, AFF, UNR; SPR, LAB, ECO; DIS, INE, SYS, INF; MON; IND, MAR; UNS, AIR
+Sprawl (SPR): POL, SOC, BIO, UNR, COM, FOO; LOW, LAB, HEA; ECO, DIS; INF, SYS; MON; IND, MAR; CHE, UNS, AIR; NIT, OCE, FRE; CLE, CLI, ENE; FOS
+Economic Inequality (ECO): COM, LOW, MON, UNR, SPR, INE, POL; LAN, IND, LAB, MAR, HEA; UNS, BIO, AIR, DIS, FOO, CHE; FRE, OCE, NIT; CLI, CLE, ENE; FOS
+Discrimination (DIS): POL, INF, SYS, AFF, LOW, COM, UNR; MON, SPR, INE, LAB, HEA; MAR, IND, LAN; FOO, BIO, CHE, AIR, UNS; FRE, NIT, OCE; CLE, ENE, CLI; FOS
+Low Labour Standards (LAB): SOC, INF, AFF, COM, SYS; SPR, UNR, INE, MON; LAN, IND, MAR; UNS, AIR, FOO, BIO, CHE; OCE, NIT, FRE; CLE, ENE, CLI; FOS
+Systemic Corruption (SYS): IND, LOW, MAR, AFF, COM, LAB, POL; CHE, AIR, UNS, SPR, DIS, HEA; OCE, FRE, NIT, LAN, BIO; CLE, FOO, ENE, CLI; FOS
+Social Inequity (SOC): HEA, LAB, ECO; INF, AFF, DIS, SYS; MON, SPR, INE; MAR, LAN, IND; AIR, FOO, BIO, UNS, CHE; NIT, OCE, FRE; CLI, ENE, CLE; FOS
+Low Education (LOW): AFF, SOC, COM, HEA, SYS, DIS, INF; INE, SPR, UNR, MON; LAN, MAR, IND; BIO, UNS, CHE, AIR, FOO; NIT, FRE, OCE; CLE, CLI, ENE; FOS
+Lack of Political Voice (POL): HEA, DIS, UNR, ECO, LOW; INF, AFF, SYS; MON, SPR, INE; MAR, LAN, IND; BIO, FOO, AIR, UNS, CHE; FRE, OCE, NIT; CLE, ENE, CLI; FOS
+Unrest & Injustice (UNR): POL, LOW, HEA; AFF, ECO, LAB; SPR, INF, SYS, DIS; LAN, INE, MON; IND, MAR, BIO, FOO; UNS, AIR, CHE; OCE, FRE, NIT; CLE, CLI, ENE; FOS
+Lack of Community Networks (COM): UNR, LOW, POL, AFF; LAB, ECO, SPR; LAN, SYS, DIS, INE, INF; FOO, MON, BIO; MAR, IND; AIR, CHE, UNS; OCE, NIT, FRE; ENE, CLI, CLE; FOS

@@ -1,0 +1,124 @@
+digraph {
+	graph [landscape=portrait size="20,20"]
+	"Lack of Affordable Housing" [fillcolor="#fcc30b" shape=box style=filled]
+	"Air & Ozone Degradation" [fillcolor="#56c02b" shape=box style=filled]
+	"Biodiversity Loss" [fillcolor="#56c02b" shape=box style=filled]
+	"Chemical Pollution" [fillcolor="#56c02b" shape=box style=filled]
+	"Clean Water Shortage" [fillcolor="#fcc30b" shape=box style=filled]
+	"Climate Change" [fillcolor="#56c02b" shape=box style=filled]
+	"Lack of Community Networks" [fillcolor="#fd6925" shape=box style=filled]
+	Discrimination [fillcolor="#dd1367" shape=box style=filled]
+	"Economic Inequality" [fillcolor="#dd1367" shape=box style=filled]
+	"Energy Shortage" [fillcolor="#fcc30b" shape=box style=filled]
+	"Food Shortage" [fillcolor="#fcc30b" shape=box style=filled]
+	"Fossil Fuel Dependency" [fillcolor="#3f7e44" shape=box style=filled]
+	"Freshwater Depletion" [fillcolor="#56c02b" shape=box style=filled]
+	"Lack of Healthcare" [fillcolor="#fcc30b" shape=box style=filled]
+	"Polluting Industry" [fillcolor="#3f7e44" shape=box style=filled]
+	Inefficiency [fillcolor="#26bde2" shape=box style=filled]
+	Inflation [fillcolor="#26bde2" shape=box style=filled]
+	"Low Labour Standards" [fillcolor="#dd1367" shape=box style=filled]
+	"Land Conversion" [fillcolor="#56c02b" shape=box style=filled]
+	"Low Education" [fillcolor="#fd6925" shape=box style=filled]
+	"Market Externalities" [fillcolor="#26bde2" shape=box style=filled]
+	Monopoly [fillcolor="#26bde2" shape=box style=filled]
+	"Nitrogen & Phosphorous Loading" [fillcolor="#56c02b" shape=box style=filled]
+	"Ocean Degradation" [fillcolor="#56c02b" shape=box style=filled]
+	"Lack of Political Voice" [fillcolor="#fd6925" shape=box style=filled]
+	"Social Inequity" [fillcolor="#fd6925" shape=box style=filled]
+	Sprawl [fillcolor="#3f7e44" shape=box style=filled]
+	"Systemic Corruption" [fillcolor="#dd1367" shape=box style=filled]
+	"Unrest & Injustice" [fillcolor="#fd6925" shape=box style=filled]
+	"Unsustainable Harvesting" [fillcolor="#3f7e44" shape=box style=filled]
+	"Lack of Affordable Housing" -> "Lack of Community Networks"
+	"Lack of Affordable Housing" -> Sprawl
+	"Lack of Affordable Housing" -> "Social Inequity"
+	"Lack of Affordable Housing" -> "Lack of Political Voice"
+	"Lack of Affordable Housing" -> "Unrest & Injustice"
+	"Air & Ozone Degradation" -> "Lack of Healthcare"
+	"Biodiversity Loss" -> "Land Conversion"
+	"Chemical Pollution" -> "Freshwater Depletion"
+	"Chemical Pollution" -> "Lack of Healthcare"
+	"Chemical Pollution" -> "Biodiversity Loss"
+	"Clean Water Shortage" -> "Lack of Healthcare"
+	"Climate Change" -> "Food Shortage"
+	"Climate Change" -> "Energy Shortage"
+	"Climate Change" -> "Biodiversity Loss"
+	"Climate Change" -> "Lack of Healthcare"
+	"Climate Change" -> "Social Inequity"
+	"Climate Change" -> "Freshwater Depletion"
+	"Climate Change" -> "Land Conversion"
+	"Lack of Community Networks" -> "Lack of Healthcare"
+	"Lack of Community Networks" -> "Social Inequity"
+	Discrimination -> "Economic Inequality"
+	Discrimination -> "Social Inequity"
+	"Economic Inequality" -> Inflation
+	"Economic Inequality" -> "Lack of Affordable Housing"
+	"Economic Inequality" -> "Social Inequity"
+	"Economic Inequality" -> "Systemic Corruption"
+	"Energy Shortage" -> "Lack of Affordable Housing"
+	"Energy Shortage" -> "Low Education"
+	"Food Shortage" -> "Lack of Community Networks"
+	"Food Shortage" -> "Lack of Healthcare"
+	"Food Shortage" -> "Social Inequity"
+	"Fossil Fuel Dependency" -> "Nitrogen & Phosphorous Loading"
+	"Fossil Fuel Dependency" -> "Chemical Pollution"
+	"Fossil Fuel Dependency" -> "Climate Change"
+	"Fossil Fuel Dependency" -> "Ocean Degradation"
+	"Freshwater Depletion" -> "Clean Water Shortage"
+	"Freshwater Depletion" -> "Food Shortage"
+	"Freshwater Depletion" -> "Energy Shortage"
+	"Lack of Healthcare" -> "Social Inequity"
+	"Lack of Healthcare" -> "Lack of Affordable Housing"
+	"Lack of Healthcare" -> "Low Education"
+	"Polluting Industry" -> Inefficiency
+	"Polluting Industry" -> "Chemical Pollution"
+	"Polluting Industry" -> "Air & Ozone Degradation"
+	Inflation -> "Economic Inequality"
+	"Low Labour Standards" -> "Economic Inequality"
+	"Low Labour Standards" -> "Lack of Healthcare"
+	"Low Labour Standards" -> Discrimination
+	"Low Labour Standards" -> "Lack of Political Voice"
+	"Low Labour Standards" -> "Low Education"
+	"Land Conversion" -> "Food Shortage"
+	"Land Conversion" -> "Biodiversity Loss"
+	"Low Education" -> "Lack of Political Voice"
+	"Low Education" -> "Economic Inequality"
+	"Low Education" -> "Low Labour Standards"
+	"Market Externalities" -> "Unsustainable Harvesting"
+	"Market Externalities" -> "Economic Inequality"
+	"Market Externalities" -> Inefficiency
+	"Market Externalities" -> "Polluting Industry"
+	Monopoly -> "Market Externalities"
+	Monopoly -> "Polluting Industry"
+	Monopoly -> Inefficiency
+	Monopoly -> "Systemic Corruption"
+	Monopoly -> "Low Labour Standards"
+	"Nitrogen & Phosphorous Loading" -> "Food Shortage"
+	"Nitrogen & Phosphorous Loading" -> "Biodiversity Loss"
+	"Ocean Degradation" -> "Food Shortage"
+	"Ocean Degradation" -> "Biodiversity Loss"
+	"Lack of Political Voice" -> "Lack of Community Networks"
+	"Lack of Political Voice" -> "Social Inequity"
+	"Lack of Political Voice" -> "Low Labour Standards"
+	"Social Inequity" -> "Lack of Political Voice"
+	"Social Inequity" -> "Unrest & Injustice"
+	"Social Inequity" -> "Lack of Community Networks"
+	"Social Inequity" -> "Low Education"
+	Sprawl -> "Land Conversion"
+	Sprawl -> Inefficiency
+	Sprawl -> "Lack of Affordable Housing"
+	"Systemic Corruption" -> "Economic Inequality"
+	"Systemic Corruption" -> Inefficiency
+	"Systemic Corruption" -> Monopoly
+	"Systemic Corruption" -> "Social Inequity"
+	"Systemic Corruption" -> Inflation
+	"Systemic Corruption" -> "Unrest & Injustice"
+	"Unrest & Injustice" -> "Lack of Community Networks"
+	"Unrest & Injustice" -> "Social Inequity"
+	"Unsustainable Harvesting" -> "Chemical Pollution"
+	"Unsustainable Harvesting" -> Inefficiency
+	"Unsustainable Harvesting" -> "Nitrogen & Phosphorous Loading"
+	"Unsustainable Harvesting" -> "Freshwater Depletion"
+	"Unsustainable Harvesting" -> "Land Conversion"
+}
