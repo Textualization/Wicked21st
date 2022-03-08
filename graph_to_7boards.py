@@ -83,7 +83,7 @@ for catname, catid in Graph.CATEGORIES:
                 style=style,
             )
 
-with open("media/board_categories.dot", "w") as b:
+with open("generated/board_categories.dot", "w") as b:
     b.write(digraph.source)
 
 for catname, catid in Graph.CATEGORIES:
@@ -178,5 +178,5 @@ for catname, catid in Graph.CATEGORIES:
                     color=color,
                 )
 
-    with open("media/board_{}.dot".format(fname), "w") as b:
+    with open("generated/board_{}.dot".format(fname), "w") as b:
         b.write(digraph.source)
